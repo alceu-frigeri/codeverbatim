@@ -19,6 +19,7 @@ The stable version is available at [CTAN](https://ctan.org/pkg/codeverbatim).
 Just place
 ```latex
   \usepackage{codeverbatim}
+  \usepackage{codehighlight}
 ```
 
 in the preamble and compile away.
