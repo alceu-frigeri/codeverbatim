@@ -1,13 +1,10 @@
-<PackageNAME>
+codeverbatim
 ==========
 
-Template for LaTeX packages ...
-
-<PackageDescription>
+A verbatim capture environment and code highlight
 
 For more details,  see the documentation,
-[<PackageNAME>.pdf](http://mirrors.ctan.org/macros/latex/contrib/<PackageNAME>/doc/<PackageNAME>.pdf)
-[<PackageNAME>.pdf](http://mirrors.ctan.org/graphics/pgf/contrib/<PackageNAME>/doc/<PackageNAME>.pdf)
+[codeverbatim.pdf](http://mirrors.ctan.org/macros/latex/contrib/codeverbatim/doc/codeverbatim.pdf)
 	
 --------------
 
@@ -16,12 +13,12 @@ For more details,  see the documentation,
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*).
 
 ## Installation
-The stable version is available at [CTAN](https://ctan.org/pkg/<PackageNAME>).
+The stable version is available at [CTAN](https://ctan.org/pkg/codeverbatim).
 
 ## Usage
 Just place
 ```latex
-  \usepackage{<PackageNAME>}
+  \usepackage{codeverbatim}
 ```
 
 in the preamble and compile away.
@@ -29,10 +26,10 @@ in the preamble and compile away.
 ## Contacting Author
 
 For bug reports and enhancement suggestions, the preferred way is to use
-[the project's issue page](https://github.com/alceu-frigeri/<PackageNAME>/issues).
+[the project's issue page](https://github.com/alceu-frigeri/codeverbatim/issues).
 Please be ready to provide an example code showing the bug, if any.
 
-* git: https://github.com/alceu-frigeri/<PackageNAME>
+* git: https://github.com/alceu-frigeri/codeverbatim
 
 -------------
 Copyright 2025-present by Alceu Frigeri
@@ -51,37 +48,26 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ### This work consist of the files
 
-* <PackageNAME>.sty
-    - the package itself
+* codeverbatim.sty
+    - the verbatim capture environment
+
+* codehighlight.sty
+    - code highlight
 
 * README.md  (this file)
     - quick introduction
 
-* <PackageNAME>.bib
-* <PackageNAME>.tex
+* codeverbatim.bib
+* codeverbatim.tex
     - package documentation
     
-* <PackageNAME>.pdf
+* codeverbatim.pdf
     - documentation in PDF format
     
 -------------
 
 ### Change log
 
-* Version 1.0e (this)
-  - minimum `kernel` version update
 
-* Version 1.0d
-  - typos, added silence option
-
-* Version 1.0c
-  - using `\pkginfograbProvidesExplPackage`
-
-* Version 1.0b
-  - requiring {pkginfo} now.
-
-* Version 1.0a
-  - some typos. added biber template.
-
-* Version 1.0
-    - Initial setup.
+* Version 0.1
+    - Initial setup. (far from ready)
