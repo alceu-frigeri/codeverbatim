@@ -1,5 +1,5 @@
 %%%==============================================================================
-%% Copyright 2023-present by Alceu Frigeri
+%% Copyright 2026-present by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {0.1} {2026/04/27}
+%% This is version {0.9} {2026/08/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codeverb
@@ -34,8 +34,8 @@
   {
      name        = {codeverbatim} ,
      prefix      = {codeverb} ,
-     date        = {2026/04/27} ,
-     version     = {0.1} ,
+     date        = {2026/08/29} ,
+     version     = {0.9} ,
      description = {Verbatim Environment for codelisting}
   }
 %%%%%%%
@@ -44,8 +44,9 @@
 
 
 
-\msg_new:nnnn { codeverbatim / syntax } {seq undef}
+\msg_new:nnnn { codeverbatim / syntax } { seq undef }
   {
+    \msg_line_context: \iow_newline:
     (#1)~There ~is ~ no ~stored ~sequence~'#2'
   }
   {
@@ -53,8 +54,9 @@
     ~Error~Code~ ID:<#1>.
   }
 
-\msg_new:nnnn { codeverbatim / syntax } {invalid range}
+\msg_new:nnnn { codeverbatim / syntax } { invalid range }
   {
+    \msg_line_context: \iow_newline:
     (#1)~The ~range~ '#2' ~is ~ invalid. ~Using~ '1'~ instead
   }
   {
@@ -64,6 +66,7 @@
 
 \msg_new:nnnn { codeverbatim / syntax } { nan range }
   {
+    \msg_line_context: \iow_newline:
     (#1)~ Invalid~ number/range:~ #2
   }
   {
@@ -71,14 +74,55 @@
     ~Error~Code~ ID:<#1>.
   }
 
+\msg_new:nnnn { codeverbatim / syntax } { single char }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Extra ~  (ignored) ~ characters ~ found ~ in ~ the ~  '#2' ~  list.
+  }
+  {
+    The ~list ~ '#2'  ~ should ~ contain ~ only ~ single ~ chars ~ items.
+    ~Error~Code~ ID:<#1>.
+  }
 
-\cs_generate_variant:Nn \regex_const:Nn {c}
-\cs_generate_variant:Nn \tl_retokenize:n { e , o}
+\msg_new:nnnn { codeverbatim } { sverb on err }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~You~ can't~ (re)define~short~ verbatim~ commands~while~they~are~active.
+  }
+  {
+    Deactivate~the~ short~verbatim~commands~ before~(re)defining~them.
+    ~Error~Code~ ID:<#1>.
+  }
 
-\tl_new:N \l__codeverb_dummy_tl %% This is a dummy, to be 'absorbed'
+\msg_new:nnnn { codeverbatim } { sverb already on }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Short~ Verbatim~ commands~ are ~already~active.~command~ignored.
+  }
+  {
+  }
+
+\msg_new:nnnn { codeverbatim } { sverb already off }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Short~ Verbatim~ commands~ aren't ~active.~command~ignored.
+  }
+  {
+  }
+
+\cs_generate_variant:Nn \regex_const:Nn { c }
+\cs_generate_variant:Nn \tl_retokenize:n { e , o }
+\cs_generate_variant:Nn \tl_show:n { e }
+
+%\tl_new:N \l__codeverb_dummy_tl %% This is a dummy, to be 'absorbed' ... see 'weird comment'
+
 \bool_new:N \l__codeverb_first_entry_bool
 \bool_new:N \l__codeverb_drop_first_bool
 \bool_new:N \l__codeverb_drop_blanks_bool
+
+
+\bool_new:N \g__codeverb_tmp_build_tl
+\bool_new:N \l__codeverb_tmpii_build_tl
 
 \tl_new:N \g__codeverb_tmpa_tl
 \tl_new:N \l__codeverb_tmpa_tl
@@ -92,92 +136,99 @@
 \seq_new:N \l__codeverb_tmpa_seq
 \seq_new:N \l__codeverb_lastline_seq
 
-%%% Just in case, but probably not nedded
+%%% Just in case, but probably not needded
 %\str_const:Ne \c__codeverb_hidden_space_str
 %  { \c_percent_str \c_circumflex_str \c_circumflex_str A scheol \c_percent_str }
 
 
-\seq_new:N \l__codeverb_set_other_seq
-\seq_set_from_clist:Nn \l__codeverb_set_other_seq
-  { \ ,\^^I,\\,\{,\},\$,\&,\#,\^,\^^K,\_,\^^A,\%,\~,\^^J }
-%\seq_show:N   \l__codeverb_set_other_seq
-\cs_new:Npn \__codeverb_set_others:
+\seq_new:N \l__codeverb_other_seq
+
+\cs_new:Npn \__codeverb_set_other:N #1
   {
-    \seq_map_inline:Nn \l__codeverb_set_other_seq
-      { \char_set_catcode_other:n {`##1} }
+    \seq_map_inline:Nn #1
+      { \char_set_catcode_other:n { ` ##1 } }
+  }
+
+\cs_new:Npn \__codeverb_set_letter:N #1
+  {
+    \seq_map_inline:Nn #1
+      { \char_set_catcode_letter:n { ` ##1 } }
   }
 
 
-\cs_new:Npn\__codeverb_env_begin:
+\cs_new:Npn \__codeverb_env_begin:
   {
     \bool_set_true:N \l__codeverb_first_entry_bool
     \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_begin:n
     \tl_gclear:N \g__codeverb_tmp_build_tl
     \group_begin:
-      \__codeverb_set_others:  
-      \char_set_catcode_other:n {`\^^M}
+      \__codeverb_env_ccset:
+      \__codeverb_sverb_self_ccset:
+      \__codeverb_env_local_ccset:
+      \char_set_catcode_other:n { ` \^^M }
       \__codeverb_linescan:w
   }
 
 
 \group_begin:
-  \char_set_catcode_other:n {`\^^M} \endlinechar=-1 
-  \char_set_catcode_other:n {`\^^J}
+  \char_set_catcode_other:n { ` \^^M } \endlinechar=-1
+  \char_set_catcode_other:n { ` \^^J }
 
-  \cs_new:Npn \__codeverb_body_build:n #1 {}
-  \cs_generate_variant:Nn \__codeverb_body_build:n {o,e}  
+  \cs_new:Npn \__codeverb_body_build:n #1 { }
+  \cs_generate_variant:Nn \__codeverb_body_build:n { o,e }
 
   \cs_new:Npn \__codeverb_body_build_begin:n #1
     {
       \bool_if:NTF \l__codeverb_first_entry_bool
         {
-          \tl_gput_right:Nn \g__codeverb_tmp_build_tl {^^J}
+          %% TO BE EVALUATED: with listings this IS NEEDED... otherwise not (codehl gets an extra line....)
+          %\tl_gput_right:Nn \g__codeverb_tmp_build_tl { ^^J }
           \bool_set_false:N \l__codeverb_first_entry_bool
           \bool_if:NTF \l__codeverb_drop_first_bool
             { }
             {
-              \tl_if_blank:nTF {#1}
+              \tl_if_blank:nTF { #1 }
                 { }
                 {
-                  \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_rest:n 
-                  \tl_gput_right:Nn \g__codeverb_tmp_build_tl {#1 ^^J}
+                  \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_rest:n
+                  \__codeverb_lineproc:Nn \g__codeverb_tmp_build_tl { #1 ^^J }
                 }
             }
         }
         {
           \bool_if:NTF \l__codeverb_drop_blanks_bool
             {
-              \tl_if_blank:nTF {#1}
+              \tl_if_blank:nTF { #1 }
                 { }
                 {
-                  \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_rest:n 
-                  \tl_gput_right:Nn \g__codeverb_tmp_build_tl {#1 ^^J}
+                  \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_rest:n
+                  \__codeverb_lineproc:Nn \g__codeverb_tmp_build_tl { #1 ^^J }
                 }
             }
             {
-              \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_rest:n 
-              \tl_gput_right:Nn \g__codeverb_tmp_build_tl {#1 ^^J}
-            }
-        }    
+              \cs_set_eq:NN \__codeverb_body_build:n \__codeverb_body_build_rest:n
+              \__codeverb_lineproc:Nn \g__codeverb_tmp_build_tl { #1 ^^J }
+           }
+        }
     }
   \cs_new:Npn \__codeverb_body_build_rest:n #1
     {
-      \tl_gput_right:Nn \g__codeverb_tmp_build_tl {#1 ^^J}
+      \__codeverb_lineproc:Nn \g__codeverb_tmp_build_tl { #1 ^^J }
     }
 
 
   \cs_new:Npn \__codeverb_set_env_linescan:NNNn #1#2#3#4
-    {        
-      \cs_new:cpn {__codeverb_#4_linescan:w} ##1 ^^M
+    {
+      \cs_new:cpn { __codeverb_env_#4_linescan:w } ##1 ^^M
         {
-          \regex_split:NnNTF  #1 {##1} \l__codeverb_tmpa_seq
+          \regex_split:NnNTF  #1 { ##1 } \l__codeverb_tmpa_seq
             {
               \int_gincr:N #3
             }
-            {}
-          \regex_split:NnNTF  #2 {##1} \l__codeverb_lastline_seq
+            { }
+          \regex_split:NnNTF  #2 { ##1 } \l__codeverb_lastline_seq
             {
-              \int_if_zero:nTF {#3}
+              \int_if_zero:nTF { #3 }
                 {
                   \seq_pop_left:NN \l__codeverb_lastline_seq \l__codeverb_left_tl
                   \seq_pop_left:NN \l__codeverb_lastline_seq \l__codeverb_left_tl
@@ -185,177 +236,741 @@
                   \seq_pop_right:NN \l__codeverb_lastline_seq \l__codeverb_right_tl
                   \tl_gset_eq:NN \g__codeverb_tmpa_tl \l__codeverb_right_tl
                   \tl_if_blank:VTF \l__codeverb_left_tl
-                    {}
+                    { }
                     {
                       \__codeverb_body_build:o \l__codeverb_left_tl
                     }
                   \cs_set:Npn \__codeverb_linescan:w
                     {
-                      \group_end: \end{#4} 
+                      \group_end: \end{ #4 }
                       \tl_retokenize:V \g__codeverb_tmpa_tl
                     }
                 }
                 {
                   \int_gdecr:N #3
-                  \__codeverb_body_build:n {##1}
+                  \__codeverb_body_build:n { ##1 }
                 }
             }
             {
-              \__codeverb_body_build:n {##1}
+              \__codeverb_body_build:n { ##1 }
             }
           \__codeverb_linescan:w
-        } 
+        }
     }
-    
+
 \group_end:
-\cs_generate_variant:Nn \__codeverb_set_env_linescan:NNNn {ccc}
+\cs_generate_variant:Nn \__codeverb_set_env_linescan:NNNn { ccc }
 
+\cs_generate_variant:Nn \regex_set:Nn { co }
 
-    
-\cs_new_protected:Npn \__codeverb_new_retokenize_envcs:Nnn  #1#2#3
+\int_new:N \g__codeverb_sverb_int
+
+%%% TODO:: move this to, perhaps, codecmm (from codedescribe...)
+%%%
+%%%%%%%
+%%% This is defined both in
+%%% codehl   => \__codehl_lang_get_dlimit:nNN
+%%%             \__codehl_regex_sanitize:N
+%%% codeverb => \__codeverb_get_dlimit:nNN
+%%%             \__codeverb_regex_sanitize:N
+%%%
+%%% to avoid cross dependence
+%%%%%%%
+
+%%%%%%%
+%%% those are all characters that have an special (regex) meaning
+%%%%%%%
+\regex_const:Nn \c__codeverb_tr_regex { ( [ \_ \| \. \+ \- \* \? \! \, \^ \$ \:  \[ \] \{ \} \( \) \\ ] ) }
+\cs_new_protected:Npn \__codeverb_regex_sanitize:N
+  { \regex_replace_all:NnN \c__codeverb_tr_regex { \\ \1 } }
+
+\regex_const:Nn \c__codeverb_escape_regex { \\(.) }
+\cs_new_protected:Npn \__codeverb_dlimit:nNN #1
   {
-    \cs_new_protected:Npn #1 ##1
+    \str_set:Nn \l__codeverb_tmpa_str { #1 }
+    \tl_remove_all:Nn \l__codeverb_tmpa_str { ~ }
+    \regex_replace_all:NnN \c__codeverb_escape_regex { \1 } \l__codeverb_tmpa_str
+    \exp_last_unbraced:No \__codeverb_dlimit:wNN \l__codeverb_tmpa_str \q_stop
+  }
+
+\cs_new_protected:Npn \__codeverb_dlimit:wNN #1#2 \q_stop #3#4
+  {
+    \tl_set:Nn #3 { #1 }
+    \tl_if_blank:nTF { #2 }
+      { \tl_clear:N #4 }
+      { \tl_set:Nn #4 { #2 } }
+  }
+
+%%%%%%%
+%%% Bending the rules... this behaves as an usual conditional,
+%%% though it isn't a standard one
+%%%%%%%
+\cs_new_protected:Npn \__codeverb_getchar:wNTF #1#2 \q_stop #3
+  {
+    \tl_set:Nn #3 { #1 }
+    \tl_if_blank:nTF { #2 }
+  }
+
+
+
+\prop_new_linked:N \l__codeverb_sverb_prop
+\prop_new_linked:N \l__codeverb_sverb_scan_prop
+\seq_new:N \l__codeverb_sverb_seq
+\seq_new:N \l__codeverb_sverb_self_activ_seq
+\bool_new:N \l__codeverb_sverb_build_bool
+\bool_new:N \l__codeverb_sverb_on_bool
+\int_new:N \l__codeverb_sverb_cnti_int
+\int_new:N \l__codeverb_sverb_cntii_int
+\int_new:N \l__codeverb_sverb_patt_cnt_int
+
+
+\seq_new:N \l__codeverb_opt_other_seq
+\seq_new:N \l__codeverb_opt_letter_seq
+
+\clist_new:N \l__codeverb_opt_other_clist
+
+
+
+
+\keys_define:nn { codeverb / common keys }
+  {
+    set ~ other   .code:n =
       {
-        \tl_retokenize:e
-          {
-            \exp_not:N \begin{#3}
-            ##1
-            #2
-          }    
+        \seq_clear:N \l__codeverb_opt_other_seq
+        \__codeverb_sanitize_list:nNn
+          { set ~ other }
+          \l__codeverb_opt_other_seq
+          { #1 }
+
+      } ,
+
+    other         .code:n =
+      {
+        \__codeverb_sanitize_list:nNn
+          { other }
+          \l__codeverb_opt_other_seq
+          { #1 }
+      } ,
+
+    letter        .code:n =
+      {
+        \__codeverb_sanitize_list:nNn
+          { letter }
+          \l__codeverb_opt_letter_seq
+          { #1 }
+      } ,
+
+%    cctab         .code:n =
+%      {
+%        \cctab_if_exist:cTF { #1 }
+%          {
+%            %%% it's either that
+%            \tl_set:Nn \l__codeverb_opt_cctab_tl { #1 }
+%          }
+%          { %%% \msg_err... it doesn't exist
+%          }
+%      } ,
+%    cctab       .value_required:n = true ,
+
+ }
+
+
+\cs_new_protected:Npn \__codeverb_opt_catcodes_default:
+  {
+    \seq_set_from_clist:Nn \l__codeverb_opt_other_seq
+      {
+        \~  , \     , \\    , \{    , \}    ,
+        \#  , \&    , \$    , \^    , \_    ,
+        \%  , \^^A  , \^^I  , \^^J  , \^^K
+      }
+    \seq_clear:N \l__codeverb_opt_letter_seq
+    \tl_clear:N \l__codeverb_opt_cctab_tl
+  }
+
+\cs_new_protected:Npn \__codeverb_sanitize_list:nNn #1#2#3
+  {
+    \seq_set_from_clist:Nn \l__codeverb_tmpa_seq { #3 }
+    \seq_map_inline:Nn \l__codeverb_tmpa_seq
+      {
+        \__codeverb_getchar:wNTF ##1 \q_stop \l__codeverb_tmpa_tl
+          { % OK, just one char
+            \seq_put_right:No #2 \l__codeverb_tmpa_tl
+          }
+          { % more than one char... rest being ignored
+            \seq_put_right:No #2 \l__codeverb_tmpa_tl
+            \msg_error:nnnn { codeverbatim / syntax } { single char }
+              { san01 } { #1 }
+          }
       }
   }
-\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:Nnn {NV}  
+
+
+\cs_new_protected:Npn \__codeverb_ccset_new:n #1
+  {
+    \tl_if_empty:NTF \l__codeverb_opt_cctab_tl
+      { \tl_clear:N \l__codeverb_tmpa_tl }
+      {
+        \tl_set:Ne  \l__codeverb_tmpa_tl
+          {
+            \exp_not:N \cctab_select:N \exp_not:c { \l__codeverb_opt_cctab_tl }
+          }
+      }
+    \seq_if_empty:NF \l__codeverb_opt_other_seq
+      {
+        \seq_set_eq:cN { __codeverb_ #1 _other_seq }
+          \l__codeverb_opt_other_seq
+
+        \tl_put_right:Ne \l__codeverb_tmpa_tl
+          {
+            \exp_not:N \__codeverb_set_other:N \exp_not:c { __codeverb_ #1 _other_seq }
+          }
+      }
+    \seq_if_empty:NF \l__codeverb_opt_letter_seq
+      {
+        \seq_set_eq:cN { __codeverb_ #1 _letter_seq }
+          \l__codeverb_opt_letter_seq
+        \tl_put_right:Ne \l__codeverb_tmpa_tl
+          {
+            \exp_not:N \__codeverb_set_letter:N \exp_not:c { __codeverb_ #1 _letter_seq }
+          }
+      }
+
+    \cs_set_protected:cpe { __codeverb_ #1 _ccset: }
+      {
+        \exp_not:o \l__codeverb_tmpa_tl
+      }
+
+%\cs_show:c { __codeverb_ #1 _ccset: }
+%%\cs_show:c { l__codeverb_ #1 _cctab }
+%\seq_show:c { __codeverb_ #1 _other_seq }
+%\seq_show:c { __codeverb_ #1 _letter_seq }
+%
+%\group_begin:
+%\use:c { __codeverb_ #1 _ccset: }
+%\group_end:
+  }
+
+
+\int_new:N \g__codeverb_sverb_cnt_int
+
+%%%%%%%
+%%% #1 keys
+%%% #2 active char, start pattern
+%%% #3 end pattern
+%%% #4 processing code
+%%%%%%%
+\cs_new_protected:Npn \codeverb_sverb_new:nnnn #1#2#3#4
+  {
+    \__codeverb_opt_catcodes_default:
+    \keys_set:nn { codeverb / common keys }
+      { #1 }
+
+
+    \bool_if:NTF \l__codeverb_sverb_on_bool
+      {
+        \msg_err:nnn { codeverbatim } { sverb on err }
+          { sverb01 }
+      }
+      {
+
+        \int_gincr:N \g__codeverb_sverb_cnt_int
+
+        \__codeverb_ccset_new:n { sverb_ \int_use:N \g__codeverb_sverb_cnt_int }
+
+        \__codeverb_dlimit:nNN
+          { #2 }
+          \l__codeverb_tmpa_tl \l__codeverb_tmpb_tl
+
+        \tl_set_eq:NN \l__codeverb_tmpe_tl \l__codeverb_tmpb_tl
+
+        \__codeverb_regex_sanitize:N \l__codeverb_tmpe_tl
+
+        \__codeverb_dlimit:nNN
+          { #3 }
+          \l__codeverb_tmpc_tl \l__codeverb_tmpd_tl
+
+        \prop_put:Nee \l__codeverb_sverb_prop
+          { \exp_not:o \l__codeverb_tmpa_tl \exp_not:o \l__codeverb_tmpb_tl }
+          {
+            { \exp_not:o \l__codeverb_tmpa_tl }
+            {
+              { \exp_not:o \l__codeverb_tmpa_tl }
+              { \exp_not:o \l__codeverb_tmpe_tl }
+              { \exp_not:o \l__codeverb_tmpc_tl \exp_not:o \l__codeverb_tmpd_tl }
+              { \exp_not:n { #4 } }
+              { \exp_not:c { __codeverb_sverb_ \int_use:N \g__codeverb_sverb_cnt_int _ccset: } }
+            }
+          }
+
+        \seq_put_right:Ne \l__codeverb_sverb_seq
+          { \exp_not:o \l__codeverb_tmpa_tl \exp_not:o \l__codeverb_tmpb_tl }
+
+        \bool_set_false:N \l__codeverb_sverb_build_bool
+%        \prop_show:N \l__codeverb_sverb_prop
+      }
+  }
+
+
+
+\cs_new_protected:Npn \codeverb_sverb_undef:n #1
+  {
+    \bool_if:NTF \l__codeverb_sverb_on_bool
+      {
+        \msg_err:nnn { codeverbatim } { sverb on err }
+          { sverb02 }
+      }
+      {
+        %%% since removing an item from a sequence is expensive (_map_inline... + tmp _seq)
+        %%% it's only removed from the main prop
+        \prop_remove:Nn \l__codeverb_sverb_prop { #1 }
+        \bool_set_false:N \l__codeverb_sverb_build_bool
+      }
+  }
+\cs_set_eq:NN \cvSVerbUndef \codeverb_sverb_undef:n
+
+\cs_new_protected:Npn \codeverb_sverb_undef_all:n #1
+  {
+    \bool_if:NTF \l__codeverb_sverb_on_bool
+      {
+        \msg_err:nnn { codeverbatim } { sverb on err }
+          { sverb03 }
+      }
+      {
+        \prop_clear:N \l__codeverb_sverb_prop
+        \seq_clear:N \__codeverb_sverb_seq
+        \bool_set_false:N \l__codeverb_sverb_build_bool
+      }
+  }
+\cs_set_eq:NN \cvSVerbUndefAll \codeverb_sverb_undef_all:n
+
+
+
+\cs_set_eq:NN \__codeverb_sverb_self_ccset: \relax
+
+\cs_new_protected:Npn \codeverb_sverb_on:
+  {
+    \bool_if:NTF \l__codeverb_sverb_on_bool
+      {
+        \msg_warning:nnn { codeverbatim } { sverb already on }
+          {verbon:01}
+      }
+      {
+        \bool_if:NTF \l__codeverb_sverb_build_bool
+          { }
+          {
+    %\prop_show:N \l__codeverb_sverb_prop
+
+            \seq_remove_duplicates:N \l__codeverb_sverb_seq
+            \prop_clear:N \l__codeverb_sverb_patt_prop
+            \prop_clear:N \l__codeverb_sverb_scan_prop
+            \seq_clear:N \l__codeverb_sverb_self_activ_seq
+            \int_zero:N \l__codeverb_sverb_patt_cnt_int
+            \seq_map_inline:Nn \l__codeverb_sverb_seq
+              {
+                %%% the pattern might have been deleted \codeverb_sverb_undef:n
+                %%%
+                \prop_get:NnNTF \l__codeverb_sverb_prop { ##1 } \l__codeverb_tmpa_tl
+                  {
+                    \exp_last_unbraced:No
+                      \__codeverb_sverb_patt_build:Nn \l__codeverb_tmpa_tl
+                  }
+                  { }
+              }
+            \int_zero:N \l__codeverb_sverb_cnti_int
+            \prop_map_inline:Nn \l__codeverb_sverb_patt_prop
+              {
+                \int_incr:N \l__codeverb_sverb_cnti_int
+                \int_zero:N \l__codeverb_sverb_cntii_int
+
+                \seq_map_inline:Nn ##2
+                  {
+                    \__codeverb_sverb_onbuild:Nnnnn ####1
+                  }
+
+                \prop_put:Nne \l__codeverb_sverb_scan_prop
+                  { ##1 }
+                  {
+                    { \exp_not:n { ##1 } }
+                    { \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int _activ_bool } }
+                    { \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int _catcode_tl } }
+                    { \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . 0 _cs: } }
+                    { \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _cs: } }
+                  }
+              }
+            \bool_set_true:N \l__codeverb_sverb_build_bool
+          }
+
+        \cs_set:Npn \__codeverb_sverb_self_ccset:
+          { \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq }
+
+        \prop_map_inline:Nn \l__codeverb_sverb_scan_prop
+          { \__codeverb_sverb_set_on:NNNNN ##2 }
+        \bool_set_true:N \l__codeverb_sverb_on_bool
+      }
+
+
+%\prop_show:N \l__codeverb_sverb_patt_prop
+%\prop_show:N \l__codeverb_sverb_scan_prop
+
+  }
+
+\cs_generate_variant:Nn \regex_show:N { c }
+\cs_generate_variant:Nn \regex_const:Nn { c }
+\cs_generate_variant:Nn \regex_set:Nn { c }
+
+
+\cs_new_protected:Npn \codeverb_sverb_off:
+  {
+    \bool_if:NTF \l__codeverb_sverb_on_bool
+      {
+        \prop_map_inline:Nn \l__codeverb_sverb_scan_prop
+          { \__codeverb_sverb_set_off:NNNNN ##2 }
+        \bool_set_false:N \l__codeverb_sverb_on_bool
+        \cs_set_eq:NN \__codeverb_sverb_self_ccset: \relax
+      }
+      {
+        \msg_warning:nnn { codeverbatim } { sverb already off }
+          {verboff:01}
+      }
+  }
+
+
+\NewDocumentCommand \cvSVerbNew { O{ }mmm }
+  { \codeverb_sverb_new:nnnn { #1 } { #2 } { #3 } { #4 } }
+
+\cs_set_eq:NN \cvSVerbOn  \codeverb_sverb_on:
+\cs_set_eq:NN \cvSVerbOff \codeverb_sverb_off:
+
+\cs_new_protected:Npn \__codeverb_sverb_set_off:NNNNN #1#2#3#4#5
+  {
+    \bool_if:NTF #2
+      { \char_set_active_eq:NN #1 #4 }
+      { \char_set_catcode:nn { ` #1 } { #3 } }
+  }
+
+\cs_new_protected:Npn \__codeverb_sverb_set_on:NNNNN #1#2#3#4#5
+  {
+    \tl_set:Ne #3
+      { \char_value_catcode:n { ` #1 } }
+
+    \int_compare:nNnTF { #3 } = { 13 }
+      {
+        \__codeverb_sverb_save:No #4 { \char_generate:nn { ` #1 } { 13 } }
+        \bool_set_true:N #2
+      }
+      {
+        \cs_set:Npn #4 { #1 }
+        \bool_set_false:N #2
+      }
+
+    \char_set_active_eq:NN #1 #5
+    \char_set_catcode_active:N #1
+  }
+
+
+\cs_new_protected:Npn \__codeverb_sverb_save:Nn #1#2
+  {
+    \exp_last_unbraced:NNo
+      \cs_set_eq:NN #1 #2
+  }
+\cs_generate_variant:Nn \__codeverb_sverb_save:Nn { No }
+
+
+%%% #5 (was) _clist (others)
+\cs_new_protected:Npn \__codeverb_sverb_onbuild:Nnnnn #1#2#3#4#5
+  {
+    \tl_set:Ne \l__codeverb_tmpa_tl
+      { \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _cs: } }
+    \int_incr:N \l__codeverb_sverb_cntii_int
+
+    \cs_set:cpn { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _scan:w } ##1 #3
+      {
+        \group_end:
+        #4
+      }
+
+    \seq_put_right:Nn \l__codeverb_sverb_self_activ_seq
+      { #1 }
+
+    \tl_if_blank:nTF  { #2 }
+      {
+        \cs_set:cpe { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _cs: }
+          {
+            \exp_not:N \group_begin:
+            \exp_not:N #5
+            \exp_not:N \__codeverb_sverb_self_ccset:
+            \exp_not:N \char_set_catcode_other:n { `\^^M }
+            \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _scan:w }
+          }
+      }
+      {
+        \regex_set:cn { c__codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int  _regex } { #2 }
+
+        \cs_set:cpe { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _cs: }
+          {
+            \exp_not:N \peek_regex_remove_once:NTF  \exp_not:c { c__codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int  _regex }
+              {
+                \exp_not:N \group_begin:
+                \exp_not:N #5
+                \exp_not:N \__codeverb_sverb_self_ccset:
+                \exp_not:N \char_set_catcode_other:n { `\^^M }
+                \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _scan:w }
+              }
+              { \exp_not:o \l__codeverb_tmpa_tl }
+          }
+      }
+%    \cs_show:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _cs: }
+%    \cs_show:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _scan:w }
+%    \regex_show:c { c__codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int  _regex }
+  }
+
+\cs_new_protected:Npn \__codeverb_sverb_patt_build:Nn #1#2
+  {
+    \prop_get:NnNTF \l__codeverb_sverb_patt_prop
+      { #1 } \l__codeverb_tmpa_tl
+      { }
+      {
+        \int_incr:N \l__codeverb_sverb_patt_cnt_int
+        \seq_clear_new:c { l__codeverb_sverb_patt_ \int_use:N \l__codeverb_sverb_patt_cnt_int _seq }
+        \tl_set:Ne \l__codeverb_tmpa_tl { \exp_not:c { l__codeverb_sverb_patt_ \int_use:N \l__codeverb_sverb_patt_cnt_int _seq } }
+        \prop_put:Nne \l__codeverb_sverb_patt_prop
+          { #1 }
+          { \exp_not:c { l__codeverb_sverb_patt_ \int_use:N \l__codeverb_sverb_patt_cnt_int _seq } }
+      }
+    \exp_last_unbraced:No
+      \seq_put_right:Nn \l__codeverb_tmpa_tl
+        { #2 }
+  }
+
+\regex_const:Nn \c__codeverb_spc_regex { \ }
+\tl_new:N \l__codeverb_tmpY_tl
+\cs_new:Npn \codeverb_hide_spc:n #1
+  {
+    \tl_set:Nn \l__codeverb_tmpY_tl { #1 }
+    \regex_replace_all:NnN \c__codeverb_spc_regex { \c{ space } } \l__codeverb_tmpY_tl
+    \l__codeverb_tmpY_tl
+  }
+\cs_set_eq:NN \cvHideSpc \codeverb_hide_spc:n
+
+\cs_new_protected:Npn \codeverb_sverb_setcs:nn #1#2
+  {
+    \__codeverb_opt_catcodes_default:
+    \keys_set:nn { codeverb / common keys }
+      { #1 }
+
+    \__codeverb_ccset_new:n { sverb }
+
+    \cs_set:Npn \__codeverb_sverb_cs:n ##1
+      { #2 }
+  }
+
+\NewDocumentCommand \cvSVerbSet { O{ }m }
+  { \codeverb_sverb_setcs:nn { #1 } { #2 } }
+
+\codeverb_sverb_setcs:nn
+  { } { \__codeverb_hide_spc:n { #1 } }
+
+
+\cs_new_protected:Npn \codeverb_sverb:Nw #1
+  {
+    \str_set:Nn \l__codeverb_tmpa_str { #1 }
+    \__codeverb_sverb_set_scan:o \l__codeverb_tmpa_str
+    \group_begin:
+      \__codeverb_sverb_ccset:
+      \__codeverb_sverb_self_ccset:
+      \char_set_catcode_other:n { ` #1 }
+      \char_set_catcode_other:n { `\^^M }
+      \__codeverb_sverb_scan:nw
+  }
+\cs_set_eq:NN \cvSVerb \codeverb_sverb:Nw
+
+\cs_new_protected:Npn \__codeverb_sverb_set_scan:n #1
+  {
+    \cs_set:Npn \__codeverb_sverb_scan:nw ##1 #1
+      {
+        \group_end:
+        \__codeverb_sverb_cs:n { ##1 }
+      }
+  }
+\cs_generate_variant:Nn \__codeverb_sverb_set_scan:n { o }
+
+%%%%%%%
+%%%%%%%
+
+
+\cs_new_protected:Npn \codeverb_env_catcode_set:n #1
+  {
+    \seq_clear:N \l__codeverb_opt_other_seq
+    \seq_clear:N \l__codeverb_opt_letter_seq
+    \tl_clear:N \l__codeverb_opt_cctab_tl
+
+    \keys_set:nn { codeverb / common keys } { #1 }
+
+    \__codeverb_ccset_new:n { env_local }
+
+  }
+
+\keys_define:nn { }
+  { codeverb / new env  .inherit:n =  codeverb / common keys  }
+
+\keys_define:nn { codeverb / new env }
+  {
+    drop ~ first    .bool_set:N        = \l__codeverb_opt_ig_first_bool ,
+
+    drop ~ blanks   .bool_set:N        = \l__codeverb_opt_ig_blank_bool ,
+
+    line ~ proc     .tl_set:N          = \l__codeverb_opt_lineproc_tl ,
+    line ~ proc     .value_required:n  = true ,
+
+    inline          .bool_set:N        = \l__codeverb_opt_inline_bool ,
+
+    verb ~ tl       .tl_set:N          = \l__codeverb_opt_verb_tl ,
+    verb ~ tl       .value_required:n  = true ,
+ }
+
+\keys_precompile:nnN  { codeverb / new env }
+  {
+    drop~first    = false ,
+    drop~blanks   = false ,
+    line~proc     = { } ,
+    inline        = false ,
+    verb~tl       = \g_codeverb_verb_body_tl ,
+  }
+  \l__codeverb_opt_env_defaults_tl
+
+\cs_new_protected:Npe \__codeverb_opt_env_defaults:
+  {
+    \exp_not:o \l__codeverb_opt_env_defaults_tl
+    \exp_not:N \__codeverb_opt_catcodes_default:
+  }
+
+\cs_new:Npn \__codeverb_set_drop_first_true:
+  { \bool_set_true:N \l__codeverb_drop_first_bool }
+\cs_new:Npn \__codeverb_set_drop_first_false:
+  { \bool_set_false:N \l__codeverb_drop_first_bool }
+\cs_new:Npn \__codeverb_set_drop_blanks_true:
+  { \bool_set_true:N \l__codeverb_drop_blanks_bool }
+\cs_new:Npn \__codeverb_set_drop_blanks_false:
+  { \bool_set_false:N \l__codeverb_drop_blanks_bool }
+
+
+\cs_new:Npn \__codeverb_new_environment:NNnnnnn  #1#2#3#4 #5#6#7
+  {
+    \bool_if:NTF \l__codeverb_opt_inline_bool
+      {
+        \cs_new_protected:Npn #2 ##1
+          { #7 }
+
+        \NewDocumentEnvironment { #4 }{ #5 }
+          {
+            #3  %% setting defaults
+            #6
+            \__codeverb_env_begin:
+          }
+          {
+            \exp_args:No
+              #2 \g__codeverb_tmp_build_tl
+          }
+      }
+      {
+        \NewDocumentEnvironment { #4 }{ #5 }
+          {
+            #3  %% setting defaults
+            #6
+            \__codeverb_env_begin:
+          }
+          {
+            \tl_gset_eq:NN #1 \g__codeverb_tmp_build_tl
+            #7
+          }
+      }
+  }
+\cs_generate_variant:Nn   \__codeverb_new_environment:NNnnnnn { NNV , NcV }
 
 
 
 \cs_new:Npn \__codeverb_new_scan_env:n #1
   {
-    \int_new:c {g__#1_cnt_int}
-    \regex_const:cn {c__#1_begin_regex} {(.*)\\begin[\ ]*\{#1\}(.*)}
-    \regex_const:cn {c__#1_end_regex}   {(.*)\\end[\ ]*\{#1\}(.*)}
-    \__codeverb_set_env_linescan:cccn  {c__#1_begin_regex} {c__#1_end_regex} {g__#1_cnt_int} {#1}
+    \int_new:c { g__env_ #1 _cnt_int }
+
+    \regex_const:cn { c__env_ #1 _begin_regex }
+      { (.*)\\begin[\ ]*\{ #1 \}(.*) }
+
+    \regex_const:cn { c__env_ #1 _end_regex }
+      { (.*)\\end[\ ]*\{ #1 \}(.*) }
+
+    \__codeverb_set_env_linescan:cccn
+      { c__env_ #1 _begin_regex }
+      { c__env_ #1 _end_regex }
+      { g__env_ #1 _cnt_int }
+      { #1 }
   }
 
-\bool_new:N \l__codeverb_opt_seq_bool
-\bool_new:N \l__codeverb_opt_seq_public_bool
 
-\keys_define:nn { codeverb / new env }
-  {
-    drop~first    .bool_set:N        = \l__codeverb_opt_ig_first_bool ,
-    
-    drop~blanks   .bool_set:N        = \l__codeverb_opt_ig_blank_bool ,
-    
-    line~proc     .tl_set:N          = \l__codeverb_opt_lineproc_tl ,
-    line~proc     .value_required:n  = true ,
-    
-    verb~tl       .tl_set:N          = \l__codeverb_opt_verb_tl ,
-    verb~tl       .value_required:n  = true ,
-    
-    seq~kind      .choice: ,
-    seq~kind  / public  .code:n = 
-      { 
-        \bool_set_true:N \l__codeverb_opt_seq_bool
-        \bool_set_true:N \l__codeverb_opt_seq_public_bool 
-      } ,
-    seq~kind  / private  .code:n = 
-      { 
-        \bool_set_true:N \l__codeverb_opt_seq_bool
-        \bool_set_false:N \l__codeverb_opt_seq_public_bool 
-      } ,
-    seq~kind  / none    .code:n =
-      { \bool_set_false:N \l__codeverb_opt_seq_bool } ,
- }
- 
-\keys_precompile:nnN  { codeverb / new env }
-  {
-    drop~first    = false ,
-    drop~blanks   = false ,
-    line~proc     = \tl_gput_right:Nn ,
-    verb~tl       = \g_codeverb_verb_body_tl ,
-    seq~kind      = none
-  }
-  \l__codeverb_opt_defaults_tl
 
-\cs_new:Npn \codeverb_set_drop_first_true:
-  { \bool_set_true:N \l__codeverb_drop_first_bool }
-\cs_new:Npn \codeverb_set_drop_first_false:
-  { \bool_set_false:N \l__codeverb_drop_first_bool }
-\cs_new:Npn \codeverb_set_drop_blanks_true:
-  { \bool_set_true:N \l__codeverb_drop_blanks_bool }
-\cs_new:Npn \codeverb_set_drop_blanks_false:
-  { \bool_set_false:N \l__codeverb_drop_blanks_bool }
 
-\cs_new:Npn \__codeverb_new_environment:NNNnnnnn  #1#2#3#4 #5#6#7#8
-  {
-    \__codeverb_new_scan_env:n {#5}
-    \NewDocumentEnvironment {#5}{#6}
-      {
-        #4  %% setting defaults
-        #7
-        \cs_set_eq:NN \__codeverb_lineproc:Nn  #2
-        \cs_set_eq:NN \__codeverb_linescan:w   #3
-        \__codeverb_env_begin:
-      }
-      { 
-        \tl_gset_eq:NN #1 \g__codeverb_tmp_build_tl
-        #8
-      }      
-  }
-\cs_generate_variant:Nn   \__codeverb_new_environment:NNNnnnnn {NNcV}
-
-\cs_new:Npn \codeverb_new_environment:nnnnnn #1#2#3
+%%% TODO: fix the 'common keys' snafu (1st cctab, then other, then letter... TEST for it...)
+%%% here it is, mostly, correct.
+%%%
+\cs_new_protected:Npn \codeverb_new_environment:nnnnn #1#2
   {
 
-    \l__codeverb_opt_defaults_tl
-    \keys_set:nn { codeverb / new env } {#1}
-    
+    \__codeverb_opt_env_defaults:
+    \keys_set:nn { codeverb / new env } { #1 }
+
+    \__codeverb_ccset_new:n { env_ #2 }
+
+%\cs_show:c { __codeverb_env_ #2 _ccset: }
+
     \bool_if:NTF \l__codeverb_opt_ig_first_bool
-      { \tl_set:Nn \l__codeverb_tmpa_tl { \codeverb_set_drop_first_true: } }
-      { \tl_set:Nn \l__codeverb_tmpa_tl { \codeverb_set_drop_first_false: } }
+      { \tl_set:Nn \l__codeverb_tmpa_tl { \__codeverb_set_drop_first_true: } }
+      { \tl_set:Nn \l__codeverb_tmpa_tl { \__codeverb_set_drop_first_false: } }
     \bool_if:NTF \l__codeverb_opt_ig_blank_bool
-      { \tl_put_right:Nn \l__codeverb_tmpa_tl  { \codeverb_set_drop_blanks_true: } }
-      { \tl_put_right:Nn \l__codeverb_tmpa_tl  { \codeverb_set_drop_blanks_false: } }
-    
-    \bool_if:NTF \l__codeverb_opt_seq_bool
+      { \tl_put_right:Nn \l__codeverb_tmpa_tl  { \__codeverb_set_drop_blanks_true: } }
+      { \tl_put_right:Nn \l__codeverb_tmpa_tl  { \__codeverb_set_drop_blanks_false: } }
+
+    \tl_if_empty:NTF \l__codeverb_opt_lineproc_tl
       {
-        \bool_if:NTF \l__codeverb_opt_seq_public_bool
-          {
-            \__codeverb_set_store_cmds:nn {g__}{#2_#3}
-            \tl_put_right:Ne \l__codeverb_tmpa_tl 
-              {
-                \exp_not:N \cs_set_eq:NN 
-                  \exp_not:N \codeverb_store_set_seq:n 
-                  \exp_not:c { #2_#3 _store_set_seq:n }
-              }
-          }
-          {
-            \__codeverb_set_store_cmds:nn {g}{__ #2_#3}
-            \tl_put_right:Ne \l__codeverb_tmpa_tl 
-              {
-                \exp_not:N \cs_set_eq:NN 
-                  \exp_not:N \codeverb_store_set_seq:n 
-                  \exp_not:c { __ #2_#3 _store_set_seq:n }
-              }
-          }
+        \cs_set_eq:cN { __codeverb_env_ #2 _lineproc:Nn } \tl_gput_right:Nn
       }
       {
+        \cs_new_protected:cpe { __codeverb_env_ #2 _lineproc:Nn } ##1 ##2
+          {
+            \exp_not:o \l__codeverb_opt_lineproc_tl \exp_not:N \l__codeverb_tmpii_build_tl { ##2 }
+            \exp_not:N \tl_gput_right:No ##1 \exp_not:N \l__codeverb_tmpii_build_tl
+          }
       }
 
-    \exp_args:NVV
-    \__codeverb_new_environment:NNcVnnnn
-      \l__codeverb_opt_verb_tl \l__codeverb_opt_lineproc_tl
-      {__codeverb_#3_linescan:w}
+    %%% This will set #2_linescan:w
+    \__codeverb_new_scan_env:n { #2 }
+
+    \tl_put_right:Ne \l__codeverb_tmpa_tl
+      {
+        \exp_not:N \cs_set:Npn    \exp_not:N \__codeverb_env_local_ccset: { }
+        \exp_not:N \cs_set_eq:NN  \exp_not:N \__codeverb_lineproc:Nn  \exp_not:c { __codeverb_env_ #2 _lineproc:Nn }
+        \exp_not:N \cs_set_eq:NN  \exp_not:N \__codeverb_linescan:w   \exp_not:c { __codeverb_env_ #2 _linescan:w }
+        \exp_not:N \cs_set_eq:NN  \exp_not:N \__codeverb_env_ccset:   \exp_not:c { __codeverb_env_ #2 _ccset: }
+      }
+
+    \exp_args:NV
+    \__codeverb_new_environment:NcVnnnn
+      \l__codeverb_opt_verb_tl
+      { __codeverb_env_ #2 _endcode:n }
       \l__codeverb_tmpa_tl
-      {#3}
+      { #2 }
   }
+
+
+\NewDocumentCommand \cvNewEnvironment { O{ }mmmm }
+  { \codeverb_new_environment:nnnnn { #1 } { #2 } { #3 } { #4 } { #5 } }
 
 %%%%
 %%%% This is trully (w)eird... for some reason the next token has to be a command...
 %%%% which gets partially absorbed.. therefore the 'dummy' (and empty) tl below...
-%%%% 
+%%%%
 %\cs_new:Npn \__codeverb_set_newlinechar:w
-%  { 
-%    \int_set:Nn \tex_newlinechar:D { 10 } {}
+%  {
+%    \int_set:Nn \tex_newlinechar:D { 10 } { }
 %  }
 %\cs_new_protected:Npn \__codeverb_new_retokenize_envcs:Nnn  #1#2#3
 %  {
@@ -363,18 +978,18 @@
 %      {
 %        \group_begin:
 %          \char_set_catcode_active:N \^^J
-%          \cs_set_eq:NN ^^J \scan_stop: 
-%          \__codeverb_set_newlinechar:w \l__codeverb_dummy_tl     
+%          \cs_set_eq:NN ^^J \scan_stop:
+%          \__codeverb_set_newlinechar:w \l__codeverb_dummy_tl
 %          \tl_retokenize:e
 %            {
-%              \exp_not:N \begin{#3}
+%              \exp_not:N \begin{ #3 }
 %              ##1
 %              #2
-%            }    
-%        \group_end:           
+%            }
+%        \group_end:
 %      }
 %  }
-%\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:NNn {Nc}  
+%\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:NNn { Nc }
 
 %\cs_new_protected:Npn \__codeverb_new_retokenize_envcs:Nnn  #1#2#3
 %  {
@@ -382,112 +997,144 @@
 %      {
 %        \tl_retokenize:e
 %          {
-%            \exp_not:N \begin{#3}
-%            ##1 
+%            \exp_not:N \begin{ #3 }
+%            ##1
 %            #2
-%          }    
+%          }
 %      }
 %  }
-%\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:Nnn {NV}  
+%\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:Nnn { NV }
 
-\cs_new_protected:Npn \codeverb_new_retokenize_envcs:Nn #1#2
+\keys_define:nn { codeverb / new expl }
   {
-    \str_set:Nn \l__codeverb_tmpa_tl { \end{#2} }
-    \str_remove_all:Nn \l__codeverb_tmpa_tl {~}
-    \__codeverb_new_retokenize_envcs:NVn #1 \l__codeverb_tmpa_tl {#2}
+    expl3 .bool_set:N = \l__codeverb_opt_expl_bool ,
+    expl3 .value_forbidden:n  = true ,
   }
 
-\cs_new_protected:Npn \codeverb_new_retokenize_cs:N #1
+\cs_new_protected:Npn \__codeverb_new_retokenize_envcs:nnn  #1#2#3
   {
-    \cs_set_eq:NN #1 \tl_retokenize:n
-  }
-
-\cs_new_protected:Npn \codeverb_new_retokenize_cs:NN #1#2
-  {
-    \cs_new_protected:Npn #1
+    \cs_new_protected:cpn { #2 :n } ##1
       {
-        \tl_retokenize:V #2
-      }
-  }
-
-
-\cs_new_protected:Npn \__codeverb_set_store_cmds:nn #1#2
-  {
-    \cs_new_protected:cpn  {#2_store_set_seq:n} ##1
-      {
-        \seq_if_exist:cF {#1 #2 _ ##1 _seq}
+        \tl_retokenize:e
           {
-            \seq_new:c {#1 #2 _ ##1 _seq}
-            \int_new:c {#1 #2 _ ##1 _int}
-            \cs_new:cpe { #2 _ ##1 _gput_right:n} ####1
+            \exp_not:N \begin{ #3 }
+            ##1
+            #1
+          }
+      }
+    \cs_generate_variant:cn { #2 :n } { V }
+    \bool_if:NTF \l__codeverb_opt_expl_bool
+      { }
+      {
+        \cs_set_eq:cc { #2 } { #2 :n }
+        \cs_set_eq:cc { #2 V } { #2 :V }
+      }
+  }
+\cs_generate_variant:Nn \__codeverb_new_retokenize_envcs:nnn { V }
+
+
+\cs_new_protected:Npn \codeverb_retoken_env_newcs:nnn #1#2#3
+  {
+    \bool_set_false:N \l__codeverb_opt_expl_bool
+    \keys_set:nn { codeverb / new expl } { #1 }
+    \str_set:Nn \l__codeverb_tmpa_tl { \end{ #3 } }
+    \str_remove_all:Nn \l__codeverb_tmpa_tl { ~}
+    \__codeverb_new_retokenize_envcs:Vnn \l__codeverb_tmpa_tl { #2 } { #3 }
+  }
+\NewDocumentCommand \cvRetokenEnvNewCommand { O{ }mm }
+  { \codeverb_retoken_env_newcs:nnn { #1 } { #2 } { #3 }
+  }
+
+\cs_new_protected:Npn \codeverb_retoken_newcs:N #1
+  { \cs_set_eq:NN #1 \tl_retokenize:n }
+\cs_set_eq:NN \cvRetokenNewCommand \__codeverb_retoken_newcs:N
+
+\cs_new_protected:Npn \codeverb_retoken_newcsV:N #1
+  { \cs_set_eq:NN #1 \tl_retokenize:V }
+\cs_set_eq:NN \cvRetokenNewCommandV \codeverb_retoken_newcsV:N
+
+
+
+\cs_new_protected:Npn \codeverb_new_store_cmds:nn #1#2
+  {
+    \bool_set_false:N \l__codeverb_opt_expl_bool
+    \keys_set:nn { codeverb / new expl } { #1 }
+
+    \cs_new_protected:cpn  { #2 _gput_right:nn } ##1 ##2
+      {
+        \seq_if_exist:cF { g__codeverb_ #2 _ ##1 _seq }
+          {
+            \seq_new:c { g__codeverb_ #2 _ ##1 _seq }
+            \int_new:c { g__codeverb_ #2 _ ##1 _int }
+            \cs_new_protected:cpe { #2 _ ##1 _gput_right:n } ####1
               {
-                \exp_not:N \int_gincr:N \exp_not:c {#1 #2 _ ##1 _int}
-                \exp_not:N \seq_gput_right:Nn \exp_not:c {#1 #2 _ ##1 _seq} {####1}
-              }      
-          }        
-        \cs_set_eq:Nc \codeverb_store_gput_right:n { #2 _ ##1  _gput_right:n}
+                \exp_not:N \int_gincr:N \exp_not:c { g__codeverb_ #2 _ ##1 _int }
+                \exp_not:N \seq_gput_right:Nn \exp_not:c { g__codeverb_ #2 _ ##1 _seq } { ####1 }
+              }
+          }
+        \use:c { #2 _ ##1 _gput_right:n } { ##2 }
       }
 
-    \cs_new_protected:cpn {#2_merge:Nnn}  ##1##2##3
+    \cs_new_protected:cpn { #2_merge:Nnn }  ##1##2##3
       {
         \bool_set_true:N \l__codeverb_first_merge_bool
-        \tl_if_blank:nTF {##3}
+        \tl_if_blank:nTF { ##3 }
           {
-            \clist_map_inline:nn {##2}
-              { 
+            \clist_map_inline:nn { ##2 }
+              {
                 \__codeverb_opt_a:wNN ####1 [ \q_nil \q_stop \l__codeverb_tmpa_tl \l__codeverb_tmpb_tl  %]
-                \__codeverb_range_merge:NnVV   ##1 {#1 #2} \l__codeverb_tmpa_tl \l__codeverb_tmpb_tl
+                \__codeverb_range_merge:NnVV   ##1 { g__codeverb_ #2 } \l__codeverb_tmpa_tl \l__codeverb_tmpb_tl
               }
           }
           {
-            \clist_map_inline:nn {##2}
-              { 
-                \clist_map_inline:nn {##3}
+            \clist_map_inline:nn { ##2 }
+              {
+                \clist_map_inline:nn { ##3 }
                   {
-                    \tl_set:Nn \l__codeverb_tmpa_tl {########1}
-                    \tl_remove_all:Nn \l__codeverb_tmpa_tl {~}
-                    \__codeverb_range_merge:NnnV ##1 {#1 #2} {####1} \l__codeverb_tmpa_tl
+                    \tl_set:Nn \l__codeverb_tmpa_tl { ########1 }
+                    \tl_remove_all:Nn \l__codeverb_tmpa_tl { ~}
+                    \__codeverb_range_merge:NnnV ##1 { g__codeverb_ #2 } { ####1 } \l__codeverb_tmpa_tl
                   }
               }
           }
-      }  
+      }
+    \bool_if:NTF \l__codeverb_opt_expl_bool
+      { }
+      {
+        \cs_set_eq:cc { #2 PutRight } { #2 _gput_right:nn }
+        \cs_set_eq:cc { #2 Merge } { #2 _Merge:Nnn }
+      }
   }
-
-%%
-%% defaults to nothing
-%%
-\cs_set_eq:NN           \codeverb_store_set_seq:n    \use_none:n
-\cs_generate_variant:Nn \codeverb_store_set_seq:n     {V , e}
-\cs_set_eq:NN           \codeverb_store_gput_right:n \use_none:n
-\cs_generate_variant:Nn \codeverb_store_gput_right:n  {V , e , o}
+\NewDocumentCommand \cvNewStoreCommands { O{ } m }
+  { \codeverb_new_store_cmds:nn { #1 } { #2 } }
 
 \tl_new:N \l__codeverb_tmp_xerr_tl
 
 \cs_new:Npn \__codeverb_range:wTF #1 \q_nil - \q_stop
   {
-    \tl_set:Nn \l__codeverb_tmp_xerr_tl {#1}
-    \tl_if_blank:nTF {#1}
+    \tl_set:Nn \l__codeverb_tmp_xerr_tl { #1 }
+    \tl_if_blank:nTF { #1 }
   }
 
 \cs_new:Npn \__codeverb_range:wNN #1 - #2 - #3 \q_stop #4 #5
   {
-    \quark_if_nil:nTF {#2}
+    \quark_if_nil:nTF { #2 }
       { % just #1
-        \tl_if_blank:nTF {#1}
+        \tl_if_blank:nTF { #1 }
           {  %% default when 'nothing is given'
-                \tl_set:Nn #4 {1}
-                \tl_set:Nn #5 {1}
+                \tl_set:Nn #4 { 1 }
+                \tl_set:Nn #5 { 1 }
           }
           {
-            \regex_if_match:NnTF \c__codeverb_notint_regex {#1}
+            \regex_if_match:NnTF \c__codeverb_notint_regex { #1 }
               { %%% err
-              \msg_error:nnnn { codeverbatim / syntax } { nan range } 
-                {nan:01} {'#1' ~-~ '#2'}
-                \tl_set:Nn #4 {1}
-                \tl_set:Nn #5 {1}
+              \msg_error:nnnn { codeverbatim / syntax } { nan range }
+                { nan:01 } { '#1' ~-~ '#2'}
+                \tl_set:Nn #4 { 1 }
+                \tl_set:Nn #5 { 1 }
               }
               {
-                \tl_set:Nn #4 {#1}
+                \tl_set:Nn #4 { #1 }
                 \tl_set_eq:NN #5 #4
               }
           }
@@ -495,37 +1142,37 @@
       { % hopefuly #1 and #2
         \__codeverb_range:wTF #3 \q_stop
           { %% everything ok, so far (no left over)
-            \regex_if_match:NnTF \c__codeverb_notint_regex {#1}
+            \regex_if_match:NnTF \c__codeverb_notint_regex { #1 }
               { %%err
-                  \msg_error:nnnn { codeverbatim / syntax } { nan range } 
-                    {nan:03} {'#1' ~-~ '#2'}
-                    \tl_set:Nn #4 {1}
-                    \tl_set:Nn #5 {1}
+                  \msg_error:nnnn { codeverbatim / syntax } { nan range }
+                    { nan:03 } { '#1' ~-~ '#2'}
+                    \tl_set:Nn #4 { 1 }
+                    \tl_set:Nn #5 { 1 }
               }
               {
-                \regex_if_match:NnTF \c__codeverb_notint_regex {#2}
+                \regex_if_match:NnTF \c__codeverb_notint_regex { #2 }
                   { %%err
-                  \msg_error:nnnn { codeverbatim / syntax } { nan range } 
-                    {nan:02} {'#1' ~-~ '#2'}
-                  
-                    \tl_set:Nn #4 {#1}
+                  \msg_error:nnnn { codeverbatim / syntax } { nan range }
+                    { nan:02 } { '#1' ~-~ '#2'}
+
+                    \tl_set:Nn #4 { #1 }
                     \tl_set_eq:NN #5 #4
                   }
                   {
-                    \tl_set:Nn #4 {#1}
-                    \tl_set:Nn #5 {#2}
+                    \tl_set:Nn #4 { #1 }
+                    \tl_set:Nn #5 { #2 }
                   }
-              }          
+              }
           }
-          { %% err, 
-            \msg_error:nnne { codeverbatim / syntax } { nan range } 
-              {nan:04} {'\exp_not:n{#1}' ~-~ '\exp_not:n{#2}'~ '\exp_not:V \l__codeverb_tmp_xerr_tl '} 
-                    \tl_set:Nn #4 {1}
-                    \tl_set:Nn #5 {1}
+          { %% err,
+            \msg_error:nnne { codeverbatim / syntax } { nan range }
+              { nan:04 } { '\exp_not:n{ #1 }' ~-~ '\exp_not:n{ #2 }'~ '\exp_not:V \l__codeverb_tmp_xerr_tl '}
+                    \tl_set:Nn #4 { 1 }
+                    \tl_set:Nn #5 { 1 }
 
           }
       }
-  } 
+  }
 
 
 
@@ -533,37 +1180,37 @@
 \int_new:N \l__codeverb_tmpb_int
 
 
-\regex_const:Nn \c__codeverb_notint_regex {[^0-9]+?}
-  
+\regex_const:Nn \c__codeverb_notint_regex { [^0-9]+?}
+
 \cs_new_protected:Npn \__codeverb_range_merge:Nnnn #1#2#3#4
   {
-    \seq_if_exist:cTF { #2 _ #3 _seq}
+    \seq_if_exist:cTF { #2 _ #3 _seq }
       {
-        \str_compare:nNnTF {#4} = {end}
+        \str_compare:nNnTF { #4 } = { end }
           {
-            \__codeverb_merge:Ne #1 
-              { \seq_item:cn { #2 _ #3 _seq}{ \int_use:c { #2 _ #3 _int} } }
+            \__codeverb_merge:Ne #1
+              { \seq_item:cn { #2 _ #3 _seq }{ \int_use:c { #2 _ #3 _int } } }
           }
           {
             \__codeverb_range:wNN #4 - \q_nil - \q_stop \l__codeverb_tmpa_tl \l__codeverb_tmpb_tl
-    
-            \str_compare:nNnTF \l__codeverb_tmpb_tl = {end}
+
+            \str_compare:nNnTF \l__codeverb_tmpb_tl = { end }
               {
-                \int_set:Nn \l__codeverb_tmpb_int { \int_use:c { #2 _ #3 _int} }
-              }           
+                \int_set:Nn \l__codeverb_tmpb_int { \int_use:c { #2 _ #3 _int } }
+              }
               {
-                \int_compare:nNnTF {\l__codeverb_tmpb_tl} > { \int_use:c { #2 _ #3 _int} }
+                \int_compare:nNnTF { \l__codeverb_tmpb_tl } > { \int_use:c { #2 _ #3 _int } }
                   {
-                    \int_set:Nn \l__codeverb_tmpb_int { \int_use:c { #2 _ #3 _int} }
-                    \msg_error:nnne { codeverbatim / syntax } { nan range } 
-                      {val:01} {' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
+                    \int_set:Nn \l__codeverb_tmpb_int { \int_use:c { #2 _ #3 _int } }
+                    \msg_error:nnne { codeverbatim / syntax } { nan range }
+                      { val:01 } { ' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
                   }
                   {
-                    \int_compare:nNnTF {\l__codeverb_tmpb_tl} < 1
+                    \int_compare:nNnTF { \l__codeverb_tmpb_tl } < 1
                       {
-                        \int_set:Nn \l__codeverb_tmpb_int {1}
-                        \msg_error:nnne { codeverbatim / syntax } { nan range } 
-                          {val:02} {' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
+                        \int_set:Nn \l__codeverb_tmpb_int { 1 }
+                        \msg_error:nnne { codeverbatim / syntax } { nan range }
+                          { val:02 } { ' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
                       }
                       {
                         \int_set:Nn \l__codeverb_tmpb_int { \l__codeverb_tmpb_tl }
@@ -571,16 +1218,16 @@
                   }
               }
 
-            \str_compare:nNnTF \l__codeverb_tmpa_tl = {end}
+            \str_compare:nNnTF \l__codeverb_tmpa_tl = { end }
               {
-                \int_set:Nn \l__codeverb_tmpa_int { \int_use:c { #2 _ #3 _int} }
-              }           
+                \int_set:Nn \l__codeverb_tmpa_int { \int_use:c { #2 _ #3 _int } }
+              }
               {
-                \int_compare:nNnTF {\l__codeverb_tmpa_tl} < 1
+                \int_compare:nNnTF { \l__codeverb_tmpa_tl } < 1
                   {
-                    \int_set:Nn \l__codeverb_tmpa_int {1}
-                    \msg_error:nnne { codeverbatim / syntax } { nan range } 
-                      {val:03} {' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
+                    \int_set:Nn \l__codeverb_tmpa_int { 1 }
+                    \msg_error:nnne { codeverbatim / syntax } { nan range }
+                      { val:03 } { ' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
                   }
                   {
                     \int_set:Nn \l__codeverb_tmpa_int { \l__codeverb_tmpa_tl }
@@ -589,49 +1236,49 @@
             \int_compare:nNnTF \l__codeverb_tmpa_int > \l__codeverb_tmpb_int
               {
                 \int_set_eq:NN \l__codeverb_tmpa_int \l__codeverb_tmpb_int
-                \msg_error:nnne { codeverbatim / syntax } { nan range } 
-                  {val:04} {' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
+                \msg_error:nnne { codeverbatim / syntax } { nan range }
+                  { val:04 } { ' \exp_not:V \l__codeverb_tmpa_tl ' ~-~ ' \exp_not:V \l__codeverb_tmpb_tl '}
               }
-              {}
+              { }
 
             \int_step_inline:nnn \l__codeverb_tmpa_int \l__codeverb_tmpb_int
               {
-                \__codeverb_merge:Ne #1 
-                  { \seq_item:cn { #2 _ #3 _seq}{##1} }
+                \__codeverb_merge:Ne #1
+                  { \seq_item:cn { #2 _ #3 _seq }{ ##1 } }
               }
          }
      }
      {
-      \msg_error:nnnn { codeverbatim / syntax } {seq undef}
-        {syntax:02} {#3}
+      \msg_error:nnnn { codeverbatim / syntax } { seq undef }
+        { syntax:02 } { #3 }
      }
   }
-\cs_generate_variant:Nn \__codeverb_range_merge:Nnnn {Nnee , NnnV , NnVV}  
+\cs_generate_variant:Nn \__codeverb_range_merge:Nnnn { Nnee , NnnV , NnVV }
 
 
 \cs_new:Npn \__codeverb_opt:wNN #1 [ #2 ] #3 \q_stop #4 #5
   {
-    \quark_if_nil:nTF {#2}
+    \quark_if_nil:nTF { #2 }
       { % just #1
-        \tl_set:Nn #4 {#1}
-        \tl_set:Nn #5 {end}
+        \tl_set:Nn #4 { #1 }
+        \tl_set:Nn #5 { end }
       }
       { % hopefuly #1 and #2
-        \tl_set:Nn #4 {#1}
-        \tl_set:Nn #5 {#2}
+        \tl_set:Nn #4 { #1 }
+        \tl_set:Nn #5 { #2 }
       }
   }
 
 
 \cs_new:Npn \__codeverb_opt_a:wNN #1 [ #2 \q_stop #3 #4
   {
-    \quark_if_nil:nTF {#2}
+    \quark_if_nil:nTF { #2 }
       { % just #1
-        \tl_set:Nn #3 {#1}
-        \tl_set:Nn #4 {end}
+        \tl_set:Nn #3 { #1 }
+        \tl_set:Nn #4 { end }
       }
       { % moving on...
-        \tl_set:Nn #3 {#1}
+        \tl_set:Nn #3 { #1 }
         \__codeverb_opt_b:wN #2 \q_stop #4
       }
   }
@@ -643,34 +1290,33 @@
 
 \cs_new:Npn \__codeverb_opt_c:wN #1 ] #2 \q_stop #3
   {
-    \quark_if_nil:nTF {#2}
+    \quark_if_nil:nTF { #2 }
       { %% syntax err !!
-      \msg_error:nnnn { codeverbatim / syntax } {invalid range}
-        {syntax:01} {[#1}
-        \tl_set:Nn #3 {1}
+      \msg_error:nnnn { codeverbatim / syntax } { invalid range }
+        { syntax:01 } { [#1 }
+        \tl_set:Nn #3 { 1 }
       }
       { %% almost ok...
         \__codeverb_opt_d:wTF #2 \q_stop
           {  %% 100% ok
-            \tl_set:Nn #3 {#1}
-            \tl_remove_all:Nn #3 {~}
+            \tl_set:Nn #3 { #1 }
+            \tl_remove_all:Nn #3 { ~}
           }
           {
-            \msg_error:nnne { codeverbatim / syntax } {invalid range}
-              {syntax:02} {[\exp_not:n {#1}] \exp_not:V \l__codeverb_tmp_xerr_tl}
-              \tl_set:Nn #3 {1}
+            \msg_error:nnne { codeverbatim / syntax } { invalid range }
+              { syntax:02 } { [\exp_not:n { #1 }] \exp_not:V \l__codeverb_tmp_xerr_tl }
+              \tl_set:Nn #3 { 1 }
           }
       }
   }
 
 \cs_new:Npn \__codeverb_opt_d:wTF #1 ] \q_nil \q_stop
   {
-    \tl_set:Nn \l__codeverb_tmp_xerr_tl {#1}
-    \tl_if_blank:nTF {#1}
+    \tl_set:Nn \l__codeverb_tmp_xerr_tl { #1 }
+    \tl_if_blank:nTF { #1 }
   }
 
 
-\cs_generate_variant:Nn \tl_show:n {e}
 
 \bool_new:N \l__codeverb_first_merge_bool
 \tl_new:N \l__codeverb_merged_tl
@@ -680,14 +1326,15 @@
     \bool_if:NTF \l__codeverb_first_merge_bool
       {
         \bool_set_false:N \l__codeverb_first_merge_bool
-        \tl_set:Nn #1 {#2}
+        \tl_set:Nn #1 { #2 }
       }
       {
-        \str_set:Nn \l__codeverb_tmpd_tl {#2}
+        \str_set:Nn \l__codeverb_tmpd_tl { #2 }
         \str_remove_once:Nn \l__codeverb_tmpd_tl { ^^J }
         \tl_put_right:NV #1 \l__codeverb_tmpd_tl
       }
   }
 \cs_generate_variant:Nn   \__codeverb_merge:Nn { NV , Ne }
+
 
 

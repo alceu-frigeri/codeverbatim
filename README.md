@@ -33,24 +33,10 @@ Please be ready to provide an example code showing the bug, if any.
 * git: https://github.com/alceu-frigeri/codeverbatim
 
 -------------
-Copyright 2025-present by Alceu Frigeri
+Copyright 2026-present by Alceu Frigeri
 
  This work may be distributed and/or modified under the
  conditions of
-
- * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt), version 1.3c (or later), and/or
- * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html), version 3 (or later)
-
-This work has the LPPL maintenance status *maintained*.
-
-The Current Maintainer of this work is Alceu Frigeri
-
--------------
-
-### This work consist of the files
-
-* codeverbatim.sty
-    - the verbatim capture environment
 
 * codehighlight.sty
     - code highlight
@@ -65,10 +51,29 @@ The Current Maintainer of this work is Alceu Frigeri
 * codeverbatim.pdf
     - documentation in PDF format
     
+* codehl-def001.def
+* codehl-def001.def
+* codehl-def001.def
+    - the many pre-defined language files
+    
 -------------
 
 ### Change log
 
+
+ * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt), version 1.3c (or later), and/or
+ * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html), version 3 (or later)
+
+This work has the LPPL maintenance status *maintained*.
+
+The Current Maintainer of this work is Alceu Frigeri
+
+-------------
+
+### This work consist of the files
+
+* codeverbatim.sty
+    - the verbatim capture environment
 
 * Version 0.1
     - Initial setup. (far from ready)

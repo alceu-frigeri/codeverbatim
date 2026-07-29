@@ -5,7 +5,7 @@
 % !TEX program = pdflatex
 % !PDFTeXify ext =  --enable-etex  --restrict-write18
 % !PDFLaTeX ext  =  --enable-etex  --restrict-write18
-% !BIB program = none
+% !BIB program = biber
 %%%==============================================================================
 %% Copyright 2025-present by Alceu Frigeri
 %%
@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {0.1} {2026/04/27}
+%% This is version {0.9} {2026/08/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codeverbatim
@@ -35,11 +35,13 @@
 \RequirePackage[inline]{enumitem}
 \SetEnumitemKey{miditemsep}{parsep=0ex,itemsep=0.4ex}
 
+\usepackage{asciitable}
 %\usepackage{codeverbatim}
 
+
 %% if needed
-%\RequirePackage[backend=biber]{biblatex}
-%\addbibresource{codeverbatim.bib}
+\RequirePackage[backend=biber]{biblatex}
+\addbibresource{codeverbatim.bib}
 
 \RequirePackage[hidelinks,hypertexnames=false]{hyperref}
 
@@ -53,36 +55,1023 @@
 
 \begin{typesetabstract}
  
-This package offers 
+These packages enables the construction of custom verbatim commands/environments with syntax highlight, splitting the action of grabbing some text in verbatim mode (\tsobj[pkg]{codeverbatim}) from typesetting it with or without syntax highlight (\tsobj[pkg]{codehighlight}). That way it's possible to fully customize the final desired behaviour, including (pre/post) processing of the grabbed text before typesetting it.
 \end{typesetabstract}
 
-%\tableofcontents
+\tableofcontents
 
 \section{Introduction}
 
-\begin{codedescribe}{\somecmd,\somecmd}
+The main aim of these packages is to allow the creation of fully customizable verbatim environments. To achieve that, unlike other packages of the kind as \tsobj[pkg]{fancyvrb} \cite{fancyvrb}, \tsobj[pkg]{scontents} \cite{SCONTENTS} or \tsobj[pkg]{listings} \cite{listings}, which have a fixed set of ways to collect/display a verbatim environment, \tsobj[pkg]{codeverbatim,codehighlight}  split the action of grabbing some text in verbatim mode (\tsobj[pkg]{codeverbatim}) from typesetting it with or without syntax highlight (\tsobj[pkg]{codehighlight}).
+
+\tsobj[pkg]{codeverbatim} package offers a mechanism to create custom verbatim environments whereas the grabbed text will be stored either in a \tsobj[pkg]{expl3} token list or sequence variables with hooks allowing the customization of the entire process.
+\begin{tsremark}
+  A great deal of the functionality of this is inspired on the \tsobj[pkg]{scontents} \cite{SCONTENTS} package.
+\end{tsremark}
+
+\tsobj[pkg]{codehighlight} package offers ways to (syntax) highlight the code grabbed by a \tsobj[pkg]{codeverbatim} environment. It's somewhat inspired on the  \tsobj[pkg]{listings} \cite{listings} functionality, allowing the definition of a custom syntax (for code highlight). Unlike \tsobj[pkg]{listings}, in \tsobj[pkg]{codehighlight} four aspects: (1) syntax definition, (2) keyword's sets, (3) highlight formatting and (4) base formatting, are kept separated, allowing a more flexible setup.
+
+Lastly, these packages are fully written in \tsobj[pkg]{expl3}, but given that one might want to use then in a \LaTeXe{} context (either at package or document level), all public commands have a \LaTeXe{} alias, and, for simplicity, they are listed together.
+
+
+
+\newpage
+\section{codeverbatim Package}\label{pkg:codeverb}
+The aim of this package is to allow to construction of custom environments and commands to capture verbatim content. Among others, one can customize:
+\begin{itemize}
+  \item which characters should be captured with category code other.
+%  \item if an environment, can it be nested?
+  \item how to handle the text after the environment begin and the first end of line.
+  \item how to process the captured code.
+\end{itemize}
+Another point is that this package only offers ways to capture content in verbatim mode, leaving it to the user to define how to postprocess and display it, for instance, using \tsobj[pkg]{codehighlight} (see \ref{pkg:codehl}) package.
+
+\subsection{Characters Category Codes and Common Keys}\label{codeverb:commonkeys}
+When capturing content in verbatim mode, many characters have their usual category code changed to other (12). In particular \tsfmt[verb]{\^{}\^{}M }  (char: 13, End Of Line character) always has its category code changed to other. 
+\begin{center}
+\begin{tabular}{clclcl}
+  \hline
+
+\tsverb[verb]{\ } & (char: 92) &   
+\tsfmt[verb]{\$}  & (char: 36)&
+\tsfmt[verb]{\^{}\^{}A }  & (char: 1) 
+\\  
+\tsfmt[verb]{\{}  & (char: 123) &
+\tsfmt[verb]{\^{}}  & (char: 94)&
+\tsfmt[verb]{\^{}\^{}I }  & (char: 9)
+\\
+\tsfmt[verb]{\}}  & (char: 125) &
+\tsfmt[verb]{\_{}}  & (char: 95) &
+\tsfmt[verb]{\^{}\^{}J }  & (char: 10)
+\\
+\tsfmt[verb]{\#}  & (char: 35) &
+\tsfmt[verb]{\&}  & (char: 38) &
+\tsfmt[verb]{\^{}\^{}K }  & (char: 11)
+\\
+\tsfmt[verb]{\%{}}  & (char: 37) &
+\tsfmt[verb]{\~{}}  & (char: 126) &
+\tsfmt[verb]{\ }  & (char: 32, space) 
+\\
+  \hline
+\end{tabular}
+\end{center}
+\begin{tsremark}
+  This list is named ``other characters list'' in the following (for simplicity).
+\end{tsremark}
+\begin{tsremark}
+  As noted above, \tsfmt[verb]{\^{}\^{}M } will always have its category code changed to other (12). Moreover, following the \tsobj{\tl_retokenize:n} convention, lines will be terminated by \tsfmt[verb]{\^{}\^{}J} (and not \tsfmt[verb]{\^{}\^{}M}), also with category code other. See the chapter ``Reassigning category codes'' (under ``Manipulating tokens in token lists'') from \citetitle{expl3} \cite{expl3}, for details.
+\end{tsremark}
+
+By default no other character has its category code changed. This can be changed with the keys below, in which there are two cases: 
+\begin{itemize} %[nosep]
+  \item[(i)] List of characters set to other: keys \tsobj[key]{set other, other},
+  \item[(ii)] List of characters set to letter: key \tsobj[key]{letter},
+%  \item[(iii)] Fully dedicated \tsobj[pkg]{expl3} ``category code table'': key \tsobj[key]{cctab}.
+\end{itemize}
+   
+
+
+These keys are common to all main code verbatim commands and expect a comma separated list of characters:
+%, except \tsobj[key]{cctab} which expects the name of a cctab variable (without the escape character):
+\begin{describelist*}{keys}
+  \describe{set other}{ This will reset and fully replace the ``other characters list''.  If used more than once, only the last attribution remains.
+  
+  The default is the ``other characters list'' above. Don't forget to escape the characters as needed, for instance, like \tsverb**[verb]{\^ ^K}
+  }
+  \describe{other}{(default: empty list) This will add  characters to the ``other characters list'' and can be called multiple times. }
+  \describe{letter}{(default: empty list) The characters on the list (cumulative list) will be made letter. }
+\begin{tsremark}
+  These character lists shall contain a single char per item! and they will raise an error if more than one character (per item) is found.
+\end{tsremark}
+%  \describe{cctab}{a cctab, ``category code table'' variable as described in  the chapter ``The l3cctab module'' from \citetitle{expl3} \cite{expl3}. Note, this key expects a variable name without the escape character.}
+%\begin{tsremark}
+%  Regardless of the \tsobj[key]{cctab} used, \tsfmt[verb]{\^{}\^{}M } will always have its category code changed to other (12), and lines will be terminated with a \tsfmt[verb]{\^{}\^{}J} (category code other, 12).
+%\end{tsremark}
+\begin{tsremark}[\color{red}Attention]
+  If all keys are given, first \tsobj[keys]{other} then \tsobj[key]{letter} will be applied.
+  % Remember to \tsobj[key]{set other = \{\}} (empty list) for \tsobj[key]{cctab} be the sole definition.
+\end{tsremark}
+\end{describelist*}
+%   
+%\ExplSyntaxOn
+%\seq_set_from_clist:Nn \l__codeverb_set_other_seq
+%  { ~,\ , \^^A,\^^I,\^^J,\^^K }
+%
+%  \seq_map_inline:Nn \l__codeverb_set_other_seq
+%    {
+%      \tsverb[verb]{#1}
+%    }
+%\ExplSyntaxOff  
+
+\subsection{New Verbatim Environment}\label{codeverb:newenv}
+
+\begin{codedescribe}{\cvNewEnvironment,\codeverb_new_environment:nnnnn}
 \begin{codesyntax}%
-\tsmacro{\somecmd}{}
-\tsmacro{\somecmd}{}
+\tsmacro{\cvNewEnvironment}[keys]{env-name,arg spec,begin-code,end-code}
+\tsmacro{\codeverb_new_environment:nnnnn}{keys,env-name,signature,begin-code,end-code}
 \end{codesyntax}
-These will affect how
+This will create a new document environment \tsobj[marg]{env-name}, following the \tsobj{\NewDocumentEnvironment}  structure. \tsobj[marg]{arg spec} is the desired \tsobj[marg]{env-name} parameter specification list (\tsobj{\NewDocumentEnvironment} 1st parameter, see \cite{usrguide}). The \tsobj[marg]{begin-code} code will be executed before the verbatim code gets grabbed. The \tsobj[marg]{end-code} will be executed right after, see the keys \tsobj[key]{inline,verb tl} below for details how to further handle the verbatim content.
 \end{codedescribe}
-\begin{tsremark}[\color{red}Warning:]
-  The default ...
+\begin{tsremark}
+  If short verbatim commands are on (\tsobj[code,or]{\cvSVerbOn,\codeverb_sverb_on:}) those active characters will be made other (see \ref{codeverb:caveats}) after applying the characters category code defined here (with the common keys from \ref{codeverb:commonkeys}) and before applying the characters category code defined with \tsobj[code,or]{\cvEnvCCSet,\codeverb_env_catcode_set:n} (see \ref{codeverb:auxiliary-cctab} below).
+\end{tsremark}
+\tsobj[marg]{keys} can be any combination of (besides the ones from \ref{codeverb:commonkeys}):
+\begin{describelist*}{keys}
+
+  \describe{drop first}{(default: false) If the character following the environment begin until the line end shall be processed of discarded. The default behaviour is similar to other packages of the kind, like \tsobj[pkg,or]{listings,fancyvrb}}
+  \describe{drop blanks}{(default: false) If set to true, and the initial lines are blank, those lines will be discarded.}
+  \describe{line proc}{(default: -nothing-) The given command shall grab 2 parameters. It will receive a single line (verbatim material) as the 2nd parameter and a temporary token list as the 1st parameter. The simplest command would be \tsobj{\tl_set:Nn} (no pre-processing at all). This can be used to pre-process the verbatim content, one line at a time. }
+  \describe{inline}{(default: false) If set, \tsobj[marg]{end-code} will receive the verbatim material as \tsfmt{\#1}. This has precedence over the key \tsobj[key]{verb tl}.}
+  \describe{verb tl}{(default: \tsobj{\g_codeverb_verb_body_tl}) If \tsobj[key]{inline} is set to false, the verbatim material will be stored in the given token list variable, before \tsobj[marg]{end-code} is executed. The assignment is global.
+  
+  Off course, the default is ok to be used in an \tsobj[pkg]{expl3} code régime, you may want to change that.}
+\end{describelist*}
+
+
+\subsection{Auxiliary Environment Begin Commands}\label{codeverb:auxiliary-cctab}
+
+\begin{codedescribe}{\cvEnvCCSet , \codeverb_env_catcode_set:n}
+\begin{codesyntax}%
+\tsmacro{\cvEnvCCSet}{keys}
+\tsmacro{\codeverb_env_catcode_set:n}{keys}
+\end{codesyntax}
+These are meant to be used in the \tsobj[marg]{begin-code} of a custom environment, allowing for further (local) customization of characters category code. \tsobj[marg]{keys} can be any combination of the common keys (see \ref{codeverb:commonkeys}). For example:
+\end{codedescribe}
+\begin{codestore}[env-cctab]
+  \cvNewEnvironment[drop first]{myEnv}{O{}}
+    { \cvEnvCCset {#1} }
+    { }
+  ...
+  
+  \begin{myEnv}[letter = { @ , \_ }]
+    some text
+  \end{myEnv
+\end{codestore}
+
+\tscode*[codeprefix={}]{env-cctab}
+
+Note that the environment \tsobj[env]{myEnv} was defined with the default verbatim setup (category codes as in \ref{codeverb:commonkeys}) and, in this example, with a single optional parameter to allow changing the characters category code by the end user. 
+\begin{tsremark}
+  It won't replace the environment defaults, but will be applied after the environment setup.
+\end{tsremark}
+\begin{tsremark}[\color{red}Attention]
+  Unlike in all other cases, the default ``other characters list'' for these commands is an empty list. That way, it will only change the catcode (to other or letter) for the given characters.
+   %Of course, if the end user gives a \tsobj[key]{cctab}, everything changes.
+\end{tsremark}
+
+\subsection{Auxiliary Store Commands}\label{codeverb:auxiliary}
+
+Besides just storing the verbatim content in a token list variable (key \tsobj[key]{verb tl} above) one has a few other options:
+\begin{itemize}[nosep]
+  \item[(i)] store the verbatim content in dedicated sequence variables (similar to \tsobj[pkg]{scontents} package \cite{SCONTENTS}), 
+  \item[(ii)] display them using another package (like \tsobj[pkg]{listings}\cite{listings}) or
+  \item[(iii)] use them as latex code right away. The following commands aim at exactly that.
+\end{itemize} 
+
+\begin{codedescribe}{\cvNewStoreCommands , \codeverb_new_store_cmds:nn}
+\begin{codesyntax}%
+\tsmacro{\cvNewStoreCommands}[key]{cs-base}
+\tsmacro{\codeverb_new_store_cmds:nn}{key,cs-base}
+\end{codesyntax}
+These will create a set of commands prefixed with \tsobj[marg]{cs-base}, using a set of dedicated \tsobj[pkg]{expl3} sequence variables to help handle verbatim code in a way similar to how the package \tsobj[pkg]{scontents} \cite{SCONTENTS} does.  By default, two \tsobj[pkg]{expl3} commands  and two \LaTeXe{} aliases will be created. This can be changed with the following key:
+
+\begin{describelist*}{key}
+  \describe{expl3}{(default: false) If set, only the \tsobj[pkg]{expl3} variants will be created and no \LaTeXe{} aliases will be defined.}
+\end{describelist*}
+\end{codedescribe}
+
+
+\begin{codedescribe}{\<cs-base>PutRight , \<cs-base>Merge , \<cs-base>_gput_right:nn , \<cs-base>_merge:Nnn }
+\begin{codesyntax}%
+\tsmacro{\<cs-base>PutRight}{st-name,verb-content}
+\tsmacro{\<cs-base>Merge}{var,base-list,index-list}
+\tsmacro{\<cs-base>_gput_right:nn}{st-name,verb-content}
+\tsmacro{\<cs-base>_merge:Nnn}{var,base-list,index-list}
+\end{codesyntax}
+The \tsobj{\<cs-base>PutRight} (or \tsobj{\<cs-base>_gput_right:nn}) will create (as needed) an internal sequence variable associated with \tsobj[marg]{st-name} and store \tsobj[marg]{verb-content} in it. 
+
+The \tsobj{\<cs-base>Merge} (or \tsobj{\<cs-base>_merge:Nnn}) will merge items of one, or more, of those sequences.
+\end{codedescribe}
+ The syntax choose resembles the one from the command \tsobj{\mergesc} package \tsobj[pkg]{scontents}, and there are two main (proper) cases:
+ \begin{itemize}
+   \item \tsobj[marg]{index-list} is an empty list. 
+   
+   In this case \tsobj[marg]{base-list} is expected to be a list of the kind \tsobj[marg]{st-name}\tsargs[oarg]{index-ref}, where \tsobj[marg]{index-ref} can be a single number (the sequence index) or a range like \tsobj[marg]{index}-\tsobj[marg]{index}. $1$ is the index of the first item, while $end$ can be used to reference the last item of a sequence, so that, \tsobj[marg]{st-name}\tsverb[oarg]{[2-end]} will refer all items starting from the 2nd. If no \tsargs[oarg]{index-ref} is given, then the last item of \tsobj[marg]{st-name} will be used.
+   
+   \item \tsobj[marg]{index-list} isn't empty. 
+   
+   In this case \tsobj[marg]{base-list} is expected to be a list of \tsobj[marg]{st-name}s (no indexes given), while \tsobj[marg]{index-list} is expected to be a list of just indexes, then all indexes from \tsobj[marg]{index-list} will be applied to each \tsobj[marg]{st-name} from \tsobj[marg]{base-list}.
+ \end{itemize}
+For example:
+\begin{codestore}[store-cmd]
+  \cvNewStoreCommands {myStore}
+  ...
+  ... many calls to \myStorePutRight { case-A } { -content- }
+  ...
+  ... many calls to \myStorePutRight { case-B } { -content- }
+  
+  \myStoreMerge { \tempA } { case-A[1] , case-B[2] , case-A[2-end] , case-B }
+
+  \myStoreMerge { \tempB } { case-A , case-B } { 1 , 3-end }
+\end{codestore}
+
+\tscode*[codeprefix={}]{store-cmd}
+
+\tsobj{\tempA} will end up with the 1st item from \tsobj[marg]{case-A}, then the  2nd item from \tsobj[marg]{case-B}, followed by all items from the 2nd to the last one from \tsobj[marg]{case-A}, and finally the last one from \tsobj[marg]{case-B}.
+
+\tsobj{\tempB} will end up with the 1st item from \tsobj[marg]{case-A} followed by all items from the 3rd to the last one from  \tsobj[marg]{case-A}, then the 1st item from \tsobj[marg]{case-B} followed by all items from the 3rd to the last one from  \tsobj[marg]{case-B}.
+
+\begin{codedescribe}{\cvRetokenEnvNewCommand , \codeverb_retoken_env_newcs:nn }
+\begin{codesyntax}%
+\tsmacro{\cvRetokenEnvNewCommand}[key]{env-cmd,env-name}
+\tsmacro{\codeverb_retoken_env_newcs:nnn}{key,env-cmd,env-name}
+\end{codesyntax}
+These will create a set of commands (see below) tailored at retokenizing  some (verbatim) content inside the given   environment \tsobj[marg]{env-name}.
+ By default, two \tsobj[pkg]{expl3} commands  and two \LaTeXe{} aliases will br created. This can be changed with the following key:
+
+\begin{describelist*}{key}
+  \describe{expl3}{(default: false) If set, only the \tsobj[pkg]{expl3} variants will be created and no \LaTeXe{} aliases will be defined.}
+\end{describelist*}
+\end{codedescribe}
+
+
+\begin{codedescribe}{ \<env-cmd> , \<env-cmd>V , \<env-cmd>:n , \<env-cmd>:V }
+\begin{codesyntax}%
+\tsmacro{\<env-cmd>}{verb-content}
+\tsmacro{\<env-cmd>V}{tl-var}
+\tsmacro{\<env-cmd>:n}{verb-content}
+\tsmacro{\<env-cmd>:V}{tl-var}
+\end{codesyntax}
+\tsobj{\<env-cmd>} (viz-à-viz \tsobj{\<env-cmd>:n}) will re-scan (retokenize)  \tsobj[marg]{verb-content} inside an \tsobj[marg]{env-name} environment. Similarly, \tsobj{\<env-cmd>V} (viz-à-viz \tsobj{\<env-cmd>:V}) will re-scan the contents (single expansion) of the \tsobj[marg]{tl-var} inside the \tsobj[marg]{env-name} environment. So that, for example:
+\end{codedescribe}
+
+
+\begin{codestore}[new-env]
+  \lstnewenvironment{lstenv}
+    {
+      % listings setup
+    }
+    {}
+  
+  \cvRetokenEnvNewCommand 
+    {VerbListing} {lstenv}
+\end{codestore}
+
+\tscode*[codeprefix={}]{new-env}
+
+once defined, \tsobj{\VerbListingV} \tsobj{\g_codeverb_verb_body_tl} (err, the variable defined with the \tsobj[key]{verb tl}) could be called in the \tsobj[marg]{end-code} of a verbatim environment (see \ref{codeverb:newenv}), which would result in the verbatim content just grabbed (into \tsobj{\g_codeverb_verb_body_tl}) being displayed using the \tsobj[env]{lstenv} environment (set up with the \tsobj[pkg]{listings} package). This will be, effectively, equivalent to
+\begin{codestore}[new-envb]
+  \begin{lstenv}
+    ... content of \g_codeverb_verb_body_tl 'retokenized' ...
+  \end{lstenv}
+\end{codestore}
+
+\tscode*[codeprefix={}]{new-envb}
+
+
+\begin{tsremark}[\color{red}Important:]
+  The verbatim code will be re-scanned (retokenized) in the process with the current category code régime.
 \end{tsremark}
 
 
-\begin{codestore}[demoA]
-some code
+\begin{codedescribe}{ \cvRetokenNewCommand , \cvRetokenNewCommandV , \codeverb_retoken_newcs:N , \codeverb_retoken_newcsV:N  }
+\begin{codesyntax}%
+\tsmacro{\cvRetokenNewCommand}{cmd}
+\tsmacro{\cvRetokenNewCommandV}{cmd}
+\tsmacro{\codeverb_retoken_newcs:N}{cmd}
+\tsmacro{\codeverb_retoken_newcsV:N}{cmd}
+\end{codesyntax}
+\tsobj{\cvRetokenNewCommand,\codeverb_retoken_newcs:N} will make \tsobj[marg]{cmd} an alias to \tsobj{\tl_retokenize:n} (from \tsobj[pkg]{expl3}, see \cite{expl3}), while \tsobj{\cvRetokenNewCommandV,\codeverb_retoken_newcsV:N}  will make \tsobj[marg]{cmd} an alias to \tsobj{\tl_retokenize:V}. These commands are just for completeness (with the previous set of commands, which retokenize some verbatim content inside a given environment). Moreover, their main aim is to allow  the code, grabbed as verbatim content, to be (re)used as \LaTeX{} commands/text, the same overall idea from the commands \tsobj{\getstored} (package \tsobj[pkg]{scontents}, see \cite{SCONTENTS}) or \tsobj{\tsexec} (package \tsobj[pkg]{codedescribe}, see \cite{codedescribe}).
+\end{codedescribe}
+
+\subsection{Auxiliary Display Commands}\label{codeverb:aux:display}
+
+\ExplSyntaxOn
+\cvSVerbNew{||}{||}
+  { \tl_trim_left_spaces:n { #1 } }
+\ExplSyntaxOff
+\cvSVerbOn
+
+\begin{codedescribe}{\cvHideSpc , \codeverb_hide_spc:n}
+\begin{codesyntax}%
+\tsmacro{\cvHideSpc}{text}
+\tsmacro{\codeverb_hide_spc:n}{text}
+\end{codesyntax}
+These will just replace every occurrence of a space (character code 32) by \tsobj{\space}. They are the default commands used by \tsobj{\cvSVerb,\codeverb_sverb:Nw} and are needed because (by default) spaces also have their category code changed to other (see \ref{codeverb:commonkeys}), resulting that spaces are visible as in ``|| example of visible spaces||''.
+\end{codedescribe}
+
+\subsection{Short Verbatim Commands}\label{codeverb:sverb}
+
+The following commands aims at defining ``short cuts'' (active characters, as in other verbatim packages) allowing to grab short verbatim content and use it ``right away'', for instance, inside a paragraph. Unlike other verbatim packages, the following commands allow to customize the used characters category code, per command, as well to customize the action taken with the just grabbed verbatim content.
+
+\begin{codedescribe}{\cvSVerbSet,\cvSVerb,\codeverb_sverb_setcs:nn,\codeverb_sverb:Nw}
+\begin{codesyntax}%
+\tsmacro{\cvSVerbSet}[keys]{code}
+\tsmacro{\cvSVerb}{char} \ldots \tsmeta{verbatim content}\ldots\tsobj[marg]{char}
+\tsmacro{\codeverb_sverb_setcs:nn}{keys,code}
+\tsmacro{\codeverb_sverb:Nw}{char} \ldots \tsmeta{verbatim content}\ldots\tsobj[marg]{char}
+\end{codesyntax}
+Both, \tsobj{\cvSVerb,\codeverb_sverb:Nw}, are the immediate commands. They will use the character, \tsobj[marg]{char}, following them, as a marker and grab everything between it and its next appearance as verbatim content. \tsobj[marg]{code} (set with \tsobj[code,or]{\csSVerbSet,\codeverb_sverb_setcs:nn}) will receive the verbatim content as \tsfmt[verb]{\#1}. The default \tsobj[marg]{code} is \tsobj{\codeverb_hide_spc:n} \tsfmt[code]{\{\#1\}} ``hidden'' spaces.
+\begin{tsremark}
+  The category code of \tsobj[marg]{char} itself will be made other, regardless of the actual underlying category code in use whilst grabbing the content, the category code change being local.
+\end{tsremark}
+With \tsobj{\csSVerbSet,\codeverb_sverb_setcs:nn} one can customize the commands  \tsobj{\cvSVerb,\codeverb_sverb:Nw}.
+ \tsobj[marg]{keys} can be any of the common keys (see \ref{codeverb:commonkeys}) and allow to change the effective category code table in use, whilst \tsobj[marg]{code} will receive the grabbed content as \tsfmt[verb]{\#1}. For instance, with \tsfmt[verb]{\tsobj{\cvSVerbSet}\{\#1\}} the content grabbed with \tsobj{\csSVerb} will be presented ``as is'' and visible spaces. Likewise, \tsfmt[verb]{\tsobj{\cvSVerbSet}\{ \{ \tsobj{\ttfamily} \#1 \} \}} will result that the content grabbed with \tsobj{\csSVerb} will be presented ``as is'' using the \tsobj{\ttfamily} (note the extra set of braces to localize the effect of the \tsobj{\ttfamily} command).
+\end{codedescribe}
+\begin{tsremark}
+  One can use \tsobj[code,or]{\hlDisplay,\codehl_display:nn} (see \ref{codehl:display}) when defining \tsobj[marg]{code}. Pay attention that those display commands expect the content to be terminated with a \tsfmt[verb]{\^{}\^{}J}. Use, then, the \tsobj[key]{short verb} key (which will add a \tsfmt[verb]{\^{}\^{}J} to the grabbed content), for instance: \tsfmt[code]{\tsobj{\cvSVerbSet} \{ \tsobj{\hlDisplay}[inline,short verb]\{\#1\} \}}.
+\end{tsremark}
+
+
+\begin{codedescribe}{\cvSVerbNew,\cvSVerbOn,\cvSVerbOff,\codeverb_sverb_new:nnnn,\codeverb_sverb_on:,\codeverb_sverb_off:}
+\begin{codesyntax}%
+\tsmacro{\cvSVerbNew}[keys]{start-patt,end-patt,code}
+\tsmacro{\cvSVerbOn}{}
+\tsmacro{\cvSVerbOff}{}
+\tsmacro{\codeverb_sverb_new:nnnn}{keys,start-patt,end-patt,code}
+\tsmacro{\codeverb_sverb_on:}{}
+\tsmacro{\codeverb_sverb_off:}{}
+\end{codesyntax}
+\tsobj{\cvSVerbNew,\codeverb_sverb_new:nnnn} allow the setup and definition of custom short commands associated with active chars (characters with category code active, 13). Once defined, and activated in text, everything between \tsobj[marg]{start-patt} and \tsobj[marg]{end-patt} will be grabbed as verbatim content and processed by \tsobj[marg]{code} (which will receive the verbatim content as \tsfmt[verb]{\#1}. These can be called more than once, defining different \tsobj[marg,comma]{star-patt,end-patt}, and associated \tsobj[marg]{code}. \tsobj{\cvSVerbOn,\codeverb_sverb_on:} turn those definitions on, while \tsobj{\cvSVerbOff,\codeverb_sverb_off:} deactivate them. For example:
+\end{codedescribe}
+
+\cvSVerbOff
+\begin{codestore}[short-verb]
+\ExplSyntaxOn
+\codeverb_sverb_new:nnnn {} {||} {||}
+  { \tl_trim_left_spaces:n { #1 } }
+\ExplSyntaxOff
+
+\cvSVerbOn
+Example of use: || \cmd{#1}||
+\cvSVerbOff
 \end{codestore}
 
-%\tscode
-%\tsdemo*[emph={draw,none},emph2={path},emph3={name},basicstyle={\scriptsize\ttfamily},numbers=left]{demoA}
-%\tsresult
+\tsdemo[codeprefix={},resultprefix={}]{short-verb}
+
+\begin{tsremark}
+  One can use \tsobj[code,or]{\hlDisplay,\codehl_display:nn} (see \ref{codehl:display}) when defining \tsobj[marg]{code}. Pay attention that those display commands expect the content to be terminated with a \tsfmt[verb]{\^{}\^{}J}. Use, then, the \tsobj[key]{short verb} key (which will add a \tsfmt[verb]{\^{}\^{}J} to the grabbed content), for instance: \tsfmt[code]{\tsobj{\cvSVerbNew} \{||\}\{||\}\{ \tsobj{\hlDisplay}[inline,short verb]\{\#1\} \}}.
+\end{tsremark}
+
+\subsubsection{Caveats}\label{codeverb:caveats}
+A few caveats to be considered:
+\begin{itemize}
+  \item \tsobj[marg]{start-patt} is a single (unique) character. This is the simplest case, the  \tsobj[marg]{start-patt} character will be made active and the content between it and \tsobj[marg]{end-patt} will be collected as verbatim content.
+  \item \tsobj[marg]{start-patt} is a pattern compose of more than one character. In this case the 1st character of \tsobj[marg]{start-patt} will be made active and look ahead to see if the following tokens match the rest of the \tsobj[marg]{start-patt}, if so, then, the content between \tsobj[marg]{start-patt,end-patt} will be collected as verbatim content.
+  \item There are more than one \tsobj[marg]{start-patt} with the same 1st character: This is very similar to the previous case, though, the active code (associated with the 1st character) will test for every possible \tsobj[marg]{start-patt}, starting by the last defined one.
+      \begin{tsremark}
+        For instance, one may want 3 definitions for \tsobj[marg]{start-patt}: \tsobj{|,||,|||}, in which case the longest one should be defined last.
+      \end{tsremark}
+      \begin{tsremark}[\color{red}Attention]
+        When looking ahead, \tsobj{\peek_regex:NTF} is used. One side effect is that the first character following the \tsobj[marg]{start-patt} will be grabbed with the current category code table (and not the verbatim one). In particular if the 1st character following \tsobj[marg]{start-patt} is a special one, like \tsverb[verb]{ \ } or \tsfmt[verb]{\#}, this will, probably, lead to low level errors. The work around is to use a single space after the \tsobj[marg]{start-patt}, since this 1st space will be grabbed with the current category code it can be easily removed with a command like \tsobj{\tl_trim_left_spaces:n} (as in the previous example) since it will (default settings) be the single space with category code 10 (space).
+      \end{tsremark}
+  \item The characters made active by the \tsobj{\cvSVerbNew,\codeverb_sverb_new:nnnn}, while effectively actives (\tsobj{\cvSVerbOn}), will be made other when using a verbatim environment (see \ref{codeverb:newenv}) or using any of the short verbatim commands.
+\end{itemize}
+
+\begin{codedescribe}{\cvSVerbUndef,\cvSVerbUndefAll,\codeverb_sverb_undef:n,\codeverb_sverb_undef_all:}
+\begin{codesyntax}%
+\tsmacro{\cvSVerbUndef}{start-patt}
+\tsmacro{\cvSVerbUndefAll}{}
+\tsmacro{\codeverb_sverb_undef:n}{start-patt}
+\tsmacro{\codeverb_sverb_undef_all:}{}
+\end{codesyntax}
+\tsobj{\cvSVerbUndef,\codeverb_sverb_undef:n} will undefine the short cut associated with \tsobj[marg]{start-patt}, while \tsobj{\cvSVerbUndefAll,\codeverb_sverb_undef_all:} will undefine all current defined short cuts.
+\end{codedescribe}
 
 
 
+\newpage
+\section{codehighlight Package}\label{pkg:codehl}
+After capturing some code in verbatim mode (see \ref{pkg:codeverb}) this provides commands to typeset them, highlighting some structures/keywords in the process.
+\begin{tsremark}
+  This is not a pretty print or formatter package. That for, a full parser would be necessary, which is way beyond the scope of this package.
+\end{tsremark}
+The specification of how and what will be highlighted is split in:
+\begin{itemize}
+  \item Language syntax (\tsobj[marg]{lang} from \ref{codehl:syntax:lang}), which defines how the code scanner can recognize elements as identifiers, comments, strings, etc. and associate those recognized elements with a formatting class.
+  \item Keywords sets (\tsobj[marg]{kewy-set} from \ref{codehl:syntax:keywd}), which just defines (list) sets of keywords, and associate them with a formatting class.
+  \item Highlight sets (\tsobj[marg]{hl-set} from \ref{codehl:syntax:hlset}), which maps a formatting class with the formatting code itself.
+  \item Literate sets (\tsobj[marg]{litt-set} from ...), which lists sets of patterns to be transliterated.{\color{red} TODO}
+  \item Base format sets (\tsobj[marg]{format-set} from \ref{codehl:syntax:baseformat}) which sets the general formatting of the code to be displayed, like frame, background, etc.
+\end{itemize}
+
+All those aspects are decouple from each other, for instance one can use different sets of keywords with a given language, or have alternative highlight sets and use one or the other as desired.
+
+As mentioned, the following display commands expect the code was captured by \tsobj[pkg]{codeverbatim} and stored in an \tsobj[pkg]{expl3} token list variable. The user is free to capture it in other ways, or process the code of said variable, in which case a few remarks are important:
+\begin{itemize}
+  \item The end of line, line break mark is \tsfmt[verb]{\^{}\^{}J} (following the \tsobj[pkg]{expl3} \cite{expl3} convention, see the section ``Reassigning category codes'', command \tsobj{\tl_retokenize:n}, from \citetitle{expl3})
+  \item No character with the following category codes should appear (of course, the characters themselves can appear, just not with the following category codes):
+      
+      
+\begin{center}
+\begin{tabular}{rlcrlc}
+catcode & name & usually & catcode & name & usually \\
+  \hline
+     0 &  escape &   \tsverb[verb]{\ } &
+     6 &  parameter &   \tsfmt[verb]{\#} \\
+
+     1 &  begin group &   \tsfmt[verb]{\}} &
+     7 &  math superscript &   \tsfmt[verb]{\^{}}  \\
+     
+     2 &  end group &   \tsfmt[verb]{\{}  &
+     8 &  math subscript &   \tsfmt[verb]{\_{}}  \\
+
+     3 &  math toggle &   \tsfmt[verb]{\$} &
+     14 &  comment &   \tsfmt[verb]{\%{}} \\
+
+     4 &  alignment &   \tsfmt[verb]{\&} \\
+  \hline
+\end{tabular}
+\end{center}
+        
+\end{itemize}
+
+
+\subsection{UTF8 and other active characters}
+Characters with character code greater then 127 are assumed to be active \tsobj{utf8} characters and ``aren't touched'': the scanning routines will keep then as is, together, letting \LaTeXe{} process them in the usual way.
+
+On the other hand, characters with a character code below 128 are assumed to be non-active. In general, it's advisable to handle them before calling any of the display commands, either by turning them off before grabbing the code, or re-configuring \tsobj[pkg]{codeverbatim}  (to turn them off) or processing the grabbed code before displaying it.
+
+The main problem that might arise from an active character (category code 13) with a character code below 128 is that the highlighting routines, besides the formatting code itself, will insert lots of breaking commands (e.g. \tsobj{\penalty 0 \relax} commands) that, most likely, won't work well with whatever code was associated with the active character, most likely triggering low level kernel errors.
+
+Of course, if the code associated with a given active character doesn't depends on \emph{what follows}, it is safe to preserve them as active characters.
+
+\subsection{Setting defaults}\label{codehl:settings}
+\begin{codedescribe}[code,force margin]{ \hlSettings, \codehl_settings:n}
+\begin{codesyntax}%
+\tsmacro{\hlSettings}{keys}
+\tsmacro{\codehl_settings:n}{keys}
+\end{codesyntax}
+These will set (or change) the many display defaults. Note that, this is when the scan functions and variables associated with a language, keywords and highlight sets are created (see \ref{codehl:building:defs}).
+
+\end{codedescribe}
+
+\tsobj[marg]{keys} can be any combination of:
+\begin{describelist*}{keys}
+  \describe{language}
+    {This will select the given language as the default one (See \ref{codehl:syntax:lang}). If set to an empty value (\tsobj[key]{language =} \tsobj[value]{\{\}})  no language specific patterns will be recognized. }
+  \describe{hl set}
+    {This will select the given highlight set as the default one. See \ref{codehl:syntax:hlset}. If set to an empty value (\tsobj[key]{hl set =} \tsobj[value]{\{\}})  no syntax highlight will ensue. }
+  \describe{keywd set}
+    {This will select the given keyword set as the default one. See \ref{codehl:syntax:keywd}. If set to an empty value (\tsobj[key]{keywd set =} \tsobj[value]{\{\}})  no keyword will be recognized. }
+  \describe{base format}
+    {This will select the given base format set as the default one. See \ref{codehl:syntax:baseformat}. If set to an empty value (\tsobj[key]{base format =} \tsobj[value]{\{\}})  then \tsobj[value]{std-fmt} (it only sets the \tsobj[key]{text width, wrap indent}) will be selected as the base formatting. }
+\begin{tsremark}
+  All keys can be set to an empty value, but, if a non empty value is given, and the respective \tsobj[key,or]{language, hl set, keywords set, base format} doesn't exist, an error will be raised.
+\end{tsremark}    
+\end{describelist*}
+
+\subsection{Display commands}\label{codehl:display}
+\begin{codedescribe}[code,force margin,variants=list]{ \hlDisplay ,  \hlDisplayVar , \codehl_display:nn { no }  }
+\begin{codesyntax}%
+\tsmacro{\hlDisplay}[keys]{code}
+\tsmacro{\hlDisplayVar}[keys]{tl-var}
+\tsmacro{\codehl_display:nn}{keys,code}
+\tsmacro{\codehl_display:no}{keys,tl-var}
+\end{codesyntax}
+These will display (typeset) the contents of \tsobj[marg,or]{code,tl-var} (an \tsobj[pkg]{expl3} token list variable) accordingly with the active language, highlight set, etc.
+\begin{tsremark}
+  The highlight routines expect that \tsobj[marg]{code} is terminated by \tsfmt[verb]{\^{}\^{}J }. A quark loop will ensue otherwise.
+\end{tsremark}
+\end{codedescribe}
+
+\tsobj[marg]{keys} can be any combination of the keys from \ref{codehl:syntax:baseformat} (except the \tsobj[key]{based on} key) and the following:
+\begin{describelist*}{keys}
+  \describe{hl set}
+    {This will locally extend the active highlight set.  
+    The expected syntax is \tsfmt[key]{hl set = \{\tsobj[marg]{hl-keys}\}}, whereas \tsobj[marg]{hl-keys} can be any combination of keys from \ref{codehl:syntax:hlset} (except the \tsobj[key]{based on} key).
+    }
+    \begin{tsremark}
+      This can only be used if a valid \tsobj[key]{hl set} was selected with \tsobj[code,or]{\hlSettings,\codehl_settings:n}.
+    \end{tsremark}
+  \describe{keywd set}
+    {This will locally extend the keywords set. 
+    The expected syntax is \tsfmt[key]{keywd set = \{\tsobj[marg]{keywd-keys}\}}, whereas \tsobj[marg]{keywd-keys} can be any combination of keys from \ref{codehl:syntax:keywd} (except the \tsobj[key]{based on} key).
+    }
+    \begin{tsremark}
+      This can only be used if a valid \tsobj[key]{keywd set} was selected with \tsobj[code,or]{\hlSettings,\codehl_settings:n}.
+    \end{tsremark}
+\end{describelist*}
+
+
+
+
+
+
+\subsection{Language and syntax highlight definitions}\label{codehl:lang:defs}
+There are a few main cases to be taken care of:
+\begin{itemize}
+  \item comments/strings $\rightarrow$ A language \tsobj[marg]{lang} (see \ref{codehl:syntax:lang}) defines the start/end patterns and associated \tsobj[marg]{class}, whilst a highlight set \tsobj[marg]{hl-set} (see \ref{codehl:syntax:hlset}) associates the related \tsobj[marg]{class} with a format to be used.
+      
+      For example, when setting a language one can have: \tsverb[key]{comment = {3}{/*}{*/}} which will define a C++ style comment and associate \tsobj[key]{comment} \tsobj[marg]{class} \tsobj[key]{3} with it. The format to be applied will come from a highlight set (see \ref{codehl:syntax:hlset}), like: \tsverb[key]{comment = {3}{\color{blue}}}.
+      
+\begin{tsremark}
+  Comments can be discarded, or made \emph{active}, meaning the comment text will be handled as normal \LaTeXe{} code.
+\end{tsremark}
+
+  \item keywords $\rightarrow$ A keyword set, \tsobj[marg]{keywd-set} (see \ref{codehl:syntax:keywd}), associates keywords with a \tsobj[marg]{class}, whilst a highlight set \tsobj[key]{hl-set} (see \ref{codehl:syntax:hlset}) associates the related \tsobj[marg]{class} with a format to be used.
+      
+      For example, when setting a keyword set, one can have: \tsverb[key]{keywd = {2}{some,words}} and \tsverb[key]{keywd = {3}{special}}. The format to be applied will come from a highlight set (see \ref{codehl:syntax:hlset}), like: \tsverb[key]{keywd = {2}{\bfseries}} and \tsverb[key]{keywd = {3}{\color{red}}}. That way the words \emph{some} and \emph{words} will appear in bold face, whilst \emph{special} in red.
+      
+      
+  \item identifiers $\rightarrow$ \tsobj[key]{language} (see \ref{codehl:syntax:lang}) defines the delimiter \tsobj[marg]{char} and associated \tsobj[marg]{id-name}, a \tsobj[marg]{keywd-set} (see \ref{codehl:syntax:keywd}) associates keywords with a \tsobj[marg]{id-name}\tsobj[marg]{class}, and \tsobj[marg]{hl-set} (see \ref{codehl:syntax:hlset}) associates the related \tsobj[marg]{id-name}\tsobj[marg]{class} with a format to be used.
+      
+      That's a special case of keywords, for example, when setting a language one can have: \tsverb[key]{identifier = {texcs}{\\}} which will define a \LaTeXe{} style identifier, associated with the \tsobj[marg]{id-name} \tsobj[value]{texcs}. 
+      
+      Then, when setting a keyword set, one can have: \tsverb[key]{texcs = {2}{cmdA,cmdB}} and \tsverb[key]{texcs = {3}{cmdC}}, and, finally, the format to be applied will come from a highlight set (see \ref{codehl:syntax:hlset}), like: \tsverb[key]{texcs = {2}{\bfseries}} and \tsverb[key]{texcs = {3}{\color{blue}}}. That way the commands \tsobj{\cmdA} and \tsobj{\cmdB} will appear in bold face, whilst \tsobj{\cmdA} in blue.
+\end{itemize}
+
+\begin{tsremark}
+  Note that, even though, all these aspects are related, they all (language sets, highlight sets, keyword sets and base format set) are decouple at definition time. Only when effectively displaying a given code that they will be ``bring together'', this allows (for instance) to have separated sets of keywords for a given language, and using one or another as needed.
+\end{tsremark}
+
+
+\subsection{Based on syntax and class remapping}\label{codehl:syntax:basedon}
+In the following sections, a common key is \tsobj[key]{based on}, whose general syntax is: 
+
+\tsobj[key]{based on} = \tsfmt[value]{ \{ \tsobj[meta]{base-ref} , \tsobj[meta]{base-ref} \dots \}}
+
+And, \tsobj[meta]{base-ref} can be any combination of:
+\begin{describelist*}{value}
+  \describe{\tsobj[meta]{base}}
+    { 
+      The \tsobj[marg]{base} will be inherited, as is. No class re-mapping.  
+    }
+  \describe{R[int]\tsobj[meta]{base}}
+    { The \tsobj[marg]{base} classes will be re-mapped, adding \tsmeta{int} to all \tsmeta{base} classes. }
+  \describe{S[int]\tsobj[meta]{base}}
+    { The \tsobj[marg]{base} classes will be re-mapped, setting  all \tsmeta{base} classes to \tsmeta{int}. }
+\end{describelist*}
+\begin{tsremark}
+  A \tsmeta{base} can be based on other \tsmeta{bases}. Keep in mind, though, no attempt is made to detect a circular definition, which will end exhausting \LaTeXe{} memory. 
+\end{tsremark}
+
+As briefly presented in the introduction above, a key concept of all sets (syntax, keywords, highlight) is the idea of a \tsobj[marg]{class}, an integer, which allows to have many formatting \tsobj[marg]{classes} associated with each element.
+
+Regarding the \tsobj[key]{based on} key, when defining a set based on another one, one has the option to just copy the definitions as is, or \emph{remap} the base classes, either setting them to a constant, \tsobj[key]{S[int]}\tsobj[marg]{base}, or add a constant \tsfmt[value]{R[int]\tsobj[meta]{base}} to them.
+\begin{tsremark}
+  When processing the many sets ( base format, see \ref{codehl:syntax:basedon}, highlight, see \ref{codehl:syntax:hlset}, keywords, see \ref{codehl:syntax:keywd} or language, see \ref{codehl:syntax:lang}) the \tsobj[key]{based on} keys are processed first in the definition order.
+  
+  Moreover, the \tsobj[key]{based on} definitions can be nested. For instance, one can have a language \tsobj[value]{langA} based on languages \tsobj[value]{langB,langC}, and \tsobj[value]{langB} based on \tsobj[value]{langD}, and so on.
+\end{tsremark}
+
+\subsection{Internal structures and scan functions}\label{codehl:building:defs}
+Prior effectively displaying/highlighting some code, a set of scan functions (derived from the language definition, see \ref{codehl:syntax:lang}) and auxiliary variables (derived from keywords sets, see \ref{codehl:syntax:keywd}, highlight sets, see \ref{codehl:syntax:hlset} and base format, see \ref{codehl:syntax:baseformat}) need to be set. Note though:
+\begin{itemize}
+  \item Those scan functions and variables will always be locally defined. This allows to, for instance, have a local set of keywords extending a base set, but not changing it.
+\end{itemize}
+
+Depending on the specifics, setting up the needed scan functions (for a language) and auxiliary variables can be a time consuming operation. That's why setting those functions/variables is delayed as much as possible, eventually to the first call of \tsobj{\hlSettings} (see \ref{codehl:settings}). Usually this is ok, but, if \tsobj{\hlSettings} is called from inside a local group (like inside an environment) this can lead to the undesirable side effect of rebuilding those functions/variables time and time again.
+
+
+\subsection{Base Format}\label{codehl:syntax:baseformat}
+\tsobj[marg]{format-set} allows to define and set general aspects of code highlighting, as framing, background color (if any), font, etc.
+
+\begin{codedescribe}{ \hlBaseFormat , \codehl_baseformat:nn }
+\begin{codesyntax}%
+\tsmacro{\hlBaseFormat}{format-set,keys}
+\tsmacro{\codehl_baseformat:nn}{format-set,keys}
+\end{codesyntax}
+\end{codedescribe}
+\tsobj[marg]{keys} can be any combination of:
+\begin{describelist*}{keys}
+  \describe{based on}
+    {\tsfmt[value]{\{ \tsobj[meta]{fmtset-ref} , \tsobj[meta]{fmtset-ref} \dots \}}
+    
+    The definitions of \tsobj[marg]{fmtset-ref} set(s) are inherited. See \ref{codehl:syntax:basedon} for details. }
+
+\describe{~}{\color{black!50!red}\textbf{Behaviour  keys:}}
+  \describe{nested keywd}
+    {(default: \tsobj[value]{false}) If keywords are to be detected (and formatted) inside comments and/or strings.}
+  \describe{nesting}
+    {(default: \tsobj[value]{default}) Possible values: \tsobj[value]{none,default,ident,all}. By default only structures defined \emph{to be detectable inside other structures, by  the language,} (see \ref{codehl:syntax:lang})   will be detected. If \tsobj[value]{none} is selected, no nested structure will be detected. If \tsobj[value]{ident} is selected, besides the default nested structures (from language) identifiers will also be detected. If \tsobj[value]{all} is selected, all possible nested structures will be detected. See \ref{codehl:syntax:lang} for details.}
+
+  \describe{gobble}
+    {(default: \tsobj[value]{0}) The number of characters to be gobble from each line prior any processing.}
+    \begin{tsremark}
+      There is no provision for utf8 chars here. It will fail badly if an utf8 character is present among the characters to be gobbled. The main purpose of this is to de-indent source code.
+    \end{tsremark}
+
+  \describe{inline}
+    {(default: \tsobj[value]{false}) Normally the code is displayed in vertical mode, constraining its width. With \tsobj[key]{inline} set to true, the code to be highlighted will be assumed to be short and displayed in its natural length.
+    }
+    \begin{tsremark}
+      A \tsfmt[verb]{\^{}\^{}J} found in the middle of \tsobj[marg]{code} will result in a line break, except the one at the end of \tsobj[marg]{code}.
+    \end{tsremark}
+  \describe{short verb}
+  {(default: \tsobj[value]{false}) This will add a \tsfmt[verb]{\^{}\^{}J } at the end of \tsobj[marg]{code} before it's further processed. This is needed (to avoid a quark loop) in case of verbatim code grabbed with one of the short verbatim commands (see \ref{codeverb:sverb}), which doesn't terminate the grabbed code with a \tsfmt[verb]{\^{}\^{}J}.
+  }
+
+  \describe{~}{\color{black!50!red}\textbf{Format  keys:}}
+  \describe{base format}
+    {This will be applied in a local group in which all highlighted code will be displayed. This shouldn't absorb any token.}
+
+  \describe{show spaces}
+    {(default: \tsobj[value]{false}) If spaces are shown or not.}
+
+  \describe{text width}
+    {(default: \tsverb**[value]{\linewidth}) This set's the text width of the displayed code.}
+  \describe{wrap indent}
+    {(default: \tsobj[value]{2em}) The indentation amount to be used in case of wrapping lines.}
+  \describe{background}
+    {Set's the background color to be used. Can be any color as defined by \tsobj[pkg]{xcolor}. By default no background is applied (equivalent to an empty argument).}
+
+  \describe{~}{\color{black!50!red}\textbf{Line numbers  keys:}}
+  \describe{numbers }
+    {(default: \tsobj[value]{none}) Possible values: \tsobj[value]{none,left,right}. Line numbers will be attached (or not) to each line.}
+  \describe{numbers format}
+    {Format to be used when displaying line numbers. The used command(s) can absorb a single parameter, namely the line number. }
+  \describe{numbers sep}
+    {(default: \tsobj[value]{2pt}) The separation between the displayed text and the line numbers.}
+
+
+  \describe{~}{\color{black!50!red}\textbf{Frame  keys:}}
+  \describe{rule width}
+    {(default: \tsobj[value]{0.25pt}) The width of the rules (if any) when framing the text.}
+
+  \describe{rule color}
+    {\color{red}(default: \tsobj[value]{black}) The color of the rules (if any) when framing the text.}
+
+  \describe{left frame}
+    {(default: \tsobj[value]{false}) If a rule at the left should be present.}
+  \describe{right frame}
+    {(default: \tsobj[value]{false}) If a rule at the right should be present.}
+  \describe{top frame}
+    {(default: \tsobj[value]{false}) If a rule at the top should be present.}
+  \describe{bottom frame}
+    {(default: \tsobj[value]{false}) If a rule at the bottom should be present.}
+
+  \describe{frame sep}
+    {(default: \tsobj[value]{2pt}) The separation between the frames (if any) and the text.}
+  \describe{left sep}
+    {(default: \tsobj[value]{0pt}) Extra separation (added to \tsobj[key]{frame sep} between the left frame and the text.}
+  \describe{right sep}
+    {(default: \tsobj[value]{0pt}) Extra separation (added to \tsobj[key]{frame sep} between the right frame and the text.}
+  \describe{top sep}
+    {(default: \tsobj[value]{0pt}) Extra separation (added to \tsobj[key]{frame sep} between the top frame and the text.}
+  \describe{bottom sep}
+    {(default: \tsobj[value]{0pt}) Extra separation (added to \tsobj[key]{frame sep} between the bottom frame and the text.}
+
+
+\end{describelist*}
+
+\begin{codedescribe}{ \hlBaseFormatShow , \codehl_baseformat_show:n }
+\begin{codesyntax}%
+\tsmacro{\hlBaseFormatShow}{format-set}
+\tsmacro{\codehl_baseformat_show:n}{format-set}
+\end{codesyntax}
+This will write to the terminal (raising an error message) the effective \tsobj[marg]{format-set}, after applying defaults and recovering all \tsobj[key]{based on} definitions.
+\end{codedescribe}
+
+
+\subsection{Highlight Sets}\label{codehl:syntax:hlset}
+
+A Highlight format set defines the formatting to be applied to the many detected elements (as defined by language \ref{codehl:syntax:lang}). The formats commands can absorb a single argument, namely the text/element detected and being formatted.
+
+\begin{codedescribe}{ \hlHLset , \codehl_hlset:nn }
+\begin{codesyntax}%
+\tsmacro{\hlHLset}{hl-set,keys}
+\tsmacro{\codehl_hlset:nn}{hl-set,keys}
+\end{codesyntax}
+\end{codedescribe}
+All keys (except for \tsobj[key]{based on}) expect two arguments: \tsargs[marg]{class,fmt-cmds}. 
+
+\tsobj[marg]{fmt-cmds} can absorb a single argument. The \tsobj[marg]{class} (an integer) allows to have distinct formats for the same structure (be it comments, strings, keywords, etc...).
+
+\tsobj[marg]{keys} can be any combination of:
+\begin{describelist*}{keys}
+  \describe{based on}
+    {\tsfmt[value]{\{ \tsobj[meta]{hlset-ref} , \tsobj[meta]{hlset-ref} \dots \}}
+    
+    The definitions of a base \tsobj[marg]{hlset-ref} set(s) are inherited. See \ref{codehl:syntax:basedon} for details. }
+  
+  \describe{comment}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{comments}.  }
+  \describe{string}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{strings}.  }
+  \describe{keywd}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{keywords}.  }
+  \describe{emph}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{keywords}, this is just an alternative way to format keywords (similar to \tsobj[pkg]{listings}\cite{listings} extra emphasis).  }
+  \describe{active}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{active} comments.  }
+  \describe{\tsmeta{id-name}}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to identifiers named \tsmeta{id-name}. See \ref{codehl:syntax:lang} for details }
+  \begin{tsremark}
+    Since this is decoupled (at definition time) from language and keyword sets, any other \tsobj[key]{key} being used will be treated as a possible identifier (see \ref{codehl:syntax:lang}), and no error will be raised.
+  \end{tsremark}
+  \begin{tsremark}
+    If you want to delete the format associated with any given \tsobj[key]{key} \tsobj[marg]{class} pair, just redefine them as nothing, e.g., \tsobj[key]{keywd = \{2\}\{\}}.
+  \end{tsremark}
+\end{describelist*}
+
+\begin{codedescribe}{ \hlHLsetShow , \codehl_hlset_show:n }
+\begin{codesyntax}%
+\tsmacro{\hlHLsetShow}{hl-set}
+\tsmacro{\codehl_hlset_show:n}{hl-set}
+\end{codesyntax}
+This will write to the terminal (raising an error message) the effective \tsobj[marg]{hl-set} (after recovering all \tsobj[key]{based on} definitions).
+\end{codedescribe}
+
+
+\subsection{Keywords Sets}\label{codehl:syntax:keywd}
+
+Sets of \emph{detectable} keywords. These set the list of keywords and associated formatting \tsobj[marg]{class}.
+
+
+\begin{codedescribe}{ \hlKeywdset , \codehl_keywdset:nn }
+\begin{codesyntax}%
+\tsmacro{\hlKeywdset}{keywd-set,keys}
+\tsmacro{\codehl_keywdset:nn}{keywd-set,keys}
+\end{codesyntax}
+\end{codedescribe}
+All keys (except for \tsobj[key]{based on}, see \ref{codehl:syntax:basedon}) expect two arguments: \tsargs[marg]{class,keywd-list}. 
+
+The \tsobj[marg]{class} (an integer) allows to have distinct sets of keywords, identifiers.
+
+\tsobj[marg]{keys} can be any combination of:
+\begin{describelist*}{keys}
+  \describe{based on}
+    {The definitions of a base \tsobj[marg]{hl-set} set are inherited. See \ref{codehl:syntax:basedon} for details. }
+  
+  \describe{keywd}
+    { \tsargs[marg]{class,keywords list}  List of keywords.  }
+  \describe{emph}
+    { \tsargs[marg]{class,keywords list}  List of keywords to be formatted as \tsobj[key]{emph}.  }
+  \describe{\tsmeta{id-name}}
+    { \tsargs[marg]{class,keywords list}  List of \tsmeta{id-name} (\tsobj[key]{identifiers}) keywords  to be formatted as \tsobj[key]{id-name} in \ref{codehl:syntax:hlset}.  See \tsobj[key]{identifiers} from \ref{codehl:syntax:lang} for details }
+  \begin{tsremark}
+    Since this is decoupled (at definition time) from language and highlight format, any other \tsobj[key]{key} being used will be treated as a possible identifier (see \ref{codehl:syntax:lang}), and no error will be raised.
+  \end{tsremark}
+  \describe{suppress \tsmeta{id-name}}
+    { \tsargs[marg]{class,keywords list}  List of \tsmeta{id-name} keywords whose format (if already defined) will be suppressed. \tsobj[marg]{id-name} can also be \tsobj[key,or]{keywd,emph}.}
+  \begin{tsremark}
+    Since this is decoupled (at definition time) from language and highlight format, no error will be raised if a keyword wasn't already defined.
+  \end{tsremark}
+\end{describelist*}
+
+
+\begin{codedescribe}{ \hlKeywdsetShow , \codehl_keywdset_show:n }
+\begin{codesyntax}%
+\tsmacro{\hlKeywdsetShow}{keywd-set}
+\tsmacro{\codehl_keywdset_show:n}{keywd-set}
+\end{codesyntax}
+This will write to the terminal (raising an error message) the effective \tsobj[marg]{keywd-set} (after  recovering all \tsobj[key]{based on} definitions).
+\end{codedescribe}
+
+
+
+
+
+\subsection{Language Syntax}\label{codehl:syntax:lang}
+The elements of a language (for instance, comments, strings) are defined in terms of their delimiters. The are 4 main cases:
+\begin{itemize}
+  \item keywords: any combination of letters. That's  \emph{implicit} for all languages.
+  \item Identifiers: keywords preceded by a marker (\tsobj[marg]{char} below), like \TeX{} commands. 
+  \item Fully delimited elements (those with \tsobj[marg]{start-pattern,end-pattern} below), like C++ comments starting with \tsobj[key]{/*} and ending with \tsobj[key]{*/}, or strings.
+  \item Line delimited elements (those with \tsobj[marg]{start-pattern} below), like C single line comments starting with \tsobj[key]{//}.
+\end{itemize}
+\begin{tsremark}
+  When defining the patterns, don't forget to escape \TeX{} special characters, specially  the ones with category code besides \emph{other} (12) and \emph{letter} (11):  
+0: escape itself (usually \tsverb{\ }), 
+1: begin-group (usually \tsfmt{\{} ), 
+2: end-group (usually \tsfmt{\}} ), 
+3: math shift (usually \tsfmt{\$} ), 
+4: alignment tab  (usually \tsfmt{\&} ), 
+6: parameter  (usually \tsfmt{\#} ), 
+7: superscript  (usually \tsfmt{\^{}} ) ,
+8: subscript (usually \tsfmt{\_} ) ,
+14: comment (usually \tsfmt{\%} ).
+
+In fact, all characters can be escaped, for instance \tsverb**[verb]{{\a\d\:\$}} is, effectively, \tsverb[verb]{{ad:$}}
+\end{tsremark}
+\begin{tsremark}
+  When processing the \tsobj[marg]{patterns}, no expansion will occur, and all characters in the given pattern will receive the category code other. For instance, given a pattern \tsverb**[verb]{{\cmdX}} the effective pattern will be \tsverb**[verb]{{cmdX}}.
+\end{tsremark}
+
+Some structures can be nested inside others: potentially, all that have an explicit \tsobj[marg]{start-pattern,end-pattern} (that excludes the ones delimited by an end-of-line.) and identifiers (which are implicitly delimited by the first non-letter character). But only a few can \emph{hold} them, namely, only \tsobj[key]{string} and \tsobj[key]{comment} variants: \tsobj[key,or]{comment,comment*,comment line, comment line at, string, string*, delimited string, delimited string*}, but not \tsobj[key,or]{discard comment, active comment} variants. 
+
+Moreover, in the following, the structures with a star (\tsobj[key,or]{comment*, discard comment*, active comment*,string*,delimited string*, identifier*}) define the ones that can be detected, by default, if inside \tsobj[key,or]{comments,strings}. This correspond to the \tsobj[value]{default} value of the key \tsobj[key]{nesting} from a \tsobj[marg]{format-set}, see \ref{codehl:syntax:baseformat}.
+
+In case of the \tsobj[key]{discard} variants, obviously a \tsobj[marg]{class} isn't really needed (no formatting), but it's required so that its syntax is the same as the \tsobj[key]{comment} counter parts, which allows one to just add or remove a \tsobj[key]{discard} word, as needed.
+
+When analysing the text to be highlighted, the listed patterns are grouped by their first letter, then the rest of the pattern is looked for in the \emph{reverse} definition order, that means, for example, if one has two comment definitions, like 
+\tsverb[key]{comment = {3}{/**}{**/}} followed by \tsverb[key]{comment = {1}{/*}{*/}} the \tsverb[key]{/**} will never be detected, always put the longest sequence last.
+\begin{tsremark}
+  If two structures are defined with the same \tsobj[marg]{start-pattern} the one defined last overwrites any previous definition for that  \tsobj[marg]{start-pattern}.
+\end{tsremark}
+
+
+\begin{codedescribe}{ \hlLang , \codehl_lang:nn }
+\begin{codesyntax}%
+\tsmacro{\hlLang}{lang,keys}
+\tsmacro{\codehl_lang:nn}{lang,keys}
+\end{codesyntax}
+\end{codedescribe}
+
+\tsobj[marg]{keys} can be any combination of:
+\begin{describelist*}{keys}
+    \describe{based on}
+    {The definitions of a base \tsobj[marg]{lang} are inherited. See \ref{codehl:syntax:basedon} for details. }
+    
+    \describe{comment}
+      { \tsargs[marg]{class,start-pattern,end-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{comment*}
+      { \tsargs[marg]{class,start-pattern,end-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+      
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{comment line}
+      { \tsargs[marg]{class,start-pattern}
+
+      Everything between \tsobj[marg]{start-pattern} and the end of line, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{comment line at}
+      { \tsargs[marg]{class,start-pattern,col}
+
+      Everything between \tsobj[marg]{start-pattern} and the end of line, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ), but only if the first character appears at column \tsobj[marg]{col}.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{discard comment}
+      { \tsargs[marg]{class,start-pattern,end-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be discarded. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment}.
+
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+      }
+    \describe{discard comment*}
+      { \tsargs[marg]{class,start-pattern,end-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be discarded. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment}.
+      
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      }
+    \describe{discard comment line}
+      { \tsargs[marg]{class,start-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and the end of line will be discarded. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment line}.
+      }
+    \describe{discard comment line at}
+      { \tsargs[marg]{class,start-pattern,col}
+      
+      Everything between \tsobj[marg]{start-pattern} and the end of line will be discarded, but only if the first character appears at column \tsobj[marg]{col}. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment line at}.
+      }
+    \describe{active comment}
+      { \tsargs[marg]{class,start-pattern,end-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, excluding them, will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+      }
+    \describe{active comment*}
+      { \tsargs[marg]{class,start-pattern,end-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, excluding them, will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+      
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      }
+    \describe{active comment line}
+      { \tsargs[marg]{class,start-pattern}
+      
+      Everything between \tsobj[marg]{start-pattern} and the end of line will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+      }
+    \describe{active comment line at}
+      { \tsargs[marg]{class,start-pattern,col}
+      
+      Everything between \tsobj[marg]{start-pattern} and the end of line will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). But only if the first character appears at column \tsobj[marg]{col}.
+      }
+    \describe{string}
+      { \tsargs[marg]{class,pattern,escape-char}
+      
+      Everything between \tsobj[marg]{pattern} and \tsobj[marg]{pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
+
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{string*}
+      { \tsargs[marg]{class,pattern,escape-char}
+      
+      Everything between \tsobj[marg]{pattern} and \tsobj[marg]{pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
+      
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{delimited string}
+      { \tsargs[marg]{class,start-pattern,end-pattern,escape-char}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
+
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{delimited string*}
+      { \tsargs[marg]{class,start-pattern,end-pattern,escape-char}
+      
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
+      
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      
+      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      }
+    \describe{identifier}
+      { \tsargs[marg]{id-name,id-char}
+        
+        The keyword following \tsobj[marg]{id-char} (and including the  \tsobj[marg]{id-char} itself) will be formatted as defined by \tsobj[key]{id-name}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+        
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{ident,all}, this will be detected if inside another comment or string.
+      }
+    \describe{identifier*}
+      { \tsargs[marg]{id-name,id-char}
+        
+        The keyword following \tsobj[marg]{id-char} (and including the  \tsobj[marg]{id-char} itself) will be formatted as defined by \tsobj[key]{id-name}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
+
+      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      }
+    \describe{suppress}
+      { \tsargs[marg]{pattern}
+      
+      The structure whose \tsobj[marg]{start-pattern} equals \tsobj[marg]{pattern} will be suppressed: no scan function will be generated for it. 
+      }
+      \begin{tsremark}
+        It won't detect if the  \tsobj[marg]{pattern} corresponds, or not, to an already defined structure, given that the \tsobj[marg]{start-pattern} might be inherited from a \tsobj[key]{based on}  \tsobj[marg]{lang}.
+      \end{tsremark}
+      \begin{tsremark}
+        Definition sequence matters: If, later on, a new structure is defined with the same \tsobj[marg]{start-pattern}, it will be normally processed (overwriting the \tsobj[key]{suppress} key).
+      \end{tsremark}
+
+\end{describelist*}
+
+
+\begin{codedescribe}{ \hlLangShow , \codehl_lang_show:n }
+\begin{codesyntax}%
+\tsmacro{\hlLangShow}{lang}
+\tsmacro{\codehl_lang_show:n}{lang}
+\end{codesyntax}
+This will write to the terminal (raising an error message) the effective \tsobj[marg]{lang} definitions (after recovering all \tsobj[key]{based on} definitions).
+\end{codedescribe}
+
+\subsection{To do, Future plans}
+These are some aspects that are either planned or that deserve some consideration:
+\begin{itemize}
+  \item case sensitive: At the moment, all keywords and identifiers are case sensitive. That shall change.
+  \item listings \tsobj[key]{procnamekeys} it might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
+  \item simula/algol comments peculiar syntax.
+  \item alphanumeric keywords
+  \item html tags (and alike): keywords/identifiers are only recognized inside tags...?? tag as 'another (persistent:\tsobj{\l__codehl_tok_curr_ident_tl}) identifier'??
+\end{itemize}
+
+\subsection{Pre-defined Languages}\label{codehl:lang:predef}
+There is a set of pre-defined languages known by \tsobj[pkg]{codehighlight}, but since it would be wasteful to load all definitions all the time, those language definitions are \emph{stored} in auxiliary \emph{packages} (usual .sty files). The following commands, which can only be called in the document preamble, will include the needed auxiliary packages. Note, though, that there isn't a one-to-one relationship, since some auxiliary packages might entice more than one language definition.
+
+
+\begin{codedescribe}{ \hlLangLoad , \codehl_lang_load:n }
+\begin{codesyntax}%
+\tsmacro{\hlLangLoad}{lang}
+\tsmacro{\codehl_lang_load:n}{lang-list}
+\end{codesyntax}
+This will include the needed auxiliary packages. Whereas \tsobj[marg]{lang-list} is a comma separated list of languages.
+\end{codedescribe}
+
+\begin{codedescribe}{ \hlKeywdsetLoad , \codehl_keywdset_load:n }
+\begin{codesyntax}%
+\tsmacro{\hlKeywdsetLoad}{lang}
+\tsmacro{\codehl_keywdset_load:n}{lang}
+\end{codesyntax}
+Similarly, this will include the needed auxiliary packages. Whereas \tsobj[marg]{lang-list} is a comma separated list of languages.
+\end{codedescribe}
+
+%\newpage
+%\newgeometry{marginparwidth=10mm,top=20mm,bottom=15mm,hmargin={15mm,15mm},marginparsep=2.5mm,columnsep=10mm,asymmetric}
+%
+%\AsciiTable{c_str_cctab}
+%
+%\restoregeometry
+%
+
+\newpage
+\section{Examples}
 %% if needed
-%\printbibliography
+
+
+
+
+\printbibliography
 
 \end{document} 
