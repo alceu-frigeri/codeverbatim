@@ -35,7 +35,9 @@
 \RequirePackage[inline]{enumitem}
 \SetEnumitemKey{miditemsep}{parsep=0ex,itemsep=0.4ex}
 
-\usepackage{asciitable}
+\usepackage { longtable,multirow,hhline}
+
+%\usepackage{asciitable}
 %\usepackage{codeverbatim}
 
 
@@ -173,7 +175,7 @@ These keys are common to all main code verbatim commands and expect a comma sepa
 This will create a new document environment \tsobj[marg]{env-name}, following the \tsobj{\NewDocumentEnvironment}  structure. \tsobj[marg]{arg spec} is the desired \tsobj[marg]{env-name} parameter specification list (\tsobj{\NewDocumentEnvironment} 1st parameter, see \cite{usrguide}). The \tsobj[marg]{begin-code} code will be executed before the verbatim code gets grabbed. The \tsobj[marg]{end-code} will be executed right after, see the keys \tsobj[key]{inline,verb tl} below for details how to further handle the verbatim content.
 \end{codedescribe}
 \begin{tsremark}
-  If short verbatim commands are on (\tsobj[code,or]{\cvSVerbOn,\codeverb_sverb_on:}) those active characters will be made other (see \ref{codeverb:caveats}) after applying the characters category code defined here (with the common keys from \ref{codeverb:commonkeys}) and before applying the characters category code defined with \tsobj[code,or]{\cvEnvCCSet,\codeverb_env_catcode_set:n} (see \ref{codeverb:auxiliary-cctab} below).
+  If short verbatim commands are on (\tsobj[code,or]{\cvSVerbOn,\codeverb_sverb_on:}) those active characters will be made other (see \ref{codeverb:caveats}) after applying the characters category code defined here (with the common keys from \ref{codeverb:commonkeys}) and before applying the characters category code defined with \tsobj[code,or]{\cvEnvCCSet,\codeverb_env_catcode_set:n} (see \ref{codeverb:auxiliary-commands} below).
 \end{tsremark}
 \tsobj[marg]{keys} can be any combination of (besides the ones from \ref{codeverb:commonkeys}):
 \begin{describelist*}{keys}
@@ -188,7 +190,7 @@ This will create a new document environment \tsobj[marg]{env-name}, following th
 \end{describelist*}
 
 
-\subsection{Auxiliary Environment Begin Commands}\label{codeverb:auxiliary-cctab}
+\subsection{Auxiliary Environment Begin Commands}\label{codeverb:auxiliary-commands}
 
 \begin{codedescribe}{\cvEnvCCSet , \codeverb_env_catcode_set:n}
 \begin{codesyntax}%
@@ -215,7 +217,7 @@ Note that the environment \tsobj[env]{myEnv} was defined with the default verbat
   It won't replace the environment defaults, but will be applied after the environment setup.
 \end{tsremark}
 \begin{tsremark}[\color{red}Attention]
-  Unlike in all other cases, the default ``other characters list'' for these commands is an empty list. That way, it will only change the catcode (to other or letter) for the given characters.
+  Unlike in all other cases, the default ``other characters list'' for these commands is an empty list. That way, it will only change the catcode (to other or letter) of the given characters.
    %Of course, if the end user gives a \tsobj[key]{cctab}, everything changes.
 \end{tsremark}
 
@@ -451,7 +453,6 @@ The specification of how and what will be highlighted is split in:
   \item Language syntax (\tsobj[marg]{lang} from \ref{codehl:syntax:lang}), which defines how the code scanner can recognize elements as identifiers, comments, strings, etc. and associate those recognized elements with a formatting class.
   \item Keywords sets (\tsobj[marg]{kewy-set} from \ref{codehl:syntax:keywd}), which just defines (list) sets of keywords, and associate them with a formatting class.
   \item Highlight sets (\tsobj[marg]{hl-set} from \ref{codehl:syntax:hlset}), which maps a formatting class with the formatting code itself.
-  \item Literate sets (\tsobj[marg]{litt-set} from ...), which lists sets of patterns to be transliterated.{\color{red} TODO}
   \item Base format sets (\tsobj[marg]{format-set} from \ref{codehl:syntax:baseformat}) which sets the general formatting of the code to be displayed, like frame, background, etc.
 \end{itemize}
 
@@ -459,7 +460,7 @@ All those aspects are decouple from each other, for instance one can use differe
 
 As mentioned, the following display commands expect the code was captured by \tsobj[pkg]{codeverbatim} and stored in an \tsobj[pkg]{expl3} token list variable. The user is free to capture it in other ways, or process the code of said variable, in which case a few remarks are important:
 \begin{itemize}
-  \item The end of line, line break mark is \tsfmt[verb]{\^{}\^{}J} (following the \tsobj[pkg]{expl3} \cite{expl3} convention, see the section ``Reassigning category codes'', command \tsobj{\tl_retokenize:n}, from \citetitle{expl3})
+  \item The end of line, line break mark is \tsfmt[verb]{\^{}\^{}J} (following the \tsobj[pkg]{expl3} \cite{expl3} convention, see the section ``Reassigning category codes'', command \tsobj{\tl_retokenize:n}, from \citetitle{expl3} \cite{expl3})
   \item No character with the following category codes should appear (of course, the characters themselves can appear, just not with the following category codes):
       
       
@@ -623,6 +624,20 @@ Prior effectively displaying/highlighting some code, a set of scan functions (de
 
 Depending on the specifics, setting up the needed scan functions (for a language) and auxiliary variables can be a time consuming operation. That's why setting those functions/variables is delayed as much as possible, eventually to the first call of \tsobj{\hlSettings} (see \ref{codehl:settings}). Usually this is ok, but, if \tsobj{\hlSettings} is called from inside a local group (like inside an environment) this can lead to the undesirable side effect of rebuilding those functions/variables time and time again.
 
+\subsection{Some package settings}\label{codehl:pkg:settings}
+\begin{codedescribe}{ \hlPackSettings , \codehl_pkg_settings:n }
+\begin{codesyntax}%
+\tsmacro{\hlPackSettings}{settings}
+\tsmacro{\codehl_pkg_settings:n}{settings}
+\end{codesyntax}
+This is meant to change some global settings. For now, \tsobj[marg]{settings} can only be:
+  \begin{describelist*}{key}
+    \describe{suppress notes}
+    {(default: false)
+    
+     If set to true the \tsobj[key]{info/note} key from \tsobj{\codehl_lang:nn} (see \ref{codehl:syntax:lang}) and \tsobj{\codehl_keywdset:nn} (see \ref{codehl:syntax:keywd}) will be ignored.}
+  \end{describelist*}
+\end{codedescribe}
 
 \subsection{Base Format}\label{codehl:syntax:baseformat}
 \tsobj[marg]{format-set} allows to define and set general aspects of code highlighting, as framing, background color (if any), font, etc.
@@ -641,10 +656,6 @@ Depending on the specifics, setting up the needed scan functions (for a language
     The definitions of \tsobj[marg]{fmtset-ref} set(s) are inherited. See \ref{codehl:syntax:basedon} for details. }
 
 \describe{~}{\color{black!50!red}\textbf{Behaviour  keys:}}
-  \describe{nested keywd}
-    {(default: \tsobj[value]{false}) If keywords are to be detected (and formatted) inside comments and/or strings.}
-  \describe{nesting}
-    {(default: \tsobj[value]{default}) Possible values: \tsobj[value]{none,default,ident,all}. By default only structures defined \emph{to be detectable inside other structures, by  the language,} (see \ref{codehl:syntax:lang})   will be detected. If \tsobj[value]{none} is selected, no nested structure will be detected. If \tsobj[value]{ident} is selected, besides the default nested structures (from language) identifiers will also be detected. If \tsobj[value]{all} is selected, all possible nested structures will be detected. See \ref{codehl:syntax:lang} for details.}
 
   \describe{gobble}
     {(default: \tsobj[value]{0}) The number of characters to be gobble from each line prior any processing.}
@@ -690,7 +701,7 @@ Depending on the specifics, setting up the needed scan functions (for a language
     {(default: \tsobj[value]{0.25pt}) The width of the rules (if any) when framing the text.}
 
   \describe{rule color}
-    {\color{red}(default: \tsobj[value]{black}) The color of the rules (if any) when framing the text.}
+    {(default: \tsobj[value]{black}) The color of the rules (if any) when framing the text.}
 
   \describe{left frame}
     {(default: \tsobj[value]{false}) If a rule at the left should be present.}
@@ -757,8 +768,10 @@ All keys (except for \tsobj[key]{based on}) expect two arguments: \tsargs[marg]{
     {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{active} comments.  }
   \describe{\tsmeta{id-name}}
     {\tsargs[marg]{class,fmt-cmds}  To be applied to identifiers named \tsmeta{id-name}. See \ref{codehl:syntax:lang} for details }
+  \describe{\tsmeta{tag-name}}
+    {\tsargs[marg]{class,fmt-cmds}  To be applied to keywords inside a \tsobj[key]{tagged area}. See \ref{codehl:syntax:lang} for details }
   \begin{tsremark}
-    Since this is decoupled (at definition time) from language and keyword sets, any other \tsobj[key]{key} being used will be treated as a possible identifier (see \ref{codehl:syntax:lang}), and no error will be raised.
+    Since this is decoupled (at definition time) from language and keyword sets, any other \tsobj[key]{key} being used will be treated as a possible identifier (\tsobj[marg,or]{id-name,tag-name} see \ref{codehl:syntax:lang}), and no error will be raised.
   \end{tsremark}
   \begin{tsremark}
     If you want to delete the format associated with any given \tsobj[key]{key} \tsobj[marg]{class} pair, just redefine them as nothing, e.g., \tsobj[key]{keywd = \{2\}\{\}}.
@@ -773,6 +786,24 @@ All keys (except for \tsobj[key]{based on}) expect two arguments: \tsargs[marg]{
 This will write to the terminal (raising an error message) the effective \tsobj[marg]{hl-set} (after recovering all \tsobj[key]{based on} definitions).
 \end{codedescribe}
 
+\subsection{Auxiliary Format Commands}
+
+\begin{codedescribe}{ \hlFmt, \hlSetFmt, \codehl_hlset_fmt:nn,  \codehl_hlset_fmt:nnn }
+\begin{codesyntax}%
+\tsmacro{\hlFmt}{id,class}
+\tsmacro{\hlSetFmt}{hl-set,id,class}
+\tsmacro{\codehl_hlset_fmt:nn}{id,class}
+\tsmacro{\codehl_hlset_fmt:nnn}{hl-set,id,class}
+\end{codesyntax}
+These are meant to be used in the definition of \tsobj[marg]{fmt-cmds}, see \ref{codehl:syntax:hlset}. The versions with two parameters (\tsobj[marg]{id,class}) use the current active set, whilst the ones with three parameters allow to reference the entries from a different highlight set. \tsobj[marg]{id} can be any highlight set key, except \tsobj[key]{based on}: \tsobj[key,comma]{comment,string,keywd,emph,active} or any \tsobj[key,or]{id-name,tag-name}. See \ref{codehl:syntax:hlset}.
+\end{codedescribe}
+  \begin{tsremark}
+    Since this is decoupled (at definition time) from any language, highlight set and/or keyword set, no error will be raised if referencing a non-existent \tsobj[marg,or]{hl-set,id,class}.
+  \end{tsremark}
+  \begin{tsremark}
+    These commands can be used anywhere, given that the corresponding highlight set was already processed (see \ref{codehl:settings} and \ref{codehl:building:defs}), though an \emph{active set} is only well defined in the context of display commands, see \ref{codehl:display}.
+  \end{tsremark}
+
 
 \subsection{Keywords Sets}\label{codehl:syntax:keywd}
 
@@ -786,6 +817,7 @@ Sets of \emph{detectable} keywords. These set the list of keywords and associate
 \end{codesyntax}
 \end{codedescribe}
 All keys (except for \tsobj[key]{based on}, see \ref{codehl:syntax:basedon}) expect two arguments: \tsargs[marg]{class,keywd-list}. 
+Besides that, one can add an asterisk to each keyy (for instance \tsobj[key,or]{keywd*,emph*}) in which case a list of keywords will be converted to lower case (using \tsobj{\str_lowercase:n}).
 
 The \tsobj[marg]{class} (an integer) allows to have distinct sets of keywords, identifiers.
 
@@ -800,6 +832,8 @@ The \tsobj[marg]{class} (an integer) allows to have distinct sets of keywords, i
     { \tsargs[marg]{class,keywords list}  List of keywords to be formatted as \tsobj[key]{emph}.  }
   \describe{\tsmeta{id-name}}
     { \tsargs[marg]{class,keywords list}  List of \tsmeta{id-name} (\tsobj[key]{identifiers}) keywords  to be formatted as \tsobj[key]{id-name} in \ref{codehl:syntax:hlset}.  See \tsobj[key]{identifiers} from \ref{codehl:syntax:lang} for details }
+  \describe{\tsmeta{tag-name}}
+    { \tsargs[marg]{class,keywords list}  List of keywords, \tsmeta{tag-name},  to be formatted as \tsobj[key,marg]{tag-name} (see \ref{codehl:syntax:hlset}) inside a \tsobj[key]{tagged area}.  See \ref{codehl:syntax:lang} for details }
   \begin{tsremark}
     Since this is decoupled (at definition time) from language and highlight format, any other \tsobj[key]{key} being used will be treated as a possible identifier (see \ref{codehl:syntax:lang}), and no error will be raised.
   \end{tsremark}
@@ -808,6 +842,14 @@ The \tsobj[marg]{class} (an integer) allows to have distinct sets of keywords, i
   \begin{tsremark}
     Since this is decoupled (at definition time) from language and highlight format, no error will be raised if a keyword wasn't already defined.
   \end{tsremark}
+  \begin{tsremark}
+   Again, each keyword can be postfixed with an asterisk, in which case the list of keywords will be converted to lower case (using \tsobj{\str_lowercase:n}. This is meant for case insensitive languages.
+  \end{tsremark}
+    \describe{info/note}
+      { \tsargs[marg]{note}
+      
+      \tsobj[marg]{note} will be logged into the log file and terminal. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+      }
 \end{describelist*}
 
 
@@ -824,7 +866,7 @@ This will write to the terminal (raising an error message) the effective \tsobj[
 
 
 \subsection{Language Syntax}\label{codehl:syntax:lang}
-The elements of a language (for instance, comments, strings) are defined in terms of their delimiters. The are 4 main cases:
+The elements of a language (for instance, comments, strings) are defined in terms of their delimiters. There are 4 main cases:
 \begin{itemize}
   \item keywords: any combination of letters. That's  \emph{implicit} for all languages.
   \item Identifiers: keywords preceded by a marker (\tsobj[marg]{char} below), like \TeX{} commands. 
@@ -849,9 +891,7 @@ In fact, all characters can be escaped, for instance \tsverb**[verb]{{\a\d\:\$}}
   When processing the \tsobj[marg]{patterns}, no expansion will occur, and all characters in the given pattern will receive the category code other. For instance, given a pattern \tsverb**[verb]{{\cmdX}} the effective pattern will be \tsverb**[verb]{{cmdX}}.
 \end{tsremark}
 
-Some structures can be nested inside others: potentially, all that have an explicit \tsobj[marg]{start-pattern,end-pattern} (that excludes the ones delimited by an end-of-line.) and identifiers (which are implicitly delimited by the first non-letter character). But only a few can \emph{hold} them, namely, only \tsobj[key]{string} and \tsobj[key]{comment} variants: \tsobj[key,or]{comment,comment*,comment line, comment line at, string, string*, delimited string, delimited string*}, but not \tsobj[key,or]{discard comment, active comment} variants. 
-
-Moreover, in the following, the structures with a star (\tsobj[key,or]{comment*, discard comment*, active comment*,string*,delimited string*, identifier*}) define the ones that can be detected, by default, if inside \tsobj[key,or]{comments,strings}. This correspond to the \tsobj[value]{default} value of the key \tsobj[key]{nesting} from a \tsobj[marg]{format-set}, see \ref{codehl:syntax:baseformat}.
+All structures can be nested inside others, but only a few can \emph{hold} them, namely: a \tsobj[key]{string} can be nested into \tsobj[key,or]{string, delimited string}, whilst a \tsobj[key]{comment} can be nested into \tsobj[key,or]{comment,comment line, comment line at}. The option \tsobj[key]{nestable} controls which ones can be detected (if nested).
 
 In case of the \tsobj[key]{discard} variants, obviously a \tsobj[marg]{class} isn't really needed (no formatting), but it's required so that its syntax is the same as the \tsobj[key]{comment} counter parts, which allows one to just add or remove a \tsobj[key]{discard} word, as needed.
 
@@ -869,140 +909,141 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
 \end{codesyntax}
 \end{codedescribe}
 
+  In the following, \tsobj[marg]{options} can any combination of the following:
+  \begin{describelist*}{keys}
+    \describe{nestable}{The construct will be detected if nested inside another likewise structure: comments inside comments, or strings/identifiers inside strings.}
+    \begin{tsremark}
+      Any \tsobj[key]{comment} construct declared as \tsobj[key]{nestable} will be detected if inside \tsobj[key,or]{comment. comment line, comment line at}.
+      
+      A \tsobj[key,or]{string,identifier} construct declared as \tsobj[key]{nestable} will be detected if inside \tsobj[key,or]{string, delimited string}.
+    \end{tsremark}
+    \describe{tagged}{The construct will only be detected inside a tagged area.}
+    \describe{non tagged}{The construct will only be detected outside a tagged area.}
+    \begin{tsremark}
+      If none is given, the construct will be detected by default (including inside a tagged area), but not inside other structures, like comments or strings.
+    \end{tsremark}
+    
+%    \begin{tsremark}[REVIEW THIS!]\color{red}
+%      The many \tsobj[keys]{discard comment,active comment} aren't affected by the \tsobj[key,or]{tagged,non tagged} keys.
+%    \end{tsremark}
+  \end{describelist*}
 \tsobj[marg]{keys} can be any combination of:
 \begin{describelist*}{keys}
     \describe{based on}
     {The definitions of a base \tsobj[marg]{lang} are inherited. See \ref{codehl:syntax:basedon} for details. }
-    
-    \describe{comment}
-      { \tsargs[marg]{class,start-pattern,end-pattern}
-      
-      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
 
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+    \describe{~}{\color{black!50!red}\textbf{Keywords/identifiers behaviour keys:}}    
+    
+
+    \describe{keywd in string}
+      {(default: \tsobj[value]{false}) If keywords (and/or identifiers) are to be detected (and formatted) inside strings.}
+    \describe{case sensitive}
+      {(default: \tsobj[value]{true}) If keywords (and/or identifiers) are case sensitive or not.}
+      \begin{tsremark}
+      If set to false (case insensitive) a 'keyword candidate' will be converted to lower case prior comparing it with any list of defined keywords, identifiers or tag names (see \ref{codehl:syntax:keywd}). This implies that, it will only work IF the keywords lists are made of lower case keywords.
+      \end{tsremark}
       
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+    \describe{alphanumeric}
+      {(default: \tsobj[value]{false}) If set to false (default) keywords and/or identifiers may only contain letters. If set to true they may start with \tsobj[key]{oletter} chars (besides letters) and may also contain \tsobj[key,or]{oletter,digits} chars.}
+      \begin{tsremark}
+        This might interfere, in some cases, with other patterns, suppressing them if they start with one of the characters listed as \tsobj[key,or]{digits,oletter}. The best approach would be to just capture those characters as letter (see \ref{codeverb:commonkeys} and \ref{codeverb:auxiliary-commands}).
+      \end{tsremark}
+    \describe{digits}
+    { \tsargs[marg]{dig-set}
+    
+    Sets the list of what a \tsobj[key]{digit} is. A regular expression composed of the range 0-9 plus \tsobj[marg]{dig-set} will be constructed as \tsfmt{[0-9\tsobj[marg]{dig-set}]} (see the section \emph{Character classes} in \citetitle{expl3} \cite{expl3}). This only applies if, and only if, \tsobj[key]{alphanumeric} is set to true.
+    }
+    \describe{digits*}
+    { \tsargs[marg]{dig-set}
+    
+    Sets the list of what a \tsobj[key]{digit} is. A regular expression composed only of \tsobj[marg]{dig-set} will be constructed as \tsfmt{[\tsobj[marg]{dig-set}]} (see the section \emph{Character classes} in \citetitle{expl3} \cite{expl3}). This only applies if, and only if, \tsobj[key]{alphanumeric} is set to true.
+    }
+    
+    \describe{oletter}
+    { \tsargs[marg]{o-set}
+    
+    Sets the list of what a \tsobj[key]{oletter} is. A regular expression composed only of \tsobj[marg]{o-set} will be constructed as \tsfmt{[\tsobj[marg]{o-set}]} (see the section \emph{Character classes} in \citetitle{expl3} \cite{expl3}). This only applies if, and only if, \tsobj[key]{alphanumeric} is set to true.
+    }
+
+    \describe{~}{\color{black!50!red}\textbf{Pattern keys:}}    
+
+    \describe{identifier}
+      { \tsargs[marg]{id-name,id-char,options}
+        
+        The keyword following \tsobj[marg]{id-char} (including the  \tsobj[marg]{id-char} itself) will be formatted as defined by \tsobj[key]{id-name}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
       }
-    \describe{comment*}
-      { \tsargs[marg]{class,start-pattern,end-pattern}
+
+    \describe{tagged area}
+      { \tsargs[marg]{tag-name,start-pattern,end-pattern,options}
+      
+        In the region enclosed by \tsobj[marg]{start-pattern,end-pattern} the usual keywords (the ones defined using the key \tsobj[key]{keywd} in a \tsobj[marg]{keywd-set}, see \ref{codehl:syntax:keywd}) won't be detected but only the ones declared as \tsobj[marg]{tag-name}. This aims at languages like \tsobj[pkg,or]{html,php}. If a \tsobj[key]{tagged area} is declared as \tsobj[value]{nestable} it can appear inside a string (for instance, like \tsobj[pkg]{php}).
+      }
+
+    \describe{comment}
+      { \tsargs[marg]{class,start-pattern,end-pattern,options}
       
       Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
-      
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
-      
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
       }
     \describe{comment line}
-      { \tsargs[marg]{class,start-pattern}
+      { \tsargs[marg]{class,start-pattern,options}
 
       Everything between \tsobj[marg]{start-pattern} and the end of line, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
-      
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
       }
     \describe{comment line at}
-      { \tsargs[marg]{class,start-pattern,col}
+      { \tsargs[marg]{class,start-pattern,col,options}
 
       Everything between \tsobj[marg]{start-pattern} and the end of line, will be formatted as defined by \tsobj[key]{comment}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ), but only if the first character appears at column \tsobj[marg]{col}.
-      
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
       }
     \describe{discard comment}
-      { \tsargs[marg]{class,start-pattern,end-pattern}
+      { \tsargs[marg]{class,start-pattern,end-pattern,options}
       
       Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be discarded. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment}.
-
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
-      }
-    \describe{discard comment*}
-      { \tsargs[marg]{class,start-pattern,end-pattern}
-      
-      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be discarded. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment}.
-      
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
       }
     \describe{discard comment line}
-      { \tsargs[marg]{class,start-pattern}
+      { \tsargs[marg]{class,start-pattern,options}
       
       Everything between \tsobj[marg]{start-pattern} and the end of line will be discarded. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment line}.
       }
     \describe{discard comment line at}
-      { \tsargs[marg]{class,start-pattern,col}
+      { \tsargs[marg]{class,start-pattern,col,options}
       
       Everything between \tsobj[marg]{start-pattern} and the end of line will be discarded, but only if the first character appears at column \tsobj[marg]{col}. The \tsobj[marg]{class} is here just so this has the same construct as \tsobj[key]{comment line at}.
       }
     \describe{active comment}
-      { \tsargs[marg]{class,start-pattern,end-pattern}
+      { \tsargs[marg]{class,start-pattern,end-pattern,options}
       
-      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, excluding them, will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
-
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
-      }
-    \describe{active comment*}
-      { \tsargs[marg]{class,start-pattern,end-pattern}
-      
-      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, excluding them, will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
-      
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, excluding them, will be: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
       }
     \describe{active comment line}
-      { \tsargs[marg]{class,start-pattern}
+      { \tsargs[marg]{class,start-pattern,options}
       
       Everything between \tsobj[marg]{start-pattern} and the end of line will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
       }
     \describe{active comment line at}
-      { \tsargs[marg]{class,start-pattern,col}
+      { \tsargs[marg]{class,start-pattern,col,options}
       
       Everything between \tsobj[marg]{start-pattern} and the end of line will: 1)  executed as \LaTeXe{} commands. 2) formatted as defined by \tsobj[key]{active}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). But only if the first character appears at column \tsobj[marg]{col}.
       }
     \describe{string}
-      { \tsargs[marg]{class,pattern,escape-char}
+      { \tsargs[marg]{class,pattern,escape-char,options}
       
-      Everything between \tsobj[marg]{pattern} and \tsobj[marg]{pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
-
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
-      
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
-      }
-    \describe{string*}
-      { \tsargs[marg]{class,pattern,escape-char}
-      
-      Everything between \tsobj[marg]{pattern} and \tsobj[marg]{pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
-      
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
-      
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+      Everything between \tsobj[marg]{pattern} and \tsobj[marg]{pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the following character won't be interpreted as a pattern delimiter of any kind.
       }
     \describe{delimited string}
-      { \tsargs[marg]{class,start-pattern,end-pattern,escape-char}
+      { \tsargs[marg]{class,start-pattern,end-pattern,escape-char,options}
       
-      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
+      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the following character won't be interpreted as a pattern delimiter of any kind.
+      }
 
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{all}, this will be detected if inside another comment or string.
+    \describe{replace}
+      { \tsargs[marg]{org-str,replacement}
       
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
+        Any occurrence of \tsobj[marg]{org-str} will be replaced by \tsobj[marg]{replacement}. Note that \tsobj[marg]{org-str} will be processed as any \tsobj[marg]{pattern} in the previous keys, in particular, any space in it will be removed. Moreover, the scan routines will only look after those \tsobj[marg]{org-str} after scanning for other patterns, the main implication: if a \tsobj[marg]{org-str} starts with the same character used in any other pattern (comments, strings, etc.) this won't be recognized at all.
       }
-    \describe{delimited string*}
-      { \tsargs[marg]{class,start-pattern,end-pattern,escape-char}
+    \describe{replace*}
+      { \tsargs[marg]{org-str,replacement}
       
-      Everything between \tsobj[marg]{start-pattern} and \tsobj[marg]{end-pattern}, including them, will be formatted as defined by \tsobj[key]{string}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ). The \tsobj[marg]{escape-char} assures the next character won't be interpreted as a pattern delimiter of any kind.
-      
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
-      
-      Unlesss \tsobj[key]{nesting = } \tsobj[value,bnf or]{none}, this can hold a nested structure.
-      }
-    \describe{identifier}
-      { \tsargs[marg]{id-name,id-char}
-        
-        The keyword following \tsobj[marg]{id-char} (and including the  \tsobj[marg]{id-char} itself) will be formatted as defined by \tsobj[key]{id-name}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
-        
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{ident,all}, this will be detected if inside another comment or string.
-      }
-    \describe{identifier*}
-      { \tsargs[marg]{id-name,id-char}
-        
-        The keyword following \tsobj[marg]{id-char} (and including the  \tsobj[marg]{id-char} itself) will be formatted as defined by \tsobj[key]{id-name}\tsobj[marg]{class} (from \tsobj[marg]{hl-set} ).
-
-      With \tsobj[key]{nesting = } \tsobj[value,bnf or]{default,ident,all}, this will be detected if inside another comment or string.
+        Any occurrence of \tsobj[marg]{org-str} will be replaced by \tsobj[marg]{replacement}. Note that \tsobj[marg]{org-str} will be processed as any \tsobj[marg]{pattern} in the previous keys, in particular, any space in it will be removed. Unlike the previous key (without the asterisk) \tsobj[marg]{org-str} will be treated as any other pattern, keep in mind that, in this case, a \tsobj[marg]{org-str} might suppress the recognition of some other pattern (any previously defined one, starting with the same characters, but longer).
       }
     \describe{suppress}
       { \tsargs[marg]{pattern}
@@ -1013,8 +1054,13 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
         It won't detect if the  \tsobj[marg]{pattern} corresponds, or not, to an already defined structure, given that the \tsobj[marg]{start-pattern} might be inherited from a \tsobj[key]{based on}  \tsobj[marg]{lang}.
       \end{tsremark}
       \begin{tsremark}
-        Definition sequence matters: If, later on, a new structure is defined with the same \tsobj[marg]{start-pattern}, it will be normally processed (overwriting the \tsobj[key]{suppress} key).
+        Sequence matters: If, later on, a new structure is defined with the same \tsobj[marg]{start-pattern}, it will be normally processed (overwriting the \tsobj[key]{suppress} key).
       \end{tsremark}
+    \describe{info/note}
+      { \tsargs[marg]{note}
+      
+      \tsobj[marg]{note} will be logged into the log file and terminal. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+      }
 
 \end{describelist*}
 
@@ -1027,19 +1073,18 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
 This will write to the terminal (raising an error message) the effective \tsobj[marg]{lang} definitions (after recovering all \tsobj[key]{based on} definitions).
 \end{codedescribe}
 
+
+
+
 \subsection{To do, Future plans}
 These are some aspects that are either planned or that deserve some consideration:
 \begin{itemize}
-  \item case sensitive: At the moment, all keywords and identifiers are case sensitive. That shall change.
-  \item listings \tsobj[key]{procnamekeys} it might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
+  \item listings \tsobj[key]{procnamekeys} might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
   \item simula/algol comments peculiar syntax.
-  \item alphanumeric keywords
-  \item html tags (and alike): keywords/identifiers are only recognized inside tags...?? tag as 'another (persistent:\tsobj{\l__codehl_tok_curr_ident_tl}) identifier'??
 \end{itemize}
 
 \subsection{Pre-defined Languages}\label{codehl:lang:predef}
-There is a set of pre-defined languages known by \tsobj[pkg]{codehighlight}, but since it would be wasteful to load all definitions all the time, those language definitions are \emph{stored} in auxiliary \emph{packages} (usual .sty files). The following commands, which can only be called in the document preamble, will include the needed auxiliary packages. Note, though, that there isn't a one-to-one relationship, since some auxiliary packages might entice more than one language definition.
-
+There is a set of pre-defined languages known by \tsobj[pkg]{codehighlight}, but since it would be wasteful to load all definitions all the time, those language definitions are \emph{stored} in auxiliary files with a .def ending. The following commands, which can only be called in the document preamble, will include the needed auxiliary files. Note, though, that there isn't a one-to-one relationship between auxiliary packages and language/keyword sets, since some auxiliary packages might entice more than one language definition. Lastly, those commands keep track of which auxiliary packages were already loaded, so  it's safe to call the following commands more than once for the same language/keyword set.
 
 \begin{codedescribe}{ \hlLangLoad , \codehl_lang_load:n }
 \begin{codesyntax}%
@@ -1057,6 +1102,526 @@ This will include the needed auxiliary packages. Whereas \tsobj[marg]{lang-list}
 Similarly, this will include the needed auxiliary packages. Whereas \tsobj[marg]{lang-list} is a comma separated list of languages.
 \end{codedescribe}
 
+\begin{tsremark}
+  The Language, Keywords sets, found on the auxiliary files were adapted from the language definitions used in the \tsobj[pkg]{listings}\cite{listings} package. The following table lists, for each language, which languages' and keywords' sets are defined.
+\end{tsremark}
+
+
+\begingroup
+\footnotesize
+
+\setlength{\arrayrulewidth}{0.05pt}
+
+\begin{longtable}{p{17mm}p{45mm}p{45mm}p{26mm}}
+  Language & Language sets & Keywords sets & Obs. \\\hline\endhead
+
+\\[-7.5pt]
+ABAP & 
+ ABAP.R/24.3 ABAP.R/25.0 ABAP.R/33.1 ABAP.R/34.6C ABAP.R/36.10 &
+ ABAP.R/24.3 ABAP.R/25.0 ABAP.R/33.1 ABAP.R/34.6C ABAP.R/36.10 & \\ \cline{2-4}
+
+\\[-7.5pt]
+ACM &
+ ACM ACMscript ACSL   &
+ ACM ACMscript ACSL   &  \\  \cline{2-4}
+
+\\[-7.5pt]
+Ada &
+Ada.2005 Ada.83 Ada.95 &  
+Ada.2005 Ada.83 Ada.95 &  \\  \cline{2-4}
+
+\\[-7.5pt]
+Algol &
+ Algol.60  Algol.68   &
+ Algol.60  Algol.68   &  \\  \cline{2-4}
+
+\\[-7.5pt]
+Ant &
+ Ant &
+ Ant & xml derived \\  \cline{2-4}
+
+asm & 
+ Assembler.Motorola68k   &  
+ Assembler.Motorola68k   &   \\  \cline{2-4}
+ 
+asm & 
+ Assembler.riscv   &  
+ Assembler.riscv   &   \\  \cline{2-4}
+ 
+asm & 
+ Assembler.x86masm   & 
+ Assembler.x86masm   &  \\  \cline{2-4}
+
+\\[-7.5pt]
+awk &
+ Awk.POSIX  Awk.gnu   &  
+ Awk.POSIX  Awk.gnu   &  \\  \cline{2-4}
+
+\\[-7.5pt]
+Basic &
+ Basic.Visual   & 
+ Basic.Visual   &  \\   \cline{2-4}
+
+\\[-7.5pt]
+C  &
+ C.ANSI C.Handel C.Objective C.Sharp   &
+ C.ANSI C.Handel C.Objective C.Sharp   &  \\   \cline{2-4}
+
+\\[-7.5pt]
+C++ & 
+ C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   & 
+ C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   &  \\ \cline{2-4}
+ 
+\\[-7.5pt]
+CIL &
+ CIL   &
+ CIL   &  \\   \cline{2-4}
+ 
+\\[-7.5pt]
+CMake  &
+ CMake   &
+ CMake   &  \\   \cline{2-4}
+ 
+\\[-7.5pt]
+Caml &
+ Caml.Objective  Caml.light   &
+ Caml.Objective  Caml.light   & \\   \cline{2-4}
+ 
+\\[-7.5pt]
+Clean &
+ Clean   &  
+ Clean   &   \\   \cline{2-4}
+
+\\[-7.5pt]
+Cobol &
+ Cobol.1974  Cobol.1985 Cobol.ibm   & 
+ Cobol.1974  Cobol.1985 Cobol.ibm   & \\   \cline{2-4}
+
+
+\\[-7.5pt]
+Comal &
+  Comal.80  &
+  Comal.80  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Comsol &
+  Comsol  &
+  Comsol  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Delphi &
+  Delphi  &
+  Delphi  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Eiffel &
+  Eiffel  &
+  Eiffel  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Elan &
+  Elan  &
+  Elan  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Euphoria &
+  Euphoria  &
+  Euphoria  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Fortran &
+  Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &
+  Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+GAP &
+  GAP  &
+  GAP  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+GCL  &
+  GCL  &
+  GCL  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Gnuplot  &
+  Gnuplot  &
+  Gnuplot  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Go  &
+  Go  &
+  Go  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+HTML  &
+  HTML  &
+  HTML  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Haskell  &
+  Haskell  &
+  Haskell  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+IDL  &
+  IDL  &
+  IDL  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+IDL  &
+  IDL.CORBA  &
+  IDL.CORBA  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Inform  &
+  Inform  &
+  Inform  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+JVMIS  &
+  JVMIS  &
+  JVMIS  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Java  &
+  Java  &
+  Java  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Java  &
+  Java.AspectJ  &
+  Java.AspectJ  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+LLVM  &
+  LLVM  &
+  LLVM  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Lingo  &
+  Lingo  &
+  Lingo  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Lisp  &
+  elisp  Lisp  Lisp.Auto  &
+  elisp  Lisp  Lisp.Auto  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Logo  &
+  Logo  &
+  Logo  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Lua  &
+  Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  &
+  Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+ML  &
+  ML  &
+  ML  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Mathematica  &
+  Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  &
+  Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Matlab  &
+  Matlab  Matlab.5.1  &
+  Matlab  Matlab.5.1  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Mercury  &
+  Mercury  &
+  Mercury  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+MetaPost  &
+  MetaPost  &
+  MetaPost  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Miranda  &
+  Miranda  &
+  Miranda  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Mizar  &
+  Mizar  &
+  Mizar  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Modula-2  &
+  Modula-2  &
+  Modula-2  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+MuPAD  &
+  MuPAD  &
+  MuPAD  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+NASTRAN  &
+  NASTRAN  &
+  NASTRAN  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+OCL  &
+  OCL.OMG  OCL.decorative  &
+  OCL.OMG  OCL.decorative  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+OORexx  &
+  OORexx  &
+  OORexx  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Octave  &
+  Octave  &
+  Octave  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Oz  &
+  Oz  &
+  Oz  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+PHP  &
+  PHP  &
+  PHP  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+PL/I  &
+  PL/I  &
+  PL/I  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+POV  &
+  POV  &
+  POV  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+PSTricks  &
+  PSTricks  &
+  PSTricks  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Pascal  &
+  Pascal.Borland6 Pascal.Standard Pascal.XSC  &
+  Pascal.Borland6 Pascal.Standard Pascal.XSC  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+Perl  &
+  Perl  &
+  Perl  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Plasm  &
+  Plasm  &
+  Plasm  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+PostScript  &
+  PostScript  &
+  PostScript  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Prolog  &
+  Prolog  &
+  Prolog  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Promela  &
+  Promela  &
+  Promela  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Python  &
+  Python.2 Python.3  &
+  Python.2 Python.3  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+R  &
+  R S S.PLUS  &
+  R S S.PLUS  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+RSL  &
+  RSL  &
+  RSL  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Reduce  &
+  Reduce  &
+  Reduce  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Rexx  &
+  Rexx Rexx.VM/XA  &
+  Rexx Rexx.VM/XA  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+Ruby  &
+  Ruby  &
+  Ruby  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+SAS  &
+  SAS  &
+  SAS  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+SHELXL  &
+  SHELXL  &
+  SHELXL  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+SPARQL  &
+  SPARQL  &
+  SPARQL  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+SQL  &
+  SQL  &
+  SQL  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Scala  &
+  Scala Scala.3.0  &
+  Scala Scala.3.0  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Scilab  &
+  Scilab  &
+  Scilab  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Simula  &
+  Simula.67 Simula.CII Simula.DEC Simula.IBM  &
+  Simula.67 Simula.CII Simula.DEC Simula.IBM  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+Swift  &
+  Swift  &
+  Swift  &  \\    \cline{2-4}
+
+
+
+\\[-7.5pt]
+VBScript  &
+  VBScript  &
+  VBScript  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+VHDL  &
+  VHDL VHDL.AMS  &
+  VHDL VHDL.AMS  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+VRML  &
+  VRML.97  &
+  VRML.97  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+Verilog  &
+  Verilog  &
+  Verilog  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+XML  &
+  XML  &
+  XML  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+XSLT  &
+  XSLT  &
+  XSLT  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+bash  &
+  bash  &
+  bash  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+command  &
+  command.com.WinXP  &
+  command.com.WinXP  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+csh  &
+  csh  &
+  csh  &  \\    \cline{2-4}
+
+
+\\[-7.5pt]
+erlang  &
+  erlang  &
+  erlang  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+hansl  &
+  hansl  &
+  hansl  &  \\    \cline{2-4}
+
+%\\[-7.5pt]
+ksh  &
+  ksh  &
+  ksh  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+make  &
+  make make.gnu  &
+  make make.gnu  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+sh  &
+  sh  &
+  sh  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+tcl  &
+  tcl  &
+  tcl  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+tcl  &
+  tcl.tk  &
+  tcl.tk  &  \\    \cline{2-4}
+
+\\[-7.5pt]
+TeX  &
+  TeX &
+  TeX.AlLaTeX TeX.LaTeX TeX.common TeX.plain TeX.primitive  &  from \tsobj[pkg]{listings} \\   \cline{2-4}
+
+\\[-7.5pt]
+TeX  &
+  TeX  &
+  TeX.ams TeX.babel TeX.bibtex TeX.hyperref TeX.kernel TeX.pgf TeX.pgfplots   TeX.xpacks &  from \tsobj[pkg]{codedescribe} \\    \cline{2-4}
+
+\\[-7.5pt]
+TeX  &
+  TeX.l3  &
+  TeX.l3ams TeX.l3bibtex TeX.l3exp TeX.l3kernel TeX.l3pgf    & from \tsobj[pkg]{codedescribe}. cmds contain \tsobj{_} \\    \cline{2-4}
+
+\\[-7.5pt]
+TeX  &
+  TeX.l3sign  &
+  TeX.l3amssign TeX.l3bibtexsign TeX.l3expsign TeX.l3kernelsign TeX.l3pgfsign &  from \tsobj[pkg]{codedescribe}. cmds contain \tsobj{_ :} \\    \cline{2-4}
+
+
+\end{longtable}
+
+\endgroup
 %\newpage
 %\newgeometry{marginparwidth=10mm,top=20mm,bottom=15mm,hmargin={15mm,15mm},marginparsep=2.5mm,columnsep=10mm,asymmetric}
 %

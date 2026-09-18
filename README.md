@@ -9,7 +9,7 @@ For more details,  see the documentation,
 --------------
 
 ## Requirements
-* none besides a fairly recent LaTeX distribution as recent as [2025/06/01](https://ctan.org/pkg/l3kernel)
+* none besides a fairly recent LaTeX distribution as recent as [2026-06-01](https://ctan.org/pkg/l3kernel)
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*).
 
 ## Installation
@@ -38,29 +38,6 @@ Copyright 2026-present by Alceu Frigeri
  This work may be distributed and/or modified under the
  conditions of
 
-* codehighlight.sty
-    - code highlight
-
-* README.md  (this file)
-    - quick introduction
-
-* codeverbatim.bib
-* codeverbatim.tex
-    - package documentation
-    
-* codeverbatim.pdf
-    - documentation in PDF format
-    
-* codehl-def001.def
-* codehl-def001.def
-* codehl-def001.def
-    - the many pre-defined language files
-    
--------------
-
-### Change log
-
-
  * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt), version 1.3c (or later), and/or
  * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html), version 3 (or later)
 
@@ -72,8 +49,32 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ### This work consist of the files
 
+
+* codehighlight.sty
+    - code highlight
+
+* README.md  (this file)
+    - quick introduction
+
+* codeverbatim.bib
+* codeverbatim.tex
+    - package documentation
+    
+* codeverbatim.pdf
+    - documentation in PDF format    
+
 * codeverbatim.sty
     - the verbatim capture environment
+
+* codehighlight.sty
+    - code highlighting package
+
+* codehl-00.def ... codehl-5F.def       *(hexadecimal numbering)*
+    - the many pre-defined language files
+
+-------------
+
+### Change log
 
 * Version 0.1
     - Initial setup. (far from ready)
