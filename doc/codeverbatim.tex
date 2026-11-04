@@ -38,8 +38,49 @@
 \usepackage { longtable,multirow,hhline}
 
 %\usepackage{asciitable}
-%\usepackage{codeverbatim}
+\usepackage{codeverbatim}
+\usepackage{codehighlight}
 
+\begin{codestore}[demo00]
+% This in the preamble only
+\hlLangLoad{C}
+
+% once the file definition was loaded, the following can be anywhere
+\hlDispSettings
+  {
+    keywd set = C
+  }
+
+\cvNewEnvironment[verb tl=\DemoV]{DemoEnv}{}
+  {}
+  { \hlDisplayV \DemoV }
+\end{codestore}
+
+\begin{codestore}[demo00]
+\hlDispSettings
+  {
+    language = C ,
+    keywd set = C
+  }
+\end{codestore}
+
+\tsexec{demo00}[1]
+
+%\hlLangShow{C}  
+
+
+
+%\ExplSyntaxOn
+%\tl_show:N \Cverb
+%\tl_show:N \l__codehl_tok_activ_lang_tl
+%\tl_show:N \l__codehl_tok_activ_keyset_tl
+%\tl_show:N \l__codehl_tok_activ_hlset_tl
+%\tl_show:N \l__codehl_tok_activ_basefmt_tl
+%
+%%\codehl_display:no {} \Cverb
+%\ExplSyntaxOff
+
+%\hlDisplayV \Cverb
 
 %% if needed
 \RequirePackage[backend=biber]{biblatex}
@@ -72,9 +113,10 @@ The main aim of these packages is to allow the creation of fully customizable ve
 \end{tsremark}
 
 \tsobj[pkg]{codehighlight} package offers ways to (syntax) highlight the code grabbed by a \tsobj[pkg]{codeverbatim} environment. It's somewhat inspired on the  \tsobj[pkg]{listings} \cite{listings} functionality, allowing the definition of a custom syntax (for code highlight). Unlike \tsobj[pkg]{listings}, in \tsobj[pkg]{codehighlight} four aspects: (1) syntax definition, (2) keyword's sets, (3) highlight formatting and (4) base formatting, are kept separated, allowing a more flexible setup.
-
+\begin{tsremark}
+  Although the two packages are though to be used together, they don't rely on each other. It's perfectly possible to use \tsobj[pkg]{codeverbatim} together with \tsobj[pkg]{listings} package, or use the \tsobj[pkg]{codehighlight} with other verbatim package, like \tsobj[pkg]{fancyvrb} (using the macros \tsobj{\SaveVerb,\UseVerb}, albeit not straightforward).
+\end{tsremark}
 Lastly, these packages are fully written in \tsobj[pkg]{expl3}, but given that one might want to use then in a \LaTeXe{} context (either at package or document level), all public commands have a \LaTeXe{} alias, and, for simplicity, they are listed together.
-
 
 
 \newpage
@@ -89,7 +131,7 @@ The aim of this package is to allow to construction of custom environments and c
 Another point is that this package only offers ways to capture content in verbatim mode, leaving it to the user to define how to postprocess and display it, for instance, using \tsobj[pkg]{codehighlight} (see \ref{pkg:codehl}) package.
 
 \subsection{Characters Category Codes and Common Keys}\label{codeverb:commonkeys}
-When capturing content in verbatim mode, many characters have their usual category code changed to other (12). In particular \tsfmt[verb]{\^{}\^{}M }  (char: 13, End Of Line character) always has its category code changed to other. 
+When capturing content in verbatim mode, many characters have their usual category code changed to other (12), but not all. In particular \tsfmt[verb]{\^{}\^{}M }  (char: 13, End Of Line character) always has its category code changed to other. 
 \begin{center}
 \begin{tabular}{clclcl}
   \hline
@@ -172,7 +214,7 @@ These keys are common to all main code verbatim commands and expect a comma sepa
 \tsmacro{\cvNewEnvironment}[keys]{env-name,arg spec,begin-code,end-code}
 \tsmacro{\codeverb_new_environment:nnnnn}{keys,env-name,signature,begin-code,end-code}
 \end{codesyntax}
-This will create a new document environment \tsobj[marg]{env-name}, following the \tsobj{\NewDocumentEnvironment}  structure. \tsobj[marg]{arg spec} is the desired \tsobj[marg]{env-name} parameter specification list (\tsobj{\NewDocumentEnvironment} 1st parameter, see \cite{usrguide}). The \tsobj[marg]{begin-code} code will be executed before the verbatim code gets grabbed. The \tsobj[marg]{end-code} will be executed right after, see the keys \tsobj[key]{inline,verb tl} below for details how to further handle the verbatim content.
+This will create a new document environment \tsobj[marg]{env-name}, following the \tsobj{\NewDocumentEnvironment}  structure. \tsobj[marg]{arg spec} is the desired \tsobj[marg]{env-name} parameter specification list (\tsobj{\NewDocumentEnvironment} 1st parameter, see \cite{usrguide}). The \tsobj[marg]{begin-code} code will be executed before the verbatim code gets grabbed. The \tsobj[marg]{end-code} will be executed right after, see the keys \tsobj[key]{inline,verb tl} below for details on how to further handle the verbatim content.
 \end{codedescribe}
 \begin{tsremark}
   If short verbatim commands are on (\tsobj[code,or]{\cvSVerbOn,\codeverb_sverb_on:}) those active characters will be made other (see \ref{codeverb:caveats}) after applying the characters category code defined here (with the common keys from \ref{codeverb:commonkeys}) and before applying the characters category code defined with \tsobj[code,or]{\cvEnvCCSet,\codeverb_env_catcode_set:n} (see \ref{codeverb:auxiliary-commands} below).
@@ -180,7 +222,7 @@ This will create a new document environment \tsobj[marg]{env-name}, following th
 \tsobj[marg]{keys} can be any combination of (besides the ones from \ref{codeverb:commonkeys}):
 \begin{describelist*}{keys}
 
-  \describe{drop first}{(default: false) If the character following the environment begin until the line end shall be processed of discarded. The default behaviour is similar to other packages of the kind, like \tsobj[pkg,or]{listings,fancyvrb}}
+  \describe{drop first}{(default: false) If the character following the environment begin until the line end shall be processed or discarded. The default behaviour is similar to other packages of the kind, like \tsobj[pkg,or]{listings,fancyvrb}}
   \describe{drop blanks}{(default: false) If set to true, and the initial lines are blank, those lines will be discarded.}
   \describe{line proc}{(default: -nothing-) The given command shall grab 2 parameters. It will receive a single line (verbatim material) as the 2nd parameter and a temporary token list as the 1st parameter. The simplest command would be \tsobj{\tl_set:Nn} (no pre-processing at all). This can be used to pre-process the verbatim content, one line at a time. }
   \describe{inline}{(default: false) If set, \tsobj[marg]{end-code} will receive the verbatim material as \tsfmt{\#1}. This has precedence over the key \tsobj[key]{verb tl}.}
@@ -243,14 +285,14 @@ These will create a set of commands prefixed with \tsobj[marg]{cs-base}, using a
 \end{codedescribe}
 
 
-\begin{codedescribe}{\<cs-base>PutRight , \<cs-base>Merge , \<cs-base>_gput_right:nn , \<cs-base>_merge:Nnn }
+\begin{codedescribe}{\<cs-base>PutRightnn ,  \<cs-base>Merge , \<cs-base>_gput_right:nn ,  \<cs-base>_merge:Nnn }
 \begin{codesyntax}%
-\tsmacro{\<cs-base>PutRight}{st-name,verb-content}
+\tsmacro{\<cs-base>PutRightnn}{st-name,verb-content}
 \tsmacro{\<cs-base>Merge}{var,base-list,index-list}
 \tsmacro{\<cs-base>_gput_right:nn}{st-name,verb-content}
 \tsmacro{\<cs-base>_merge:Nnn}{var,base-list,index-list}
 \end{codesyntax}
-The \tsobj{\<cs-base>PutRight} (or \tsobj{\<cs-base>_gput_right:nn}) will create (as needed) an internal sequence variable associated with \tsobj[marg]{st-name} and store \tsobj[marg]{verb-content} in it. 
+The \tsobj{\<cs-base>PutRightnn} (or \tsobj{\<cs-base>_gput_right:nn}) will create (as needed) an internal sequence variable associated with \tsobj[marg]{st-name} and store \tsobj[marg]{verb-content} in it. Note, three other commands variants will be defined: \tsobj{\<cs-base>PutRightnV,\<cs-base>PutRightVV,\<cs-base>PutRightVn}, all expecting 2 parameters, the \tsobj{V} denoting if the first, second or all parameters are stored in an auxiliary \tsobj[marg]{tl-var} (\LaTeXe{} command).
 
 The \tsobj{\<cs-base>Merge} (or \tsobj{\<cs-base>_merge:Nnn}) will merge items of one, or more, of those sequences.
 \end{codedescribe}
@@ -441,7 +483,6 @@ A few caveats to be considered:
 \end{codedescribe}
 
 
-
 \newpage
 \section{codehighlight Package}\label{pkg:codehl}
 After capturing some code in verbatim mode (see \ref{pkg:codeverb}) this provides commands to typeset them, highlighting some structures/keywords in the process.
@@ -498,10 +539,10 @@ The main problem that might arise from an active character (category code 13) wi
 Of course, if the code associated with a given active character doesn't depends on \emph{what follows}, it is safe to preserve them as active characters.
 
 \subsection{Setting defaults}\label{codehl:settings}
-\begin{codedescribe}[code,force margin]{ \hlSettings, \codehl_settings:n}
+\begin{codedescribe}[code]{ \hlDispSettings, \codehl_display_settings:n}
 \begin{codesyntax}%
-\tsmacro{\hlSettings}{keys}
-\tsmacro{\codehl_settings:n}{keys}
+\tsmacro{\hlDispSettings}{keys}
+\tsmacro{\codehl_display_settings:n}{keys}
 \end{codesyntax}
 These will set (or change) the many display defaults. Note that, this is when the scan functions and variables associated with a language, keywords and highlight sets are created (see \ref{codehl:building:defs}).
 
@@ -520,13 +561,16 @@ These will set (or change) the many display defaults. Note that, this is when th
 \begin{tsremark}
   All keys can be set to an empty value, but, if a non empty value is given, and the respective \tsobj[key,or]{language, hl set, keywords set, base format} doesn't exist, an error will be raised.
 \end{tsremark}    
+\begin{tsremark}
+  Initially, \tsobj[key]{language,keywd set} are set to empty (no definition), whilst, \tsobj[key]{base format} is set to \tsobj[value]{str-fmt} and \tsobj[key]{hl set} is set to \tsobj[value]{str-hlset}.
+\end{tsremark}    
 \end{describelist*}
 
 \subsection{Display commands}\label{codehl:display}
-\begin{codedescribe}[code,force margin,variants=list]{ \hlDisplay ,  \hlDisplayVar , \codehl_display:nn { no }  }
+\begin{codedescribe}[code,force margin,variants=list]{ \hlDisplay ,  \hlDisplayV , \codehl_display:nn { no }  }
 \begin{codesyntax}%
 \tsmacro{\hlDisplay}[keys]{code}
-\tsmacro{\hlDisplayVar}[keys]{tl-var}
+\tsmacro{\hlDisplayV}[keys]{tl-var}
 \tsmacro{\codehl_display:nn}{keys,code}
 \tsmacro{\codehl_display:no}{keys,tl-var}
 \end{codesyntax}
@@ -543,20 +587,16 @@ These will display (typeset) the contents of \tsobj[marg,or]{code,tl-var} (an \t
     The expected syntax is \tsfmt[key]{hl set = \{\tsobj[marg]{hl-keys}\}}, whereas \tsobj[marg]{hl-keys} can be any combination of keys from \ref{codehl:syntax:hlset} (except the \tsobj[key]{based on} key).
     }
     \begin{tsremark}
-      This can only be used if a valid \tsobj[key]{hl set} was selected with \tsobj[code,or]{\hlSettings,\codehl_settings:n}.
+      This can only be used if a valid \tsobj[key]{hl set} was selected with \tsobj[code,or]{\hlDispSettings,\codehl_display_settings:n}.
     \end{tsremark}
   \describe{keywd set}
     {This will locally extend the keywords set. 
     The expected syntax is \tsfmt[key]{keywd set = \{\tsobj[marg]{keywd-keys}\}}, whereas \tsobj[marg]{keywd-keys} can be any combination of keys from \ref{codehl:syntax:keywd} (except the \tsobj[key]{based on} key).
     }
     \begin{tsremark}
-      This can only be used if a valid \tsobj[key]{keywd set} was selected with \tsobj[code,or]{\hlSettings,\codehl_settings:n}.
+      This can only be used if a valid \tsobj[key]{keywd set} was selected with \tsobj[code,or]{\hlDispSettings,\codehl_display_settings:n}.
     \end{tsremark}
 \end{describelist*}
-
-
-
-
 
 
 \subsection{Language and syntax highlight definitions}\label{codehl:lang:defs}
@@ -622,7 +662,7 @@ Prior effectively displaying/highlighting some code, a set of scan functions (de
   \item Those scan functions and variables will always be locally defined. This allows to, for instance, have a local set of keywords extending a base set, but not changing it.
 \end{itemize}
 
-Depending on the specifics, setting up the needed scan functions (for a language) and auxiliary variables can be a time consuming operation. That's why setting those functions/variables is delayed as much as possible, eventually to the first call of \tsobj{\hlSettings} (see \ref{codehl:settings}). Usually this is ok, but, if \tsobj{\hlSettings} is called from inside a local group (like inside an environment) this can lead to the undesirable side effect of rebuilding those functions/variables time and time again.
+Depending on the specifics, setting up the needed scan functions (for a language) and auxiliary variables can be a time consuming operation. That's why setting those functions/variables is delayed as much as possible, eventually to the first call of \tsobj{\hlDispSettings} (see \ref{codehl:settings}). Usually this is ok, but, if \tsobj{\hlDispSettings} is called from inside a local group (like inside an environment) this can lead to the undesirable side effect of rebuilding those functions/variables time and time again.
 
 \subsection{Some package settings}\label{codehl:pkg:settings}
 \begin{codedescribe}{ \hlPackSettings , \codehl_pkg_settings:n }
@@ -633,19 +673,18 @@ Depending on the specifics, setting up the needed scan functions (for a language
 This is meant to change some global settings. For now, \tsobj[marg]{settings} can only be:
   \begin{describelist*}{key}
     \describe{suppress notes}
-    {(default: false)
-    
-     If set to true the \tsobj[key]{info/note} key from \tsobj{\codehl_lang:nn} (see \ref{codehl:syntax:lang}) and \tsobj{\codehl_keywdset:nn} (see \ref{codehl:syntax:keywd}) will be ignored.}
+    {(default: true) 
+     If set to true the \tsobj[key]{info/note} key from \tsobj{\codehl_lang_def:nn} (see \ref{codehl:syntax:lang}) and \tsobj{\codehl_keyset_def:nn} (see \ref{codehl:syntax:keywd}) will be ignored. Note, the package's default is \tsobj[key]{suppress notes = false}.}
   \end{describelist*}
 \end{codedescribe}
 
 \subsection{Base Format}\label{codehl:syntax:baseformat}
-\tsobj[marg]{format-set} allows to define and set general aspects of code highlighting, as framing, background color (if any), font, etc.
+A base format defines general aspects of code highlighting, as framing, background color (if any), font, etc. By default, there is an initial set, \tsobj[key]{std-fmt}, which only sets the \tsobj[key]{text width} to \tsverb[value]{\linewidth} and \tsobj[key]{wrap indent} to \tsobj[value]{2em} (the full setup can be seen with \tsobj{\hlBasefmtShow{std-fmt}}).
 
-\begin{codedescribe}{ \hlBaseFormat , \codehl_baseformat:nn }
+\begin{codedescribe}{ \hlBasefmtDef , \codehl_basefmt_def:nn }
 \begin{codesyntax}%
-\tsmacro{\hlBaseFormat}{format-set,keys}
-\tsmacro{\codehl_baseformat:nn}{format-set,keys}
+\tsmacro{\hlBasefmtDef}{format-set,keys}
+\tsmacro{\codehl_basefmt_def:nn}{format-set,keys}
 \end{codesyntax}
 \end{codedescribe}
 \tsobj[marg]{keys} can be any combination of:
@@ -654,6 +693,12 @@ This is meant to change some global settings. For now, \tsobj[marg]{settings} ca
     {\tsfmt[value]{\{ \tsobj[meta]{fmtset-ref} , \tsobj[meta]{fmtset-ref} \dots \}}
     
     The definitions of \tsobj[marg]{fmtset-ref} set(s) are inherited. See \ref{codehl:syntax:basedon} for details. }
+
+    \describe{info/note}
+      { \tsargs[marg]{note}
+      
+      \tsobj[marg]{note} will be logged into the log file. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+      }
 
 \describe{~}{\color{black!50!red}\textbf{Behaviour  keys:}}
 
@@ -726,10 +771,10 @@ This is meant to change some global settings. For now, \tsobj[marg]{settings} ca
 
 \end{describelist*}
 
-\begin{codedescribe}{ \hlBaseFormatShow , \codehl_baseformat_show:n }
+\begin{codedescribe}{ \hlBasefmtShow , \codehl_basefmt_show:n }
 \begin{codesyntax}%
-\tsmacro{\hlBaseFormatShow}{format-set}
-\tsmacro{\codehl_baseformat_show:n}{format-set}
+\tsmacro{\hlBasefmtShow}{format-set}
+\tsmacro{\codehl_basefmt_show:n}{format-set}
 \end{codesyntax}
 This will write to the terminal (raising an error message) the effective \tsobj[marg]{format-set}, after applying defaults and recovering all \tsobj[key]{based on} definitions.
 \end{codedescribe}
@@ -737,12 +782,12 @@ This will write to the terminal (raising an error message) the effective \tsobj[
 
 \subsection{Highlight Sets}\label{codehl:syntax:hlset}
 
-A Highlight format set defines the formatting to be applied to the many detected elements (as defined by language \ref{codehl:syntax:lang}). The formats commands can absorb a single argument, namely the text/element detected and being formatted.
+A Highlight set defines the formatting to be applied to the many detected elements (as defined by language \ref{codehl:syntax:lang}). The formats commands can absorb a single argument, namely the text/element detected and being formatted. By default, there is an initial set, \tsobj[key]{std-hlset}, which only sets \tsobj[key]{comment} (classes 1 to 6) to \tsverb[value]{\itshape}, \tsobj[key]{string} (classes 1 to 6) to \tsverb[value]{\slshape} and  \tsobj[key]{keywd,texcs} (classes 1 to 6) to \tsverb[value]{\slshape} (the full setup can be seen with \tsobj{\hlHLsetShow{std-hlset}}). \tsobj[key]{std-hlset} is just for convenience, allowing for a quick and simple setup (like in \ref{examples}).
 
-\begin{codedescribe}{ \hlHLset , \codehl_hlset:nn }
+\begin{codedescribe}{ \hlHLsetDef , \codehl_hlset_def:nn }
 \begin{codesyntax}%
-\tsmacro{\hlHLset}{hl-set,keys}
-\tsmacro{\codehl_hlset:nn}{hl-set,keys}
+\tsmacro{\hlHLsetDef}{hl-set,keys}
+\tsmacro{\codehl_hlset_def:nn}{hl-set,keys}
 \end{codesyntax}
 \end{codedescribe}
 All keys (except for \tsobj[key]{based on}) expect two arguments: \tsargs[marg]{class,fmt-cmds}. 
@@ -756,6 +801,11 @@ All keys (except for \tsobj[key]{based on}) expect two arguments: \tsargs[marg]{
     
     The definitions of a base \tsobj[marg]{hlset-ref} set(s) are inherited. See \ref{codehl:syntax:basedon} for details. }
   
+    \describe{info/note}
+      { \tsargs[marg]{note}
+      
+      \tsobj[marg]{note} will be logged into the log file. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+      }
   \describe{comment}
     {\tsargs[marg]{class,fmt-cmds}  To be applied to \tsobj[key]{comments}.  }
   \describe{string}
@@ -770,6 +820,7 @@ All keys (except for \tsobj[key]{based on}) expect two arguments: \tsargs[marg]{
     {\tsargs[marg]{class,fmt-cmds}  To be applied to identifiers named \tsmeta{id-name}. See \ref{codehl:syntax:lang} for details }
   \describe{\tsmeta{tag-name}}
     {\tsargs[marg]{class,fmt-cmds}  To be applied to keywords inside a \tsobj[key]{tagged area}. See \ref{codehl:syntax:lang} for details }
+    
   \begin{tsremark}
     Since this is decoupled (at definition time) from language and keyword sets, any other \tsobj[key]{key} being used will be treated as a possible identifier (\tsobj[marg,or]{id-name,tag-name} see \ref{codehl:syntax:lang}), and no error will be raised.
   \end{tsremark}
@@ -807,13 +858,13 @@ These are meant to be used in the definition of \tsobj[marg]{fmt-cmds}, see \ref
 
 \subsection{Keywords Sets}\label{codehl:syntax:keywd}
 
-Sets of \emph{detectable} keywords. These set the list of keywords and associated formatting \tsobj[marg]{class}.
+Sets of \emph{detectable} keywords. These defines the list of keywords and associated formatting \tsobj[marg]{class}.
 
 
-\begin{codedescribe}{ \hlKeywdset , \codehl_keywdset:nn }
+\begin{codedescribe}{ \hlKeysetDef , \codehl_keyset_def:nn }
 \begin{codesyntax}%
-\tsmacro{\hlKeywdset}{keywd-set,keys}
-\tsmacro{\codehl_keywdset:nn}{keywd-set,keys}
+\tsmacro{\hlKeysetDef}{keywd-set,keys}
+\tsmacro{\codehl_keyset_def:nn}{keywd-set,keys}
 \end{codesyntax}
 \end{codedescribe}
 All keys (except for \tsobj[key]{based on}, see \ref{codehl:syntax:basedon}) expect two arguments: \tsargs[marg]{class,keywd-list}. 
@@ -825,6 +876,11 @@ The \tsobj[marg]{class} (an integer) allows to have distinct sets of keywords, i
 \begin{describelist*}{keys}
   \describe{based on}
     {The definitions of a base \tsobj[marg]{hl-set} set are inherited. See \ref{codehl:syntax:basedon} for details. }
+    \describe{info/note}
+      { \tsargs[marg]{note}
+      
+      \tsobj[marg]{note} will be logged into the log file. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+      }
   
   \describe{keywd}
     { \tsargs[marg]{class,keywords list}  List of keywords.  }
@@ -845,24 +901,16 @@ The \tsobj[marg]{class} (an integer) allows to have distinct sets of keywords, i
   \begin{tsremark}
    Again, each keyword can be postfixed with an asterisk, in which case the list of keywords will be converted to lower case (using \tsobj{\str_lowercase:n}. This is meant for case insensitive languages.
   \end{tsremark}
-    \describe{info/note}
-      { \tsargs[marg]{note}
-      
-      \tsobj[marg]{note} will be logged into the log file and terminal. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
-      }
 \end{describelist*}
 
 
-\begin{codedescribe}{ \hlKeywdsetShow , \codehl_keywdset_show:n }
+\begin{codedescribe}{ \hlKeysetShow , \codehl_keyset_show:n }
 \begin{codesyntax}%
-\tsmacro{\hlKeywdsetShow}{keywd-set}
-\tsmacro{\codehl_keywdset_show:n}{keywd-set}
+\tsmacro{\hlKeysetShow}{keywd-set}
+\tsmacro{\codehl_keyset_show:n}{keywd-set}
 \end{codesyntax}
 This will write to the terminal (raising an error message) the effective \tsobj[marg]{keywd-set} (after  recovering all \tsobj[key]{based on} definitions).
 \end{codedescribe}
-
-
-
 
 
 \subsection{Language Syntax}\label{codehl:syntax:lang}
@@ -902,10 +950,10 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
 \end{tsremark}
 
 
-\begin{codedescribe}{ \hlLang , \codehl_lang:nn }
+\begin{codedescribe}{ \hlLangDef , \codehl_lang_def:nn }
 \begin{codesyntax}%
-\tsmacro{\hlLang}{lang,keys}
-\tsmacro{\codehl_lang:nn}{lang,keys}
+\tsmacro{\hlLangDef}{lang,keys}
+\tsmacro{\codehl_lang_def:nn}{lang,keys}
 \end{codesyntax}
 \end{codedescribe}
 
@@ -931,6 +979,11 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
 \begin{describelist*}{keys}
     \describe{based on}
     {The definitions of a base \tsobj[marg]{lang} are inherited. See \ref{codehl:syntax:basedon} for details. }
+    \describe{info/note}
+      { \tsargs[marg]{note}
+      
+      \tsobj[marg]{note} will be logged into the log file. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+      }
 
     \describe{~}{\color{black!50!red}\textbf{Keywords/identifiers behaviour keys:}}    
     
@@ -964,7 +1017,9 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
     
     Sets the list of what a \tsobj[key]{oletter} is. A regular expression composed only of \tsobj[marg]{o-set} will be constructed as \tsfmt{[\tsobj[marg]{o-set}]} (see the section \emph{Character classes} in \citetitle{expl3} \cite{expl3}). This only applies if, and only if, \tsobj[key]{alphanumeric} is set to true.
     }
-
+\begin{tsremark}
+  Regarding \tsobj[key]{alphanumeric,digits,oletter},  it is slightly better (performance) to just to set those as letter (category code 11) and avoid the extra overhead, setting \tsobj[key]{alphanumeric} to false.
+\end{tsremark}
     \describe{~}{\color{black!50!red}\textbf{Pattern keys:}}    
 
     \describe{identifier}
@@ -1056,12 +1111,6 @@ When analysing the text to be highlighted, the listed patterns are grouped by th
       \begin{tsremark}
         Sequence matters: If, later on, a new structure is defined with the same \tsobj[marg]{start-pattern}, it will be normally processed (overwriting the \tsobj[key]{suppress} key).
       \end{tsremark}
-    \describe{info/note}
-      { \tsargs[marg]{note}
-      
-      \tsobj[marg]{note} will be logged into the log file and terminal. This is merely informational and can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
-      }
-
 \end{describelist*}
 
 
@@ -1074,36 +1123,81 @@ This will write to the terminal (raising an error message) the effective \tsobj[
 \end{codedescribe}
 
 
+\subsection{Aliases}\label{codehl:aliases}
 
+\begin{codedescribe}{  \hlLangAlias, \codehl_lang_alias:nn }
+\begin{codesyntax}%
+\tsmacro{\hlLangAlias}{alias,lang}
+\tsmacro{\codehl_lang_alias:nn}{alias,lang}
+\end{codesyntax}
+These commands define a set of aliases for a language. Notice, thought, that the internal representation of those aliases will always be exactly one level deep. For instance you can define 'B' as an alias for 'A' then 'C' as an alias to 'B', in which case, internally, 'C' will be just another alias for 'A'. More important, if, later on, 'B' is redefined as an alias for 'X', 'C' will remain an alias for 'A'.
+\begin{tsremark}
+  An error will be raised if \tsobj[marg]{alias} is an already defined language (not an alias).
+\end{tsremark}
+\begin{tsremark}
+  The alias definition will be logged into the log file. This can be suppressed with the command \tsobj{\codehl_pkg_settings} (see \ref{codehl:pkg:settings}).
+\end{tsremark}
 
-\subsection{To do, Future plans}
-These are some aspects that are either planned or that deserve some consideration:
-\begin{itemize}
-  \item listings \tsobj[key]{procnamekeys} might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
-  \item simula/algol comments peculiar syntax.
-\end{itemize}
+\end{codedescribe}
+
+\begin{codedescribe}{ \hlKeysetAlias, \codehl_keyset_alias:nn }
+\begin{codesyntax}%
+\tsmacro{\hlKeysetAlias}{alias,keyset}
+\tsmacro{\codehl_keyset_alias:nn}{alias,keyset}
+\end{codesyntax}
+Same, for a keyword set. 
+\end{codedescribe}
+
+\begin{codedescribe}{ \hlHLsetAlias, \codehl_hlset_alias:nn }
+\begin{codesyntax}%
+\tsmacro{\hlHLsetAlias}{alias,hlset}
+\tsmacro{\codehl_hlset_alias:nn}{alias,hlset}
+\end{codesyntax}
+Same, for a highlight set.
+\end{codedescribe}
+
+\begin{codedescribe}{ \hlBasefmtAlias, \codehl_basefmt_alias:nn }
+\begin{codesyntax}%
+\tsmacro{\hlBasefmtAlias}{alias,basefmt}
+\tsmacro{\codehl_basefmt_alias:nn}{alias,basefmt}
+\end{codesyntax}
+Same, for a base format set. 
+\end{codedescribe}
+
 
 \subsection{Pre-defined Languages}\label{codehl:lang:predef}
-There is a set of pre-defined languages known by \tsobj[pkg]{codehighlight}, but since it would be wasteful to load all definitions all the time, those language definitions are \emph{stored} in auxiliary files with a .def ending. The following commands, which can only be called in the document preamble, will include the needed auxiliary files. Note, though, that there isn't a one-to-one relationship between auxiliary packages and language/keyword sets, since some auxiliary packages might entice more than one language definition. Lastly, those commands keep track of which auxiliary packages were already loaded, so  it's safe to call the following commands more than once for the same language/keyword set.
+There is a set of pre-defined languages known by \tsobj[pkg]{codehighlight}, but since it would be wasteful to load all definitions all the time, those language definitions are \emph{stored} in auxiliary files.
 
-\begin{codedescribe}{ \hlLangLoad , \codehl_lang_load:n }
+Those auxiliary files will be loaded as needed, for instance when one tries to expand the definitions of a pre-defined language (\tsobj{\codehl_lang_def:nn}, see \ref{codehl:syntax:lang}), or defines a language based on pre-defined one (key \tsobj[key]{based on}, see \ref{codehl:syntax:basedon}), or sets the display defaults (\tsobj{\codehl_display_settings:n}, see \ref{codehl:settings}).
+\begin{tsremark}
+  File loading, can only occurs in the preamble. An error will be raised otherwise.
+\end{tsremark}
+\begin{tsremark}[\color{red}Attention:]
+  When defining a language, keyword set, highlight set, all definitions are local. This allows to, for instance, locally expand a keyword list, but it also has a side effect that, if an auxiliary file is loaded in a local group, the definitions will be lost.
+\end{tsremark}
+
+ The following commands, force the load of the needed auxiliary files, and should be used in the preamble. Note, though, that there isn't a one-to-one relationship between auxiliary packages and language/keyword sets, since some auxiliary packages might entice more than one language definition. Lastly, those commands keep track of which auxiliary files were already loaded, so  it's safe to call them more than once for the same language/keyword set.
+
+\begin{codedescribe}{ \hlLangLoad , \codehl_lang_preload:n }
 \begin{codesyntax}%
-\tsmacro{\hlLangLoad}{lang}
-\tsmacro{\codehl_lang_load:n}{lang-list}
+\tsmacro{\hlLangLoad}{lang-list}
+\tsmacro{\codehl_lang_preload:n}{lang-list}
 \end{codesyntax}
 This will include the needed auxiliary packages. Whereas \tsobj[marg]{lang-list} is a comma separated list of languages.
 \end{codedescribe}
 
-\begin{codedescribe}{ \hlKeywdsetLoad , \codehl_keywdset_load:n }
+\begin{codedescribe}{ \hlKeysetLoad , \codehl_keyset_preload:n }
 \begin{codesyntax}%
-\tsmacro{\hlKeywdsetLoad}{lang}
-\tsmacro{\codehl_keywdset_load:n}{lang}
+\tsmacro{\hlKeysetLoad}{keyset-list}
+\tsmacro{\codehl_keyset_preload:n}{keyset-list}
 \end{codesyntax}
-Similarly, this will include the needed auxiliary packages. Whereas \tsobj[marg]{lang-list} is a comma separated list of languages.
+Similarly, this will include the needed auxiliary packages. Whereas \tsobj[marg]{keyset-list} is a comma separated list of keyset sets.
 \end{codedescribe}
 
+The following table contain the current list of known languages and keyword sets. Languages like Fortran also have a pre-defined alias (in this case, just Fortran) normally pointing to the 'most recent' definition. Note: if a new variant is introduced, the alias shall point to it.
+
 \begin{tsremark}
-  The Language, Keywords sets, found on the auxiliary files were adapted from the language definitions used in the \tsobj[pkg]{listings}\cite{listings} package. The following table lists, for each language, which languages' and keywords' sets are defined.
+  The Language, Keywords sets, found on the auxiliary files were adapted from the language definitions used in the \tsobj[pkg]{listings}\cite{listings} package (October 2026, version 1.11b). The following table lists, for each language, the defined sets and aliases.
 \end{tsremark}
 
 
@@ -1113,507 +1207,498 @@ Similarly, this will include the needed auxiliary packages. Whereas \tsobj[marg]
 \setlength{\arrayrulewidth}{0.05pt}
 
 \begin{longtable}{p{17mm}p{45mm}p{45mm}p{26mm}}
-  Language & Language sets & Keywords sets & Obs. \\\hline\endhead
+  Language & Language sets & Keywords sets & Alias / Obs. \\\hline\\[-7.85pt]\endhead
 
-\\[-7.5pt]
+\\[-7.85pt]
 ABAP & 
- ABAP.R/24.3 ABAP.R/25.0 ABAP.R/33.1 ABAP.R/34.6C ABAP.R/36.10 &
- ABAP.R/24.3 ABAP.R/25.0 ABAP.R/33.1 ABAP.R/34.6C ABAP.R/36.10 & \\ \cline{2-4}
+ ABAP.R/2-4.3 ABAP.R/2-5.0 ABAP.R/3-3.1 ABAP.R/3-4.6C ABAP.R/3-6.10 &
+ ABAP.R/2-4.3 ABAP.R/2-5.0 ABAP.R/3-3.1 ABAP.R/3-4.6C ABAP.R/3-6.10 & ABAP $\rightarrow$ ABAP.R/3-6.10 \\ \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 ACM &
  ACM ACMscript ACSL   &
  ACM ACMscript ACSL   &  \\  \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Ada &
-Ada.2005 Ada.83 Ada.95 &  
-Ada.2005 Ada.83 Ada.95 &  \\  \cline{2-4}
+Ada.05 Ada.83 Ada.95 &  
+Ada.05 Ada.83 Ada.95 &  Ada   $\rightarrow$ Ada.05 \\  \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Algol &
  Algol.60  Algol.68   &
- Algol.60  Algol.68   &  \\  \cline{2-4}
+ Algol.60  Algol.68   & Algol  $\rightarrow$ Algol.68 \\  \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Ant &
  Ant &
- Ant & xml derived \\  \cline{2-4}
+ Ant & \\  \cline{2-4}
 
 asm & 
- Assembler.Motorola68k   &  
- Assembler.Motorola68k   &   \\  \cline{2-4}
+ asm.Motorola68k   &  
+ asm.Motorola68k   &  Motorola68k \\  \cline{2-4}
  
 asm & 
- Assembler.riscv   &  
- Assembler.riscv   &   \\  \cline{2-4}
+ asm.riscv   &  
+ asm.riscv   &  riscv \\  \cline{2-4}
  
 asm & 
- Assembler.x86masm   & 
- Assembler.x86masm   &  \\  \cline{2-4}
+ asm.x86   & 
+ asm.x86   & x86 \\  \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 awk &
  Awk.POSIX  Awk.gnu   &  
- Awk.POSIX  Awk.gnu   &  \\  \cline{2-4}
+ Awk.POSIX  Awk.gnu   &  Awk  $\rightarrow$ Awk.gnu \\  \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Basic &
  Basic.Visual   & 
- Basic.Visual   &  \\   \cline{2-4}
+ Basic.Visual   &  VB  $\rightarrow$ Basic.Visual \\   \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 C  &
  C.ANSI C.Handel C.Objective C.Sharp   &
- C.ANSI C.Handel C.Objective C.Sharp   &  \\   \cline{2-4}
+ C.ANSI C.Handel C.Objective C.Sharp   & C $\rightarrow$ C.ANSI  \\   \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 C++ & 
  C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   & 
- C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   &  \\ \cline{2-4}
+ C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   & C++ $\rightarrow$ C++.ANSI  \\ \cline{2-4}
  
-\\[-7.5pt]
+\\[-7.85pt]
 CIL &
  CIL   &
  CIL   &  \\   \cline{2-4}
  
-\\[-7.5pt]
+\\[-7.85pt]
 CMake  &
  CMake   &
  CMake   &  \\   \cline{2-4}
  
-\\[-7.5pt]
+\\[-7.85pt]
 Caml &
  Caml.Objective  Caml.light   &
- Caml.Objective  Caml.light   & \\   \cline{2-4}
+ Caml.Objective  Caml.light   & Caml $\rightarrow$ Caml.Objetive\\   \cline{2-4}
  
-\\[-7.5pt]
+\\[-7.85pt]
 Clean &
  Clean   &  
  Clean   &   \\   \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Cobol &
- Cobol.1974  Cobol.1985 Cobol.ibm   & 
- Cobol.1974  Cobol.1985 Cobol.ibm   & \\   \cline{2-4}
+ Cobol.74  Cobol.85 Cobol.IBM   & 
+ Cobol.74  Cobol.85 Cobol.IBM   & Cobol  $\rightarrow$ Cobol.IBM \\   \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 Comal &
   Comal.80  &
-  Comal.80  &  \\    \cline{2-4}
+  Comal.80  & Comal \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Comsol &
   Comsol  &
   Comsol  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Delphi &
   Delphi  &
   Delphi  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Eiffel &
   Eiffel  &
   Eiffel  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Elan &
   Elan  &
   Elan  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Euphoria &
   Euphoria  &
   Euphoria  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Fortran &
   Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &
-  Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &  \\    \cline{2-4}
+  Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &  Fortran  $\rightarrow$\break Fortran.03 \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 GAP &
   GAP  &
   GAP  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 GCL  &
   GCL  &
   GCL  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Gnuplot  &
   Gnuplot  &
   Gnuplot  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Go  &
   Go  &
   Go  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 HTML  &
   HTML  &
   HTML  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Haskell  &
   Haskell  &
   Haskell  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 IDL  &
   IDL  &
   IDL  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 IDL  &
   IDL.CORBA  &
   IDL.CORBA  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Inform  &
   Inform  &
   Inform  &  \\    \cline{2-4}
 
-\\[-7.5pt]
-JVMIS  &
-  JVMIS  &
-  JVMIS  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Java  &
-  Java  &
-  Java  &  \\    \cline{2-4}
+  Java  AspectJ  JVMIS  &
+  Java  AspectJ  JVMIS  &  \\    \cline{2-4}
 
-\\[-7.5pt]
-Java  &
-  Java.AspectJ  &
-  Java.AspectJ  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 LLVM  &
   LLVM  &
   LLVM  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Lingo  &
   Lingo  &
   Lingo  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Lisp  &
   elisp  Lisp  Lisp.Auto  &
   elisp  Lisp  Lisp.Auto  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Logo  &
   Logo  &
   Logo  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Lua  &
   Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  &
-  Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  &  \\    \cline{2-4}
+  Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  & Lua $\rightarrow$ Lua.5.3 \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 ML  &
   ML  &
   ML  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Mathematica  &
   Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  &
-  Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  &  \\    \cline{2-4}
+  Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  & Mathematica $\rightarrow$ Mathematica.11.0 \\   \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Matlab  &
-  Matlab  Matlab.5.1  &
-  Matlab  Matlab.5.1  &  \\    \cline{2-4}
+  Matlab.5.1  &
+  Matlab.5.1  &  Matlab \\   \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Mercury  &
   Mercury  &
   Mercury  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 MetaPost  &
   MetaPost  &
   MetaPost  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Miranda  &
   Miranda  &
   Miranda  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Mizar  &
   Mizar  &
   Mizar  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Modula-2  &
   Modula-2  &
   Modula-2  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 MuPAD  &
   MuPAD  &
   MuPAD  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 NASTRAN  &
   NASTRAN  &
   NASTRAN  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 OCL  &
   OCL.OMG  OCL.decorative  &
-  OCL.OMG  OCL.decorative  &  \\    \cline{2-4}
+  OCL.OMG  OCL.decorative  & OCL $\rightarrow$ OCL.OMG \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 OORexx  &
   OORexx  &
   OORexx  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Octave  &
   Octave  &
   Octave  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Oz  &
   Oz  &
   Oz  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 PHP  &
   PHP  &
-  PHP  &  \\    \cline{2-4}
+  PHP  &  \\    \cline{2-4}  
 
-\\[-7.5pt]
+\\[-7.85pt]
 PL/I  &
   PL/I  &
   PL/I  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 POV  &
   POV  &
   POV  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 PSTricks  &
   PSTricks  &
   PSTricks  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Pascal  &
   Pascal.Borland6 Pascal.Standard Pascal.XSC  &
-  Pascal.Borland6 Pascal.Standard Pascal.XSC  &  \\    \cline{2-4}
+  Pascal.Borland6 Pascal.Standard Pascal.XSC  & Pascal $\rightarrow$\break Pascal.Standard \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 Perl  &
   Perl  &
   Perl  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Plasm  &
   Plasm  &
   Plasm  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 PostScript  &
   PostScript  &
   PostScript  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Prolog  &
   Prolog  &
   Prolog  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Promela  &
   Promela  &
   Promela  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Python  &
   Python.2 Python.3  &
-  Python.2 Python.3  &  \\    \cline{2-4}
+  Python.2 Python.3  & Python $\rightarrow$ Python.3 \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 R  &
   R S S.PLUS  &
   R S S.PLUS  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 RSL  &
   RSL  &
   RSL  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Reduce  &
   Reduce  &
   Reduce  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Rexx  &
   Rexx Rexx.VM/XA  &
   Rexx Rexx.VM/XA  &  \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 Ruby  &
   Ruby  &
   Ruby  &  \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 SAS  &
   SAS  &
   SAS  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 SHELXL  &
   SHELXL  &
   SHELXL  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 SPARQL  &
   SPARQL  &
   SPARQL  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 SQL  &
   SQL  &
   SQL  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Scala  &
   Scala Scala.3.0  &
   Scala Scala.3.0  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Scilab  &
   Scilab  &
   Scilab  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Simula  &
   Simula.67 Simula.CII Simula.DEC Simula.IBM  &
-  Simula.67 Simula.CII Simula.DEC Simula.IBM  &  \\    \cline{2-4}
+  Simula.67 Simula.CII Simula.DEC Simula.IBM  &  Simula $\rightarrow$\break Simula.IBM \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 Swift  &
   Swift  &
   Swift  &  \\    \cline{2-4}
 
 
-
-\\[-7.5pt]
+\\[-7.85pt]
 VBScript  &
   VBScript  &
   VBScript  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 VHDL  &
   VHDL VHDL.AMS  &
   VHDL VHDL.AMS  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 VRML  &
   VRML.97  &
-  VRML.97  &  \\    \cline{2-4}
+  VRML.97  & VRML \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 Verilog  &
   Verilog  &
   Verilog  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 XML  &
   XML  &
   XML  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 XSLT  &
   XSLT  &
   XSLT  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 bash  &
   bash  &
   bash  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 command  &
   command.com.WinXP  &
   command.com.WinXP  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 csh  &
   csh  &
   csh  &  \\    \cline{2-4}
 
 
-\\[-7.5pt]
+\\[-7.85pt]
 erlang  &
   erlang  &
   erlang  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 hansl  &
   hansl  &
   hansl  &  \\    \cline{2-4}
 
-%\\[-7.5pt]
+%\\[-7.85pt]
 ksh  &
   ksh  &
   ksh  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 make  &
   make make.gnu  &
   make make.gnu  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 sh  &
   sh  &
   sh  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 tcl  &
   tcl  &
   tcl  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 tcl  &
   tcl.tk  &
   tcl.tk  &  \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 TeX  &
   TeX &
   TeX.AlLaTeX TeX.LaTeX TeX.common TeX.plain TeX.primitive  &  from \tsobj[pkg]{listings} \\   \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 TeX  &
   TeX  &
   TeX.ams TeX.babel TeX.bibtex TeX.hyperref TeX.kernel TeX.pgf TeX.pgfplots   TeX.xpacks &  from \tsobj[pkg]{codedescribe} \\    \cline{2-4}
 
-\\[-7.5pt]
+\\[-7.85pt]
 TeX  &
   TeX.l3  &
   TeX.l3ams TeX.l3bibtex TeX.l3exp TeX.l3kernel TeX.l3pgf    & from \tsobj[pkg]{codedescribe}. cmds contain \tsobj{_} \\    \cline{2-4}
 
-\\[-7.5pt]
+%\\[-7.85pt]
 TeX  &
   TeX.l3sign  &
   TeX.l3amssign TeX.l3bibtexsign TeX.l3expsign TeX.l3kernelsign TeX.l3pgfsign &  from \tsobj[pkg]{codedescribe}. cmds contain \tsobj{_ :} \\    \cline{2-4}
@@ -1632,9 +1717,172 @@ TeX  &
 
 \newpage
 \section{Examples}
-%% if needed
+
+In the following examples, for simplicity, mostly \LaTeXe{} commands are used.
+
+\subsection{A minimal construct}
+A minimal construct could entice loading a pre-defined language (C in the example), setting the display settings to only recognize the keywords (therefore, no comment or string will be recognized), and define an environment which would display the collected verbatim code right away:
+\tscode*[codeprefix={}]{demo00}[1]
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codeprefix={},resultprefix={}]{demo01}[1]
+
+Changing the settings to include the language syntax:
+\tscode*[codeprefix={},resultprefix={}]{demo00}[2]
+\tsexec{demo00}[2]
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment 
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codeprefix={},resultprefix={}]{demo01}[2]
+
+\subsection{Customizing the language}\label{examples}
+One can change an existing language definition, for instance, adding a \LaTeX{} escape (the \tsobj[key]{nestable} key is to allow it to be detected even inside another comment):
 
 
+\begin{codestore}[demo01]
+\hlLangDef{C}
+  {
+    active comment line = {1}{\$\$}{ nestable }
+  }
+\end{codestore}
+\tscode*[codeprefix={},resultprefix={}]{demo01}[3]
+\tsexec{demo01}[3]
+
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment $$ \textbf{this}
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codeprefix={},resultprefix={}]{demo01}[4]
+
+\newpage
+\subsection{Further customization}
+One can use color to call attention to some parts of the code, in general this is achieved by customizing a \tsobj[marg]{hlset} (see \ref{codehl:syntax:hlset}). Note that, in the following example, \tsobj[marg]{std-hlset} is a pre-defined \tsobj[marg]{hlset} (the default one, if none is declared).
+\begin{codestore}[demo01]
+\hlLangDef{C}
+  {
+    comment line = {2}{//+}{ }
+  }
+\hlHLsetDef{std-hlset}
+  {
+    comment = {2}{\itshape\color{red}}
+  }
+\end{codestore}
+\tscode*[codeprefix={},resultprefix={}]{demo01}[5]
+\tsexec{demo01}[5]
+
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment $$ \textbf{this}
+    //+ specially important comment
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codeprefix={},resultprefix={}]{demo01}[6]
+
+
+\subsection{Using sequences}
+
+Note, the following example could be written in \LaTeXe{}, but, it's more natural to write it in \tsobj[pkg]{expl3} (given the use of sequences).
+First a dedicated store command is created (see \ref{codeverb:auxiliary}) then an environment using it (see \ref{codeverb:newenv}).
+\begin{codestore}[demo02]
+\ExplSyntaxOn
+
+  \codeverb_new_store_cmds:nn { } { DemoStore }
+  \cs_generate_variant:Nn \DemoStore_gput_right:nn { V } 
+
+  \codeverb_new_environment:nnnnn 
+    { 
+      drop ~ first, 
+      inline ,       % The environment end code will receive the verbatim code as #1
+      other =  { \^^K } ,
+    } 
+    {DemoStore} {O{default}} 
+    { %% Here, #1 is the environment optional parameter
+      \tl_set:Nn \DemoStore_tmp_tl {#1}
+    }
+    { %% Here, #1 is the collected verbatim code
+      \DemoStore_gput_right:Vn
+          \DemoStore_tmp_tl
+          { #1 }
+    }
+\ExplSyntaxOff  
+\end{codestore}
+
+
+\tscode*[codeprefix={},resultprefix={}]{demo02}[1]
+
+\tsexec{demo02}
+
+\begin{codestore}[demo02]
+\begin{DemoStore}[sampleA]
+      for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }    // a comment $$ \textbf{this}
+\end{DemoStore}
+
+\begin{DemoStore}[sampleA]
+      for ( j=0 , j<10 , j++ ) {
+      h += i;
+    }    // a comment $$ \textbf{this too}
+\end{DemoStore}
+
+\DemoStoreMerge {\mymerged} {sampleA} {1-2}
+\hlDisplayV \mymerged
+\end{codestore}
+ 
+ Note that, the above code defines a new environment, \tsobj[env]{DemoStore}, which expects a single parameter: the `sequence name' to be used.
+Once a few verbatim snips are collected, they can be merged (command \tsobj{\DemoStoreMerge} below, created by the command \tsobj{\codeverb_new_store_cmds:nn} above) and then displayed as a simple peace.
+ \tsdemo[codeprefix={},resultprefix={}]{demo02}[2]
+ 
+%\hlDisplayV \Cverb
+%\ExplSyntaxOn
+%\tl_show:N \Cverb
+%\tl_show:N \l__codehl_tok_activ_lang_tl
+%\tl_show:N \l__codehl_tok_activ_keyset_tl
+%\tl_show:N \l__codehl_tok_activ_hlset_tl
+%\tl_show:N \l__codehl_tok_activ_basefmt_tl
+%
+%%\codehl_display:no {} \Cverb
+%\ExplSyntaxOff
+
+\newpage
+\section{To do, Future plans}
+These are some aspects that are either planned or that deserve some consideration:
+\begin{itemize}
+  \item grabbing code from an external file (codeverbatim): defining a 'text marker' (begging/end ... label).
+  \item optimize the background color code. It works as is, but, it's slow.
+  \item indexing might be implement in a similar way as it is in \tsobj[pkg]{codedescribe}.
+  \item allow for further customization of line numberging: e.g. one every 5, or starting number, etc.
+  \item simula/algol comments peculiar syntax.
+  \item listings \tsobj[key]{procnamekeys} might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
+  \item writing code to an external file, albeit fairly simple, isn't planned for the time being.
+  \item improve the examples section.
+\end{itemize}
 
 
 \printbibliography

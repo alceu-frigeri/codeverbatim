@@ -49,10 +49,6 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ### This work consist of the files
 
-
-* codehighlight.sty
-    - code highlight
-
 * README.md  (this file)
     - quick introduction
 
@@ -64,10 +60,10 @@ The Current Maintainer of this work is Alceu Frigeri
     - documentation in PDF format    
 
 * codeverbatim.sty
-    - the verbatim capture environment
+    - verbatim capture environment
 
 * codehighlight.sty
-    - code highlighting package
+    - code highlighting
 
 * codehl-00.def ... codehl-5F.def       *(hexadecimal numbering)*
     - the many pre-defined language files

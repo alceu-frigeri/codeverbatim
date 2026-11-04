@@ -43,7 +43,6 @@
 %%%%%%%
 
 
-
 \msg_new:nnnn { codeverbatim / syntax } { seq undef }
   {
     \msg_line_context: \iow_newline:
@@ -312,7 +311,6 @@
   }
 
 
-
 \prop_new_linked:N \l__codeverb_sverb_prop
 \prop_new_linked:N \l__codeverb_sverb_scan_prop
 \seq_new:N \l__codeverb_sverb_seq
@@ -328,8 +326,6 @@
 \seq_new:N \l__codeverb_opt_letter_seq
 
 \clist_new:N \l__codeverb_opt_other_clist
-
-
 
 
 \keys_define:nn { codeverb / common keys }
@@ -511,7 +507,6 @@
   }
 
 
-
 \cs_new_protected:Npn \codeverb_sverb_undef:n #1
   {
     \bool_if:NTF \l__codeverb_sverb_on_bool
@@ -542,7 +537,6 @@
       }
   }
 \cs_set_eq:NN \cvSVerbUndefAll \codeverb_sverb_undef_all:n
-
 
 
 \cs_set_eq:NN \__codeverb_sverb_self_ccset: \relax
@@ -600,8 +594,20 @@
             \bool_set_true:N \l__codeverb_sverb_build_bool
           }
 
-        \cs_set:Npn \__codeverb_sverb_self_ccset:
-          { \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq }
+        \seq_if_exist:NTF \l__codedesc_scut_self_activ_seq
+          {
+            \cs_set:Npn \__codeverb_sverb_self_ccset:
+              {
+                \__codeverb_set_other:N \l__codedesc_sverb_self_activ_seq
+                \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
+              }
+          }
+          {
+            \cs_set:Npn \__codeverb_sverb_self_ccset:
+              {
+                \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
+              }
+          }
 
         \prop_map_inline:Nn \l__codeverb_sverb_scan_prop
           { \__codeverb_sverb_set_on:NNNNN ##2 }
@@ -888,7 +894,6 @@
 \cs_generate_variant:Nn   \__codeverb_new_environment:NNnnnnn { NNV , NcV }
 
 
-
 \cs_new:Npn \__codeverb_new_scan_env:n #1
   {
     \int_new:c { g__env_ #1 _cnt_int }
@@ -907,14 +912,12 @@
   }
 
 
-
-
 %%% TODO: fix the 'common keys' snafu (1st cctab, then other, then letter... TEST for it...)
 %%% here it is, mostly, correct.
 %%%
 \cs_new_protected:Npn \codeverb_new_environment:nnnnn #1#2
   {
-
+%\tl_show:n {<<new-env>>(#1)(#2)}
     \__codeverb_opt_env_defaults:
     \keys_set:nn { codeverb / new env } { #1 }
 
@@ -961,7 +964,7 @@
   }
 
 
-\NewDocumentCommand \cvNewEnvironment { O{ }mmmm }
+\NewDocumentCommand \cvNewEnvironment { O{ }mmm+m }
   { \codeverb_new_environment:nnnnn { #1 } { #2 } { #3 } { #4 } { #5 } }
 
 %%%%
@@ -1054,7 +1057,6 @@
 \cs_set_eq:NN \cvRetokenNewCommandV \codeverb_retoken_newcsV:N
 
 
-
 \cs_new_protected:Npn \codeverb_new_store_cmds:nn #1#2
   {
     \bool_set_false:N \l__codeverb_opt_expl_bool
@@ -1074,10 +1076,11 @@
           }
         \use:c { #2 _ ##1 _gput_right:n } { ##2 }
       }
+    \cs_generate_variant:cn { #2 _gput_right:nn } { nV }
 
     \cs_new_protected:cpn { #2_merge:Nnn }  ##1##2##3
       {
-        \bool_set_true:N \l__codeverb_first_merge_bool
+        \tl_clear_new:N ##1
         \tl_if_blank:nTF { ##3 }
           {
             \clist_map_inline:nn { ##2 }
@@ -1098,11 +1101,13 @@
               }
           }
       }
+
     \bool_if:NTF \l__codeverb_opt_expl_bool
       { }
       {
-        \cs_set_eq:cc { #2 PutRight } { #2 _gput_right:nn }
-        \cs_set_eq:cc { #2 Merge } { #2 _Merge:Nnn }
+        \cs_set_eq:cc { #2 PutRight }  { #2 _gput_right:nn }
+        \cs_set_eq:cc { #2 PutRightV } { #2 _gput_right:nV }
+        \cs_set_eq:cc { #2 Merge }     { #2 _merge:Nnn }
       }
   }
 \NewDocumentCommand \cvNewStoreCommands { O{ } m }
@@ -1173,7 +1178,6 @@
           }
       }
   }
-
 
 
 \int_new:N \l__codeverb_tmpa_int
@@ -1317,22 +1321,22 @@
   }
 
 
-
-\bool_new:N \l__codeverb_first_merge_bool
-\tl_new:N \l__codeverb_merged_tl
+%\bool_new:N \l__codeverb_first_merge_bool
 
 \cs_new:Npn \__codeverb_merge:Nn #1#2
   {
-    \bool_if:NTF \l__codeverb_first_merge_bool
-      {
-        \bool_set_false:N \l__codeverb_first_merge_bool
-        \tl_set:Nn #1 { #2 }
-      }
-      {
-        \str_set:Nn \l__codeverb_tmpd_tl { #2 }
-        \str_remove_once:Nn \l__codeverb_tmpd_tl { ^^J }
-        \tl_put_right:NV #1 \l__codeverb_tmpd_tl
-      }
+    \tl_put_right:Nn #1 { #2 }
+%    \bool_if:NTF \l__codeverb_first_merge_bool
+%      {
+%        \bool_set_false:N \l__codeverb_first_merge_bool
+%        \tl_set:Nn #1 { #2 }
+%      }
+%      {
+%%        \str_set:Nn \l__codeverb_tmpd_tl { #2 }
+%%        \str_remove_once:Nn \l__codeverb_tmpd_tl { ^^J }
+%%        \tl_put_right:NV #1 \l__codeverb_tmpd_tl
+%        \tl_put_right:Nn #1 { #2 }
+%      }
   }
 \cs_generate_variant:Nn   \__codeverb_merge:Nn { NV , Ne }
 

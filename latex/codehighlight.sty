@@ -55,27 +55,47 @@
 
 \cs_generate_variant:Nn \int_set:Nn { Ne }
 
-%%%\cs_generate_variant:Nn \__codehl_io_show:nnnn { nnne }
 \cs_generate_variant:Nn \msg_error:nnnnnn { nnne , nnneee }
 \cs_generate_variant:Nn \msg_error:nnnn   { nnne }
-\cs_generate_variant:Nn \msg_show:nnnn    { nnne }
+\cs_generate_variant:Nn \msg_show:nnnn    { nnne , nnox }
 \cs_generate_variant:Nn \msg_note:nnnnn   { nnne }
-\cs_generate_variant:Nn \msg_note:nnnnnn  { nnnee }
+\cs_generate_variant:Nn \msg_note:nnnnnn  { nnnee , nnnne }
+\cs_generate_variant:Nn \msg_info:nnnnn   { nnne }
+\cs_generate_variant:Nn \msg_info:nnnnnn  { nnnee , nnnne }
 
 \prg_generate_conditional_variant:Nnn \tl_if_blank:n { v } {TF}
 \prg_generate_conditional_variant:Nnn \bool_if:n { o } { TF }
 \prg_generate_conditional_variant:Nnn \str_compare:nNn  { nNo , oNo } { TF }
 
-\msg_new:nnnn { codehl / hlfmtset } { based on syntax }
+
+%%%%%%%
+%%% false => CTAN distribution
+%%% true  => log the many _register:nn commands
+%%%%%%%
+\bool_new:N \l__codehl_register_bool
+%\bool_set_true:N \l__codehl_register_bool
+
+
+\msg_new:nnnn { codehl / basefmt } { alias err }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Language~#2~ is ~a ~ defined ~ base ~ format ~ set. ~ (alias~ ignored)
+  }
+  {
+    (#1)~You ~ tried~ to ~ define~ #2 ~ as ~ an ~ alias, ~ but ~ it's ~ a~ defined~ base ~ format ~ set~ (alias~ ignored).
+  }
+
+
+\msg_new:nnnn { codehl / basefmt } { based on syntax }
   {
     \msg_line_context: \iow_newline:
     (#1)~Invalid~base~descriptor:~#2~(ignored)
   }
   {
-    (#1)~The~expected~syntax: R|F[<int>]<base-hlfmtset> ~or~ just~ <base-hlfmtset>.
+    (#1)~The~expected~syntax: R|F[<int>]<base-basefmt> ~or~ just~ <base-basefmt>.
   }
 
-\msg_new:nnnn { codehl / hlfmtset } { non existant base }
+\msg_new:nnnn { codehl / basefmt } { non existant base }
   {
     \msg_line_context: \iow_newline:
     (#1)~Invalid~base:~#2
@@ -84,7 +104,7 @@
     (#1)~The~format~base~doesn't~exist.
   }
 
-\msg_new:nnnn { codehl / hlfmtset } { invalid code }
+\msg_new:nnnn { codehl / basefmt } { invalid code }
   {
     \msg_line_context: \iow_newline:
     (#1)~Invalid~based~on~code:~#2
@@ -93,7 +113,7 @@
     (#1)~The~options~are:~R~(remap)~or~S~(set).
   }
 
-\msg_new:nnnn { codehl /  hlfmtset } { non existant }
+\msg_new:nnnn { codehl /  basefmt } { non existant }
   {
     \msg_line_context: \iow_newline:
     (#1)~format~#2~isn't~defined.
@@ -102,6 +122,61 @@
     (#1)~You~tried~to~use ~a ~non ~defined~ format~ set.
   }
 
+
+\msg_new:nnnn { codehl / hlset } { alias err }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Language~#2~ is ~a ~ defined ~ highlight ~ set. ~ (alias~ ignored)
+  }
+  {
+    (#1)~You ~ tried~ to ~ define~ #2 ~ as ~ an ~ alias, ~ but ~ it's ~ a~ defined~ highlight ~ set~ (alias~ ignored).
+  }
+
+
+\msg_new:nnnn { codehl / hlset } { based on syntax }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Invalid~base~descriptor:~#2~(ignored)
+  }
+  {
+    (#1)~The~expected~syntax: R|F[<int>]<base-hlset> ~or~ just~ <base-hlset>.
+  }
+
+\msg_new:nnnn { codehl / hlset } { non existant base }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Invalid~base:~#2
+  }
+  {
+    (#1)~The~format~base~doesn't~exist.
+  }
+
+\msg_new:nnnn { codehl / hlset } { invalid code }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Invalid~based~on~code:~#2
+  }
+  {
+    (#1)~The~options~are:~R~(remap)~or~S~(set).
+  }
+
+\msg_new:nnnn { codehl /  hlset } { non existant }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~format~#2~isn't~defined.
+  }
+  {
+    (#1)~You~tried~to~use ~a ~non ~defined~ highlight~ set.
+  }
+
+\msg_new:nnnn { codehl / keyset } { alias err }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Language~#2~ is ~a ~ defined ~ keywd ~ set. ~ (alias~ ignored)
+  }
+  {
+    (#1)~You ~ tried~ to ~ define~ #2 ~ as ~ an ~ alias, ~ but ~ it's ~ a~ defined~ keywd ~ set~ (alias~ ignored).
+  }
 
 
 \msg_new:nnnn { codehl / keyset } { based on syntax }
@@ -140,6 +215,14 @@
     (#1)~You~tried~to~use ~a ~non ~defined~ keyword~ set.
   }
 
+\msg_new:nnnn { codehl / lang } { alias err }
+  {
+    \msg_line_context: \iow_newline:
+    (#1)~Language~#2~ is ~a ~ defined ~ language. ~ (alias~ ignored)
+  }
+  {
+    (#1)~You ~ tried~ to ~ define~ #2 ~ as ~ an ~ alias, ~ but ~ it's ~ a~ defined~ language~ (alias~ ignored).
+  }
 
 \msg_new:nnnn { codehl / lang } { based on syntax }
   {
@@ -168,13 +251,13 @@
     (#1)~The~options~are:~R~(remap)~or~S~(set).
   }
 
-\msg_new:nnnn { codehl /  lang } { non existant }
+\msg_new:nnnn { codehl / lang } { non existant }
   {
     \msg_line_context: \iow_newline:
     (#1)~language~#2~isn't~defined.
   }
   {
-    (#1)~You~tried~to~use ~a ~non ~defined~ language~ set.
+    (#1)~You~tried~to~use ~a ~non ~defined~ language.
   }
 
 
@@ -188,8 +271,7 @@
   }
 
 
-
-\msg_new:nnnn { codehl /  hlfmtset } { syntax err }
+\msg_new:nnnn { codehl /  hlset } { syntax err }
   {
     \msg_line_context: \iow_newline:
     (#1)~Syntax ~Error: ~#3.
@@ -199,7 +281,7 @@
   }
 
 
-\msg_new:nnnn { codehl /  lang } { syntax err }
+\msg_new:nnnn { codehl / lang } { syntax err }
   {
     \msg_line_context: \iow_newline:
     (#1)~Syntax ~Error: ~#3.
@@ -217,17 +299,29 @@
     (#1) ~The ~ language ~ #2~ isn't~ pre-defined
   }
 
-\msg_new:nnnn { codehl / lang } { info note }
-  {
-%    \msg_line_context: ~ ~ (file ~ #3)\iow_newline:
-%    In ~ the ~ def. ~ of ~ Language: ~ {#2} \iow_newline:
-%    #4
 
-    \__codehl_lang_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+\bool_if:NTF \l__codehl_register_bool
+  {
+    \msg_new:nnnn { codehl / lang } { info note }
+      {
+        \__codehl_lang_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ Language: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
   }
   {
-    (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ Language: ~ #2 ~ in ~ file ~ #3:\iow_newline:
-    #4
+    \msg_new:nnnn { codehl / lang } { info note }
+      {
+        \msg_line_context: ~ ~ (file ~ #3)\iow_newline:
+        In ~  Language: ~ {#2} \iow_newline:
+        #4
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ Language: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
   }
 
 \msg_new:nnnn { codehl / keyset } { pre def }
@@ -239,18 +333,102 @@
     (#1) ~The ~ keywd-set ~ #2~ isn't~ pre-defined
   }
 
-\msg_new:nnnn { codehl / keyset } { info note }
+\bool_if:NTF \l__codehl_register_bool
   {
-%    \msg_line_context: ~ ~ (file ~ #3)\iow_newline:
-%    In ~ the ~ def. ~ of ~ keyword ~ set: ~ {#2} \iow_newline:
-%    #4
+    \msg_new:nnnn { codehl / keyset } { info note }
+      {
+        \__codehl_keyset_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ keyword ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
+  }
+  {
+    \msg_new:nnnn { codehl / keyset } { info note }
+      {
+        \msg_line_context: ~ ~ (file ~ #3)\iow_newline:
+        In ~  keyword ~ set: ~ {#2} \iow_newline:
+        #4
 
-    \__codehl_keyset_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+        \__codehl_keyset_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ keyword ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
+  }
+
+
+\msg_new:nnnn { codehl / hlset } { pre def }
+  {
+    \msg_line_context: \iow_newline:
+    (#1) ~ non ~ existant ~ Language: ~ #2
   }
   {
-    (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ keyword ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
-    #4
+    (#1) ~The ~ highlight ~ set ~ #2~ isn't~ pre-defined
   }
+
+
+\bool_if:NTF \l__codehl_register_bool
+  {
+    \msg_new:nnnn { codehl / hlset } { info note }
+      {
+        \__codehl_hlset_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ highlight ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
+  }
+  {
+    \msg_new:nnnn { codehl / hlset } { info note }
+      {
+        \msg_line_context: ~ ~ (file ~ #3)\iow_newline:
+        In ~  highlight ~ set: ~ {#2} \iow_newline:
+        #4
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ highlight ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
+  }
+
+
+\msg_new:nnnn { codehl / basefmt } { pre def }
+  {
+    \msg_line_context: \iow_newline:
+    (#1) ~ non ~ existant ~ Language: ~ #2
+  }
+  {
+    (#1) ~The ~ base ~ format ~ set ~ #2~ isn't~ pre-defined
+  }
+
+
+\bool_if:NTF \l__codehl_register_bool
+  {
+    \msg_new:nnnn { codehl / basefmt } { info note }
+      {
+        \__codehl_basefmt_register:nn { ~ #2 ~ } ~ { ~ #3 ~ }
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ base ~ format ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
+  }
+  {
+    \msg_new:nnnn { codehl / basefmt } { info note }
+      {
+        \msg_line_context: ~ ~ (file ~ #3)\iow_newline:
+        In ~  base ~ format ~ set: ~ {#2} \iow_newline:
+        #4
+      }
+      {
+        (#1) ~ note ~ found ~ in ~ the ~ definition ~ of ~ base ~ format ~ set: ~ #2 ~ in ~ file ~ #3:\iow_newline:
+        #4
+      }
+  }
+
 
 \msg_new:nnnn { codehl / lang } { struct info }
   {
@@ -272,7 +450,7 @@
 
   }
 
-\msg_new:nnnn { codehl / hlfmtset } { struct info }
+\msg_new:nnnn { codehl / hlset } { struct info }
   {
     \msg_line_context: \iow_newline:
     Highlight ~format ~set~\{#1\}~ (without ~outer ~blaces): \iow_newline:
@@ -300,7 +478,7 @@
   }
   {
     To~be~ able~ to ~ extend ~ the ~ definitions ~ of ~ a ~ #2 ~ set, ~ first ~ a ~ valid~ one
-    ~ has ~ to ~ be ~ selected~ with ~ \codehl_settings:n.
+    ~ has ~ to ~ be ~ selected~ with ~ \codehl_display_settings:n.
   }
 
 
@@ -321,13 +499,13 @@
 
 \prop_new_linked:N \g__codehl_predef_lang_prop
 \prop_new_linked:N \g__codehl_predef_keyset_prop
+\prop_new_linked:N \g__codehl_predef_hlset_prop
+\prop_new_linked:N \g__codehl_predef_basefmt_prop
 \prop_new_linked:N \g__codehl_loaded_files_prop
 
 \cs_new_protected:Npn \__codehl_lang_register:nn #1#2
   {
     \prop_gput:Nnn \g__codehl_predef_lang_prop
-      { #1 } { #2 }
-    \prop_gput:Nnn \g__codehl_predef_keyset_prop
       { #1 } { #2 }
   }
 \cs_new_protected:Npn \__codehl_keyset_register:nn #1#2
@@ -335,13 +513,21 @@
     \prop_gput:Nnn \g__codehl_predef_keyset_prop
       { #1 } { #2 }
   }
-
-\cs_new_protected:Npn \codehl_lang_load:n #1
+\cs_new_protected:Npn \__codehl_hlset_register:nn #1#2
   {
-    \clist_map_inline:nn { #1 }
-      {
+    \prop_gput:Nnn \g__codehl_predef_hlset_prop
+      { #1 } { #2 }
+  }
+\cs_new_protected:Npn \__codehl_basefmt_register:nn #1#2
+  {
+    \prop_gput:Nnn \g__codehl_predef_basefmt_prop
+      { #1 } { #2 }
+  }
+
+\prg_new_protected_conditional:Npnn \__codehl_lang_load_if_predef:n #1 { TF }
+  {
         \prop_get:NnNTF \g__codehl_predef_lang_prop
-          { ##1 } \l__codehl_tmpa_tl
+          { #1 } \l__codehl_tmpa_tl
           {
             \prop_if_in:NoTF \g__codehl_loaded_files_prop
               \l__codehl_tmpa_tl
@@ -351,21 +537,30 @@
                   \l__codehl_tmpa_tl { }
                 \file_input:V \l__codehl_tmpa_tl
               }
+            \prg_return_true:
           }
+          { \prg_return_false: }
+  }
+
+\cs_new_protected:Npn \codehl_lang_preload:n #1
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \__codehl_lang_load_if_predef:nTF { ##1 }
+          { }
           { %err
             \msg_error:nnnn { codehl / lang } { pre def }
               { predef01 } { ##1 }
           }
       }
   }
-\cs_set_eq:NN \hlLangLoad  \codehl_lang_load:n
+\cs_set_eq:NN \hlLangLoad  \codehl_lang_preload:n
 
-\cs_new_protected:Npn \codehl_keywdset_load:n #1
+
+\prg_new_protected_conditional:Npnn \__codehl_keyset_load_if_predef:n #1 { TF }
   {
-    \clist_map_inline:nn { #1 }
-      {
         \prop_get:NnNTF \g__codehl_predef_keyset_prop
-          { ##1 } \l__codehl_tmpa_tl
+          { #1 } \l__codehl_tmpa_tl
           {
             \prop_if_in:NoTF \g__codehl_loaded_files_prop
               \l__codehl_tmpa_tl
@@ -375,14 +570,94 @@
                   \l__codehl_tmpa_tl { }
                 \file_input:V \l__codehl_tmpa_tl
               }
+            \prg_return_true:
           }
+          { \prg_return_false: }
+  }
+
+
+\cs_new_protected:Npn \codehl_keyset_preload:n #1
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \__codehl_keyset_load_if_predef:nTF { ##1 }
+          { }
           { %err
             \msg_error:nnnn { codehl / keyset } { pre def }
               { predef02 } { ##1 }
           }
       }
   }
-\cs_set_eq:NN \hlKeywdsetLoad  \codehl_keywdset_load:n
+\cs_set_eq:NN \hlKeysetLoad  \codehl_keyset_preload:n
+
+
+\prg_new_protected_conditional:Npnn \__codehl_hlset_load_if_predef:n #1 { TF }
+  {
+        \prop_get:NnNTF \g__codehl_predef_hlset_prop
+          { #1 } \l__codehl_tmpa_tl
+          {
+            \prop_if_in:NoTF \g__codehl_loaded_files_prop
+              \l__codehl_tmpa_tl
+              { }
+              {
+                \prop_gput:Non \g__codehl_loaded_files_prop
+                  \l__codehl_tmpa_tl { }
+                \file_input:V \l__codehl_tmpa_tl
+              }
+            \prg_return_true:
+          }
+          { \prg_return_false: }
+  }
+
+
+\cs_new_protected:Npn \codehl_hlset_preload:n #1
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \__codehl_hlset_load_if_predef:nTF { ##1 }
+          { }
+          { %err
+            \msg_error:nnnn { codehl / hlset } { pre def }
+              { predef02 } { ##1 }
+          }
+      }
+  }
+\cs_set_eq:NN \hlHLsetLoad  \codehl_hlset_preload:n
+
+
+\prg_new_protected_conditional:Npnn \__codehl_basefmt_load_if_predef:n #1 { TF }
+  {
+        \prop_get:NnNTF \g__codehl_predef_basefmt_prop
+          { #1 } \l__codehl_tmpa_tl
+          {
+            \prop_if_in:NoTF \g__codehl_loaded_files_prop
+              \l__codehl_tmpa_tl
+              { }
+              {
+                \prop_gput:Non \g__codehl_loaded_files_prop
+                  \l__codehl_tmpa_tl { }
+                \file_input:V \l__codehl_tmpa_tl
+              }
+            \prg_return_true:
+          }
+          { \prg_return_false: }
+  }
+
+
+\cs_new_protected:Npn \codehl_basefmt_preload:n #1
+  {
+    \clist_map_inline:nn { #1 }
+      {
+        \__codehl_basefmt_load_if_predef:nTF { ##1 }
+          { }
+          { %err
+            \msg_error:nnnn { codehl / basefmt } { pre def }
+              { predef02 } { ##1 }
+          }
+      }
+  }
+\cs_set_eq:NN \hlBasefmtLoad  \codehl_basefmt_preload:n
+
 
 %%%%%%%
 %%% auxiliary, hack, commands
@@ -415,432 +690,495 @@
 %%% pre-defined sets
 %%%%%%%
 
-\__codehl_lang_register:nn { 00 } { codehl-00.def }
-\__codehl_lang_register:nn { 01 } { codehl-01.def }
-\__codehl_lang_register:nn { 02 } { codehl-02.def }
-\__codehl_lang_register:nn { 03 } { codehl-03.def }
-\__codehl_lang_register:nn { 04 } { codehl-04.def }
-\__codehl_lang_register:nn { 05 } { codehl-05.def }
-\__codehl_lang_register:nn { 06 } { codehl-06.def }
-\__codehl_lang_register:nn { 07 } { codehl-07.def }
-\__codehl_lang_register:nn { 08 } { codehl-08.def }
-\__codehl_lang_register:nn { 09 } { codehl-09.def }
-\__codehl_lang_register:nn { 0A } { codehl-0A.def }
-\__codehl_lang_register:nn { 0B } { codehl-0B.def }
-\__codehl_lang_register:nn { 0C } { codehl-0C.def }
-\__codehl_lang_register:nn { 0D } { codehl-0D.def }
-\__codehl_lang_register:nn { 0E } { codehl-0E.def }
-\__codehl_lang_register:nn { 0F } { codehl-0F.def }
-
-\__codehl_lang_register:nn { 10 } { codehl-10.def }
-\__codehl_lang_register:nn { 11 } { codehl-11.def }
-\__codehl_lang_register:nn { 12 } { codehl-12.def }
-\__codehl_lang_register:nn { 13 } { codehl-13.def }
-\__codehl_lang_register:nn { 14 } { codehl-14.def }
-\__codehl_lang_register:nn { 15 } { codehl-15.def }
-\__codehl_lang_register:nn { 16 } { codehl-16.def }
-\__codehl_lang_register:nn { 17 } { codehl-17.def }
-\__codehl_lang_register:nn { 18 } { codehl-18.def }
-\__codehl_lang_register:nn { 19 } { codehl-19.def }
-\__codehl_lang_register:nn { 1A } { codehl-1A.def }
-\__codehl_lang_register:nn { 1B } { codehl-1B.def }
-\__codehl_lang_register:nn { 1C } { codehl-1C.def }
-\__codehl_lang_register:nn { 1D } { codehl-1D.def }
-\__codehl_lang_register:nn { 1E } { codehl-1E.def }
-\__codehl_lang_register:nn { 1F } { codehl-1F.def }
-
-
-\__codehl_lang_register:nn { 20 } { codehl-20.def }
-\__codehl_lang_register:nn { 21 } { codehl-21.def }
-\__codehl_lang_register:nn { 22 } { codehl-22.def }
-\__codehl_lang_register:nn { 23 } { codehl-23.def }
-\__codehl_lang_register:nn { 24 } { codehl-24.def }
-\__codehl_lang_register:nn { 25 } { codehl-25.def }
-\__codehl_lang_register:nn { 26 } { codehl-26.def }
-\__codehl_lang_register:nn { 27 } { codehl-27.def }
-\__codehl_lang_register:nn { 28 } { codehl-28.def }
-\__codehl_lang_register:nn { 29 } { codehl-29.def }
-\__codehl_lang_register:nn { 2A } { codehl-2A.def }
-\__codehl_lang_register:nn { 2B } { codehl-2B.def }
-\__codehl_lang_register:nn { 2C } { codehl-2C.def }
-\__codehl_lang_register:nn { 2D } { codehl-2D.def }
-\__codehl_lang_register:nn { 2E } { codehl-2E.def }
-\__codehl_lang_register:nn { 2F } { codehl-2F.def }
-
-\__codehl_lang_register:nn { 30 } { codehl-30.def }
-\__codehl_lang_register:nn { 31 } { codehl-31.def }
-\__codehl_lang_register:nn { 32 } { codehl-32.def }
-\__codehl_lang_register:nn { 33 } { codehl-33.def }
-\__codehl_lang_register:nn { 34 } { codehl-34.def }
-\__codehl_lang_register:nn { 35 } { codehl-35.def }
-\__codehl_lang_register:nn { 36 } { codehl-36.def }
-\__codehl_lang_register:nn { 37 } { codehl-37.def }
-\__codehl_lang_register:nn { 38 } { codehl-38.def }
-\__codehl_lang_register:nn { 39 } { codehl-39.def }
-\__codehl_lang_register:nn { 3A } { codehl-3A.def }
-\__codehl_lang_register:nn { 3B } { codehl-3B.def }
-\__codehl_lang_register:nn { 3C } { codehl-3C.def }
-\__codehl_lang_register:nn { 3D } { codehl-3D.def }
-\__codehl_lang_register:nn { 3E } { codehl-3E.def }
-\__codehl_lang_register:nn { 3F } { codehl-3F.def }
-
-\__codehl_lang_register:nn { 40 } { codehl-40.def }
-\__codehl_lang_register:nn { 41 } { codehl-41.def }
-\__codehl_lang_register:nn { 42 } { codehl-42.def }
-\__codehl_lang_register:nn { 43 } { codehl-43.def }
-\__codehl_lang_register:nn { 44 } { codehl-44.def }
-\__codehl_lang_register:nn { 45 } { codehl-45.def }
-\__codehl_lang_register:nn { 46 } { codehl-46.def }
-\__codehl_lang_register:nn { 47 } { codehl-47.def }
-\__codehl_lang_register:nn { 48 } { codehl-48.def }
-\__codehl_lang_register:nn { 49 } { codehl-49.def }
-\__codehl_lang_register:nn { 4A } { codehl-4A.def }
-\__codehl_lang_register:nn { 4B } { codehl-4B.def }
-\__codehl_lang_register:nn { 4C } { codehl-4C.def }
-\__codehl_lang_register:nn { 4D } { codehl-4D.def }
-\__codehl_lang_register:nn { 4E } { codehl-4E.def }
-\__codehl_lang_register:nn { 4F } { codehl-4F.def }
-
-\__codehl_lang_register:nn { 50 } { codehl-50.def }
-\__codehl_lang_register:nn { 51 } { codehl-51.def }
-\__codehl_lang_register:nn { 52 } { codehl-52.def }
-\__codehl_lang_register:nn { 53 } { codehl-53.def }
-\__codehl_lang_register:nn { 54 } { codehl-54.def }
-\__codehl_lang_register:nn { 55 } { codehl-55.def }
-\__codehl_lang_register:nn { 56 } { codehl-56.def }
-\__codehl_lang_register:nn { 57 } { codehl-57.def }
-\__codehl_lang_register:nn { 58 } { codehl-58.def }
-\__codehl_lang_register:nn { 59 } { codehl-59.def }
-\__codehl_lang_register:nn { 5A } { codehl-5A.def }
-\__codehl_lang_register:nn { 5B } { codehl-5B.def }
-\__codehl_lang_register:nn { 5C } { codehl-5C.def }
-\__codehl_lang_register:nn { 5D } { codehl-5D.def }
-\__codehl_lang_register:nn { 5E } { codehl-5E.def }
-\__codehl_lang_register:nn { 5F } { codehl-5F.def }
-
-
-
+%\__codehl_lang_register:nn { 00 } { codehl-00.def }
+%\__codehl_lang_register:nn { 01 } { codehl-01.def }
+%\__codehl_lang_register:nn { 02 } { codehl-02.def }
+%\__codehl_lang_register:nn { 03 } { codehl-03.def }
+%\__codehl_lang_register:nn { 04 } { codehl-04.def }
+%\__codehl_lang_register:nn { 05 } { codehl-05.def }
+%\__codehl_lang_register:nn { 06 } { codehl-06.def }
+%\__codehl_lang_register:nn { 07 } { codehl-07.def }
+%\__codehl_lang_register:nn { 08 } { codehl-08.def }
+%\__codehl_lang_register:nn { 09 } { codehl-09.def }
+%\__codehl_lang_register:nn { 0A } { codehl-0A.def }
+%\__codehl_lang_register:nn { 0B } { codehl-0B.def }
+%\__codehl_lang_register:nn { 0C } { codehl-0C.def }
+%\__codehl_lang_register:nn { 0D } { codehl-0D.def }
+%\__codehl_lang_register:nn { 0E } { codehl-0E.def }
+%\__codehl_lang_register:nn { 0F } { codehl-0F.def }
+%
+%\__codehl_lang_register:nn { 10 } { codehl-10.def }
+%\__codehl_lang_register:nn { 11 } { codehl-11.def }
+%\__codehl_lang_register:nn { 12 } { codehl-12.def }
+%\__codehl_lang_register:nn { 13 } { codehl-13.def }
+%\__codehl_lang_register:nn { 14 } { codehl-14.def }
+%\__codehl_lang_register:nn { 15 } { codehl-15.def }
+%\__codehl_lang_register:nn { 16 } { codehl-16.def }
+%\__codehl_lang_register:nn { 17 } { codehl-17.def }
+%\__codehl_lang_register:nn { 18 } { codehl-18.def }
+%\__codehl_lang_register:nn { 19 } { codehl-19.def }
+%\__codehl_lang_register:nn { 1A } { codehl-1A.def }
+%\__codehl_lang_register:nn { 1B } { codehl-1B.def }
+%\__codehl_lang_register:nn { 1C } { codehl-1C.def }
+%\__codehl_lang_register:nn { 1D } { codehl-1D.def }
+%\__codehl_lang_register:nn { 1E } { codehl-1E.def }
+%\__codehl_lang_register:nn { 1F } { codehl-1F.def }
+%
+%
+%\__codehl_lang_register:nn { 20 } { codehl-20.def }
+%\__codehl_lang_register:nn { 21 } { codehl-21.def }
+%\__codehl_lang_register:nn { 22 } { codehl-22.def }
+%\__codehl_lang_register:nn { 23 } { codehl-23.def }
+%\__codehl_lang_register:nn { 24 } { codehl-24.def }
+%\__codehl_lang_register:nn { 25 } { codehl-25.def }
+%\__codehl_lang_register:nn { 26 } { codehl-26.def }
+%\__codehl_lang_register:nn { 27 } { codehl-27.def }
+%\__codehl_lang_register:nn { 28 } { codehl-28.def }
+%\__codehl_lang_register:nn { 29 } { codehl-29.def }
+%\__codehl_lang_register:nn { 2A } { codehl-2A.def }
+%\__codehl_lang_register:nn { 2B } { codehl-2B.def }
+%\__codehl_lang_register:nn { 2C } { codehl-2C.def }
+%\__codehl_lang_register:nn { 2D } { codehl-2D.def }
+%\__codehl_lang_register:nn { 2E } { codehl-2E.def }
+%\__codehl_lang_register:nn { 2F } { codehl-2F.def }
+%
+%\__codehl_lang_register:nn { 30 } { codehl-30.def }
+%\__codehl_lang_register:nn { 31 } { codehl-31.def }
+%\__codehl_lang_register:nn { 32 } { codehl-32.def }
+%\__codehl_lang_register:nn { 33 } { codehl-33.def }
+%\__codehl_lang_register:nn { 34 } { codehl-34.def }
+%\__codehl_lang_register:nn { 35 } { codehl-35.def }
+%\__codehl_lang_register:nn { 36 } { codehl-36.def }
+%\__codehl_lang_register:nn { 37 } { codehl-37.def }
+%\__codehl_lang_register:nn { 38 } { codehl-38.def }
+%\__codehl_lang_register:nn { 39 } { codehl-39.def }
+%\__codehl_lang_register:nn { 3A } { codehl-3A.def }
+%\__codehl_lang_register:nn { 3B } { codehl-3B.def }
+%\__codehl_lang_register:nn { 3C } { codehl-3C.def }
+%\__codehl_lang_register:nn { 3D } { codehl-3D.def }
+%\__codehl_lang_register:nn { 3E } { codehl-3E.def }
+%\__codehl_lang_register:nn { 3F } { codehl-3F.def }
+%
+%\__codehl_lang_register:nn { 40 } { codehl-40.def }
+%\__codehl_lang_register:nn { 41 } { codehl-41.def }
+%\__codehl_lang_register:nn { 42 } { codehl-42.def }
+%\__codehl_lang_register:nn { 43 } { codehl-43.def }
+%\__codehl_lang_register:nn { 44 } { codehl-44.def }
+%\__codehl_lang_register:nn { 45 } { codehl-45.def }
+%\__codehl_lang_register:nn { 46 } { codehl-46.def }
+%\__codehl_lang_register:nn { 47 } { codehl-47.def }
+%\__codehl_lang_register:nn { 48 } { codehl-48.def }
+%\__codehl_lang_register:nn { 49 } { codehl-49.def }
+%\__codehl_lang_register:nn { 4A } { codehl-4A.def }
+%\__codehl_lang_register:nn { 4B } { codehl-4B.def }
+%\__codehl_lang_register:nn { 4C } { codehl-4C.def }
+%\__codehl_lang_register:nn { 4D } { codehl-4D.def }
+%\__codehl_lang_register:nn { 4E } { codehl-4E.def }
+%\__codehl_lang_register:nn { 4F } { codehl-4F.def }
+%
+%\__codehl_lang_register:nn { 50 } { codehl-50.def }
+%\__codehl_lang_register:nn { 51 } { codehl-51.def }
+%\__codehl_lang_register:nn { 52 } { codehl-52.def }
+%\__codehl_lang_register:nn { 53 } { codehl-53.def }
+%\__codehl_lang_register:nn { 54 } { codehl-54.def }
+%\__codehl_lang_register:nn { 55 } { codehl-55.def }
+%\__codehl_lang_register:nn { 56 } { codehl-56.def }
+%\__codehl_lang_register:nn { 57 } { codehl-57.def }
+%\__codehl_lang_register:nn { 58 } { codehl-58.def }
+%\__codehl_lang_register:nn { 59 } { codehl-59.def }
+%\__codehl_lang_register:nn { 5A } { codehl-5A.def }
+%\__codehl_lang_register:nn { 5B } { codehl-5B.def }
+%\__codehl_lang_register:nn { 5C } { codehl-5C.def }
+%\__codehl_lang_register:nn { 5D } { codehl-5D.def }
+%\__codehl_lang_register:nn { 5E } { codehl-5E.def }
+%\__codehl_lang_register:nn { 5F } { codehl-5F.def }
 
 \__codehl_lang_register:nn   { TeX } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.l3 } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.l3sign } { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.primitive } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.primitive } { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.common } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.common } { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.LaTeX } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.LaTeX } { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.plain } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.plain } { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.AlLaTeX } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.AlLaTeX } { codehl-00.def }
-\__codehl_keyset_register:nn { Fortran.77 } { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.77 } { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.95 } { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.95 } { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.90 } { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.90 } { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.03 } { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.03 } { codehl-01.def }
-\__codehl_keyset_register:nn { ACSL } { codehl-01.def }
+\__codehl_lang_register:nn   { TeX.l3 }  { codehl-00.def }
+\__codehl_lang_register:nn   { TeX.l3sign }  { codehl-00.def }
+\__codehl_keyset_register:nn { TeX.primitive }  { codehl-00.def }
+\__codehl_lang_register:nn   { TeX.primitive }  { codehl-00.def }
+\__codehl_keyset_register:nn { TeX.common }  { codehl-00.def }
+\__codehl_lang_register:nn   { TeX.common }  { codehl-00.def }
+\__codehl_keyset_register:nn { TeX.LaTeX }  { codehl-00.def }
+\__codehl_lang_register:nn   { TeX.LaTeX }  { codehl-00.def }
+\__codehl_keyset_register:nn { TeX.plain }  { codehl-00.def }
+\__codehl_lang_register:nn   { TeX.plain }  { codehl-00.def }
+\__codehl_keyset_register:nn { TeX.AlLaTeX }  { codehl-00.def }
+\__codehl_lang_register:nn   { TeX.AlLaTeX }  { codehl-00.def }
+\__codehl_keyset_register:nn { Fortran.77 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran.77 }  { codehl-01.def }
+\__codehl_keyset_register:nn { Fortran.95 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran.95 }  { codehl-01.def }
+\__codehl_keyset_register:nn { Fortran.90 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran.90 }  { codehl-01.def }
+\__codehl_keyset_register:nn { Fortran.03 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran.03 }  { codehl-01.def }
+\__codehl_keyset_register:nn { ACSL }  { codehl-01.def }
 \__codehl_lang_register:nn   { ACSL } { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.08 } { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.08 } { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.18 } { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.18 } { codehl-01.def }
-\__codehl_keyset_register:nn { Cobol.1974 } { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol.1974 } { codehl-02.def }
-\__codehl_keyset_register:nn { Cobol.1985 } { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol.1985 } { codehl-02.def }
-\__codehl_keyset_register:nn { Cobol.ibm } { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol.ibm } { codehl-02.def }
-\__codehl_keyset_register:nn { PL/I } { codehl-03.def }
+\__codehl_keyset_register:nn { Fortran.08 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran.08 }  { codehl-01.def }
+\__codehl_keyset_register:nn { Fortran.18 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran.18 }  { codehl-01.def }
+\__codehl_lang_register:nn   { Fortran }  { codehl-01.def }
+\__codehl_keyset_register:nn { Fortran }  { codehl-01.def }
+\__codehl_keyset_register:nn { Cobol.74 }  { codehl-02.def }
+\__codehl_lang_register:nn   { Cobol.74 }  { codehl-02.def }
+\__codehl_keyset_register:nn { Cobol.85 }  { codehl-02.def }
+\__codehl_lang_register:nn   { Cobol.85 }  { codehl-02.def }
+\__codehl_keyset_register:nn { Cobol.IBM }  { codehl-02.def }
+\__codehl_lang_register:nn   { Cobol.IBM }  { codehl-02.def }
+\__codehl_lang_register:nn   { Cobol } { codehl-02.def }
+\__codehl_keyset_register:nn { Cobol }  { codehl-02.def }
+\__codehl_keyset_register:nn { PL/I }  { codehl-03.def }
 \__codehl_lang_register:nn   { PL/I } { codehl-03.def }
-\__codehl_keyset_register:nn { Ada.83 } { codehl-04.def }
-\__codehl_lang_register:nn   { Ada.83 } { codehl-04.def }
-\__codehl_keyset_register:nn { Ada.95 } { codehl-04.def }
-\__codehl_lang_register:nn   { Ada.95 } { codehl-04.def }
-\__codehl_keyset_register:nn { Ada.2005 } { codehl-04.def }
-\__codehl_lang_register:nn   { Ada.2005 } { codehl-04.def }
-\__codehl_keyset_register:nn { Awk.POSIX } { codehl-05.def }
-\__codehl_lang_register:nn   { Awk.POSIX } { codehl-05.def }
-\__codehl_keyset_register:nn { Awk.gnu } { codehl-05.def }
-\__codehl_lang_register:nn   { Awk.gnu } { codehl-05.def }
-\__codehl_keyset_register:nn { Basic.Visual } { codehl-06.def }
-\__codehl_lang_register:nn   { Basic.Visual } { codehl-06.def }
-\__codehl_keyset_register:nn { C.ANSI } { codehl-07.def }
-\__codehl_lang_register:nn   { C.ANSI } { codehl-07.def }
-\__codehl_keyset_register:nn { C.Handel } { codehl-07.def }
-\__codehl_lang_register:nn   { C.Handel } { codehl-07.def }
-\__codehl_keyset_register:nn { C.Objective } { codehl-07.def }
-\__codehl_lang_register:nn   { C.Objective } { codehl-07.def }
-\__codehl_keyset_register:nn { C++.ISO } { codehl-07.def }
-\__codehl_lang_register:nn   { C++.ISO } { codehl-07.def }
-\__codehl_keyset_register:nn { C++.Visual } { codehl-07.def }
-\__codehl_lang_register:nn   { C++.Visual } { codehl-07.def }
-\__codehl_keyset_register:nn { C++.GNU } { codehl-07.def }
-\__codehl_lang_register:nn   { C++.GNU } { codehl-07.def }
-\__codehl_keyset_register:nn { C++.ANSI } { codehl-07.def }
-\__codehl_lang_register:nn   { C++.ANSI } { codehl-07.def }
-\__codehl_keyset_register:nn { C++.11 } { codehl-07.def }
-\__codehl_lang_register:nn   { C++.11 } { codehl-07.def }
-\__codehl_keyset_register:nn { C.Sharp } { codehl-07.def }
-\__codehl_lang_register:nn   { C.Sharp } { codehl-07.def }
-\__codehl_keyset_register:nn { csh } { codehl-08.def }
+\__codehl_keyset_register:nn { Ada.83 }  { codehl-04.def }
+\__codehl_lang_register:nn   { Ada.83 }  { codehl-04.def }
+\__codehl_keyset_register:nn { Ada.95 }  { codehl-04.def }
+\__codehl_lang_register:nn   { Ada.95 }  { codehl-04.def }
+\__codehl_keyset_register:nn { Ada.05 }  { codehl-04.def }
+\__codehl_lang_register:nn   { Ada.05 }  { codehl-04.def }
+\__codehl_lang_register:nn   { Ada } { codehl-04.def }
+\__codehl_keyset_register:nn { Ada }  { codehl-04.def }
+\__codehl_keyset_register:nn { Awk.POSIX }  { codehl-05.def }
+\__codehl_lang_register:nn   { Awk.POSIX }  { codehl-05.def }
+\__codehl_keyset_register:nn { Awk.gnu }  { codehl-05.def }
+\__codehl_lang_register:nn   { Awk.gnu }  { codehl-05.def }
+\__codehl_lang_register:nn   { Awk } { codehl-05.def }
+\__codehl_keyset_register:nn { Awk }  { codehl-05.def }
+\__codehl_keyset_register:nn { Basic.Visual }  { codehl-06.def }
+\__codehl_lang_register:nn   { Basic.Visual }  { codehl-06.def }
+\__codehl_lang_register:nn   { VB } { codehl-06.def }
+\__codehl_keyset_register:nn { VB }  { codehl-06.def }
+\__codehl_keyset_register:nn { C.ANSI }  { codehl-07.def }
+\__codehl_lang_register:nn   { C.ANSI }  { codehl-07.def }
+\__codehl_keyset_register:nn { C.Handel }  { codehl-07.def }
+\__codehl_lang_register:nn   { C.Handel }  { codehl-07.def }
+\__codehl_keyset_register:nn { C.Objective }  { codehl-07.def }
+\__codehl_lang_register:nn   { C.Objective }  { codehl-07.def }
+\__codehl_keyset_register:nn { C++.ISO }  { codehl-07.def }
+\__codehl_lang_register:nn   { C++.ISO }  { codehl-07.def }
+\__codehl_keyset_register:nn { C++.Visual }  { codehl-07.def }
+\__codehl_lang_register:nn   { C++.Visual }  { codehl-07.def }
+\__codehl_keyset_register:nn { C++.GNU }  { codehl-07.def }
+\__codehl_lang_register:nn   { C++.GNU }  { codehl-07.def }
+\__codehl_keyset_register:nn { C++.ANSI }  { codehl-07.def }
+\__codehl_lang_register:nn   { C++.ANSI }  { codehl-07.def }
+\__codehl_keyset_register:nn { C++.11 }  { codehl-07.def }
+\__codehl_lang_register:nn   { C++.11 }  { codehl-07.def }
+\__codehl_keyset_register:nn { C.Sharp }  { codehl-07.def }
+\__codehl_lang_register:nn   { C.Sharp }  { codehl-07.def }
+\__codehl_lang_register:nn   { C } { codehl-07.def }
+\__codehl_keyset_register:nn { C } { codehl-07.def }
+\__codehl_keyset_register:nn { csh }  { codehl-08.def }
 \__codehl_lang_register:nn   { csh } { codehl-08.def }
-\__codehl_keyset_register:nn { sh } { codehl-08.def }
+\__codehl_keyset_register:nn { sh }  { codehl-08.def }
 \__codehl_lang_register:nn   { sh } { codehl-08.def }
-\__codehl_keyset_register:nn { bash } { codehl-08.def }
+\__codehl_keyset_register:nn { bash }  { codehl-08.def }
 \__codehl_lang_register:nn   { bash } { codehl-08.def }
-\__codehl_keyset_register:nn { ksh } { codehl-08.def }
+\__codehl_keyset_register:nn { ksh }  { codehl-08.def }
 \__codehl_lang_register:nn   { ksh } { codehl-08.def }
-\__codehl_keyset_register:nn { HTML } { codehl-09.def }
+\__codehl_keyset_register:nn { HTML }  { codehl-09.def }
 \__codehl_lang_register:nn   { HTML } { codehl-09.def }
-\__codehl_keyset_register:nn { XML } { codehl-0A.def }
+\__codehl_keyset_register:nn { XML }  { codehl-0A.def }
 \__codehl_lang_register:nn   { XML } { codehl-0A.def }
-\__codehl_keyset_register:nn { XSLT } { codehl-0A.def }
+\__codehl_keyset_register:nn { XSLT }  { codehl-0A.def }
 \__codehl_lang_register:nn   { XSLT } { codehl-0A.def }
-\__codehl_keyset_register:nn { Ant } { codehl-0A.def }
+\__codehl_keyset_register:nn { Ant }  { codehl-0A.def }
 \__codehl_lang_register:nn   { Ant } { codehl-0A.def }
-\__codehl_keyset_register:nn { PHP } { codehl-0B.def }
+\__codehl_keyset_register:nn { PHP }  { codehl-0B.def }
 \__codehl_lang_register:nn   { PHP } { codehl-0B.def }
-\__codehl_keyset_register:nn { Java } { codehl-0C.def }
+\__codehl_keyset_register:nn { Java }  { codehl-0C.def }
 \__codehl_lang_register:nn   { Java } { codehl-0C.def }
-\__codehl_keyset_register:nn { Java.AspectJ } { codehl-0C.def }
-\__codehl_lang_register:nn   { Java.AspectJ } { codehl-0C.def }
-\__codehl_keyset_register:nn { JVMIS } { codehl-0C.def }
+\__codehl_keyset_register:nn { AspectJ }  { codehl-0C.def }
+\__codehl_lang_register:nn   { AspectJ }  { codehl-0C.def }
+\__codehl_keyset_register:nn { JVMIS }  { codehl-0C.def }
 \__codehl_lang_register:nn   { JVMIS } { codehl-0C.def }
-\__codehl_keyset_register:nn { Matlab } { codehl-0D.def }
-\__codehl_lang_register:nn   { Matlab } { codehl-0D.def }
-\__codehl_keyset_register:nn { Matlab.5.1 } { codehl-0D.def }
-\__codehl_lang_register:nn   { Matlab.5.1 } { codehl-0D.def }
-\__codehl_keyset_register:nn { Octave } { codehl-0E.def }
-\__codehl_lang_register:nn   { Octave } { codehl-0E.def }
-\__codehl_keyset_register:nn { Mathematica.1.0 } { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.1.0 } { codehl-0F.def }
-\__codehl_keyset_register:nn { Mathematica.3.0 } { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.3.0 } { codehl-0F.def }
-\__codehl_keyset_register:nn { Mathematica.5.2 } { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.5.2 } { codehl-0F.def }
+\__codehl_keyset_register:nn { Matlab }  { codehl-0D.def }
+\__codehl_lang_register:nn   { Matlab }  { codehl-0D.def }
+\__codehl_keyset_register:nn { Matlab.5.1 }  { codehl-0D.def }
+\__codehl_lang_register:nn   { Matlab.5.1 }  { codehl-0D.def }
+\__codehl_keyset_register:nn { Octave }  { codehl-0E.def }
+\__codehl_lang_register:nn   { Octave }  { codehl-0E.def }
+\__codehl_keyset_register:nn { Mathematica.1.0 }  { codehl-0F.def }
+\__codehl_lang_register:nn   { Mathematica.1.0 }  { codehl-0F.def }
+\__codehl_keyset_register:nn { Mathematica.3.0 }  { codehl-0F.def }
+\__codehl_lang_register:nn   { Mathematica.3.0 }  { codehl-0F.def }
+\__codehl_keyset_register:nn { Mathematica.5.2 }  { codehl-0F.def }
+\__codehl_lang_register:nn   { Mathematica.5.2 }  { codehl-0F.def }
 \__codehl_keyset_register:nn { Mathematica.11.0 } { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.11.0 } { codehl-0F.def }
-\__codehl_keyset_register:nn { Algol.68 } { codehl-10.def }
-\__codehl_lang_register:nn   { Algol.68 } { codehl-10.def }
-\__codehl_keyset_register:nn { Algol.60 } { codehl-10.def }
-\__codehl_lang_register:nn   { Algol.60 } { codehl-10.def }
-\__codehl_keyset_register:nn { Pascal.Standard } { codehl-11.def }
-\__codehl_lang_register:nn   { Pascal.Standard } { codehl-11.def }
-\__codehl_keyset_register:nn { Pascal.XSC } { codehl-11.def }
-\__codehl_lang_register:nn   { Pascal.XSC } { codehl-11.def }
-\__codehl_keyset_register:nn { Pascal.Borland6 } { codehl-11.def }
-\__codehl_lang_register:nn   { Pascal.Borland6 } { codehl-11.def }
-\__codehl_keyset_register:nn { Modula-2 } { codehl-12.def }
-\__codehl_lang_register:nn   { Modula-2 } { codehl-12.def }
-\__codehl_keyset_register:nn { Eiffel } { codehl-13.def }
-\__codehl_lang_register:nn   { Eiffel } { codehl-13.def }
-\__codehl_keyset_register:nn { Delphi } { codehl-14.def }
-\__codehl_lang_register:nn   { Delphi } { codehl-14.def }
-\__codehl_keyset_register:nn { Perl } { codehl-15.def }
+\__codehl_lang_register:nn   { Mathematica.11.0 }  { codehl-0F.def }
+\__codehl_lang_register:nn   { Mathematica }  { codehl-0F.def }
+\__codehl_keyset_register:nn { Mathematica }  { codehl-0F.def }
+\__codehl_keyset_register:nn { Algol.68 }  { codehl-10.def }
+\__codehl_lang_register:nn   { Algol.68 }  { codehl-10.def }
+\__codehl_keyset_register:nn { Algol.60 }  { codehl-10.def }
+\__codehl_lang_register:nn   { Algol.60 }  { codehl-10.def }
+\__codehl_lang_register:nn   { Algol } { codehl-10.def }
+\__codehl_keyset_register:nn { Algol }  { codehl-10.def }
+\__codehl_keyset_register:nn { Pascal.Standard }  { codehl-11.def }
+\__codehl_lang_register:nn   { Pascal.Standard }  { codehl-11.def }
+\__codehl_keyset_register:nn { Pascal.XSC }  { codehl-11.def }
+\__codehl_lang_register:nn   { Pascal.XSC }  { codehl-11.def }
+\__codehl_keyset_register:nn { Pascal.Borland6 }  { codehl-11.def }
+\__codehl_lang_register:nn   { Pascal.Borland6 }  { codehl-11.def }
+\__codehl_keyset_register:nn { Modula-2 }  { codehl-12.def }
+\__codehl_lang_register:nn   { Modula-2 }  { codehl-12.def }
+\__codehl_keyset_register:nn { Eiffel }  { codehl-13.def }
+\__codehl_lang_register:nn   { Eiffel }  { codehl-13.def }
+\__codehl_keyset_register:nn { Delphi }  { codehl-14.def }
+\__codehl_lang_register:nn   { Delphi }  { codehl-14.def }
+\__codehl_keyset_register:nn { Perl }  { codehl-15.def }
 \__codehl_lang_register:nn   { Perl } { codehl-15.def }
-\__codehl_keyset_register:nn { POV } { codehl-16.def }
+\__codehl_keyset_register:nn { POV }  { codehl-16.def }
 \__codehl_lang_register:nn   { POV } { codehl-16.def }
-\__codehl_keyset_register:nn { Python.2 } { codehl-17.def }
-\__codehl_lang_register:nn   { Python.2 } { codehl-17.def }
-\__codehl_keyset_register:nn { Python.3 } { codehl-17.def }
-\__codehl_lang_register:nn   { Python.3 } { codehl-17.def }
-\__codehl_keyset_register:nn { Scilab } { codehl-18.def }
-\__codehl_lang_register:nn   { Scilab } { codehl-18.def }
-\__codehl_keyset_register:nn { SQL } { codehl-19.def }
+\__codehl_keyset_register:nn { Python.2 }  { codehl-17.def }
+\__codehl_lang_register:nn   { Python.2 }  { codehl-17.def }
+\__codehl_keyset_register:nn { Python.3 }  { codehl-17.def }
+\__codehl_lang_register:nn   { Python.3 }  { codehl-17.def }
+\__codehl_lang_register:nn   { Python }  { codehl-17.def }
+\__codehl_keyset_register:nn { Python }  { codehl-17.def }
+\__codehl_keyset_register:nn { Scilab }  { codehl-18.def }
+\__codehl_lang_register:nn   { Scilab }  { codehl-18.def }
+\__codehl_keyset_register:nn { SQL }  { codehl-19.def }
 \__codehl_lang_register:nn   { SQL } { codehl-19.def }
-\__codehl_keyset_register:nn { VHDL } { codehl-1A.def }
+\__codehl_keyset_register:nn { VHDL }  { codehl-1A.def }
 \__codehl_lang_register:nn   { VHDL } { codehl-1A.def }
-\__codehl_keyset_register:nn { VHDL.AMS } { codehl-1A.def }
-\__codehl_lang_register:nn   { VHDL.AMS } { codehl-1A.def }
-\__codehl_keyset_register:nn { Verilog } { codehl-1B.def }
-\__codehl_lang_register:nn   { Verilog } { codehl-1B.def }
-\__codehl_keyset_register:nn { ABAP.R/25.0 } { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/25.0 } { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/33.1 } { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/33.1 } { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/34.6C } { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/34.6C } { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/36.10 } { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/36.10 } { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/24.3 } { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/24.3 } { codehl-1C.def }
-\__codehl_keyset_register:nn { ACM } { codehl-1D.def }
+\__codehl_keyset_register:nn { VHDL.AMS }  { codehl-1A.def }
+\__codehl_lang_register:nn   { VHDL.AMS }  { codehl-1A.def }
+\__codehl_keyset_register:nn { Verilog }  { codehl-1B.def }
+\__codehl_lang_register:nn   { Verilog }  { codehl-1B.def }
+\__codehl_keyset_register:nn { ABAP.R/2-5.0 }  { codehl-1C.def }
+\__codehl_lang_register:nn   { ABAP.R/2-5.0 }  { codehl-1C.def }
+\__codehl_keyset_register:nn { ABAP.R/3-3.1 }  { codehl-1C.def }
+\__codehl_lang_register:nn   { ABAP.R/3-3.1 }  { codehl-1C.def }
+\__codehl_keyset_register:nn { ABAP.R/3-4.6C }  { codehl-1C.def }
+\__codehl_lang_register:nn   { ABAP.R/3-4.6C }  { codehl-1C.def }
+\__codehl_keyset_register:nn { ABAP.R/3-6.10 }  { codehl-1C.def }
+\__codehl_lang_register:nn   { ABAP.R/3-6.10 }  { codehl-1C.def }
+\__codehl_keyset_register:nn { ABAP.R/2-4.3 }  { codehl-1C.def }
+\__codehl_lang_register:nn   { ABAP.R/2-4.3 }  { codehl-1C.def }
+\__codehl_lang_register:nn   { ABAP } { codehl-1C.def }
+\__codehl_keyset_register:nn { ABAP }  { codehl-1C.def }
+\__codehl_keyset_register:nn { ACM }  { codehl-1D.def }
 \__codehl_lang_register:nn   { ACM } { codehl-1D.def }
-\__codehl_keyset_register:nn { VBScript } { codehl-1E.def }
-\__codehl_lang_register:nn   { VBScript } { codehl-1E.def }
-\__codehl_keyset_register:nn { ACMscript } { codehl-1E.def }
-\__codehl_lang_register:nn   { ACMscript } { codehl-1E.def }
-\__codehl_keyset_register:nn { IDL.CORBA } { codehl-1F.def }
-\__codehl_lang_register:nn   { IDL.CORBA } { codehl-1F.def }
-\__codehl_keyset_register:nn { Caml.light } { codehl-20.def }
-\__codehl_lang_register:nn   { Caml.light } { codehl-20.def }
-\__codehl_keyset_register:nn { Caml.Objective } { codehl-20.def }
-\__codehl_lang_register:nn   { Caml.Objective } { codehl-20.def }
-\__codehl_keyset_register:nn { CMake } { codehl-21.def }
+\__codehl_keyset_register:nn { VBScript }  { codehl-1E.def }
+\__codehl_lang_register:nn   { VBScript }  { codehl-1E.def }
+\__codehl_keyset_register:nn { ACMscript }  { codehl-1E.def }
+\__codehl_lang_register:nn   { ACMscript }  { codehl-1E.def }
+\__codehl_keyset_register:nn { IDL.CORBA }  { codehl-1F.def }
+\__codehl_lang_register:nn   { IDL.CORBA }  { codehl-1F.def }
+\__codehl_keyset_register:nn { Caml.light }  { codehl-20.def }
+\__codehl_lang_register:nn   { Caml.light }  { codehl-20.def }
+\__codehl_keyset_register:nn { Caml.Objective }  { codehl-20.def }
+\__codehl_lang_register:nn   { Caml.Objective }  { codehl-20.def }
+\__codehl_lang_register:nn   { Caml } { codehl-20.def }
+\__codehl_keyset_register:nn { Caml }  { codehl-20.def }
+\__codehl_keyset_register:nn { CMake }  { codehl-21.def }
 \__codehl_lang_register:nn   { CMake } { codehl-21.def }
-\__codehl_keyset_register:nn { make.gnu } { codehl-22.def }
-\__codehl_lang_register:nn   { make.gnu } { codehl-22.def }
-\__codehl_keyset_register:nn { make } { codehl-22.def }
+\__codehl_keyset_register:nn { make.gnu }  { codehl-22.def }
+\__codehl_lang_register:nn   { make.gnu }  { codehl-22.def }
+\__codehl_keyset_register:nn { make }  { codehl-22.def }
 \__codehl_lang_register:nn   { make } { codehl-22.def }
-\__codehl_keyset_register:nn { Euphoria } { codehl-23.def }
-\__codehl_lang_register:nn   { Euphoria } { codehl-23.def }
-\__codehl_keyset_register:nn { GAP } { codehl-24.def }
+\__codehl_keyset_register:nn { Euphoria }  { codehl-23.def }
+\__codehl_lang_register:nn   { Euphoria }  { codehl-23.def }
+\__codehl_keyset_register:nn { GAP }  { codehl-24.def }
 \__codehl_lang_register:nn   { GAP } { codehl-24.def }
-\__codehl_keyset_register:nn { GCL } { codehl-25.def }
+\__codehl_keyset_register:nn { GCL }  { codehl-25.def }
 \__codehl_lang_register:nn   { GCL } { codehl-25.def }
-\__codehl_keyset_register:nn { Gnuplot } { codehl-26.def }
-\__codehl_lang_register:nn   { Gnuplot } { codehl-26.def }
-\__codehl_keyset_register:nn { hansl } { codehl-27.def }
+\__codehl_keyset_register:nn { Gnuplot }  { codehl-26.def }
+\__codehl_lang_register:nn   { Gnuplot }  { codehl-26.def }
+\__codehl_keyset_register:nn { hansl }  { codehl-27.def }
 \__codehl_lang_register:nn   { hansl } { codehl-27.def }
-\__codehl_keyset_register:nn { Haskell } { codehl-28.def }
-\__codehl_lang_register:nn   { Haskell } { codehl-28.def }
-\__codehl_keyset_register:nn { IDL } { codehl-29.def }
+\__codehl_keyset_register:nn { Haskell }  { codehl-28.def }
+\__codehl_lang_register:nn   { Haskell }  { codehl-28.def }
+\__codehl_keyset_register:nn { IDL }  { codehl-29.def }
 \__codehl_lang_register:nn   { IDL } { codehl-29.def }
-\__codehl_keyset_register:nn { Inform } { codehl-2A.def }
-\__codehl_lang_register:nn   { Inform } { codehl-2A.def }
-\__codehl_keyset_register:nn { Lisp } { codehl-2B.def }
+\__codehl_keyset_register:nn { Inform }  { codehl-2A.def }
+\__codehl_lang_register:nn   { Inform }  { codehl-2A.def }
+\__codehl_keyset_register:nn { Lisp }  { codehl-2B.def }
 \__codehl_lang_register:nn   { Lisp } { codehl-2B.def }
-\__codehl_keyset_register:nn { elisp } { codehl-2B.def }
+\__codehl_keyset_register:nn { elisp }  { codehl-2B.def }
 \__codehl_lang_register:nn   { elisp } { codehl-2B.def }
-\__codehl_keyset_register:nn { Lisp.Auto } { codehl-2C.def }
-\__codehl_lang_register:nn   { Lisp.Auto } { codehl-2C.def }
-\__codehl_keyset_register:nn { Lua.5.0 } { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.0 } { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua.5.1 } { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.1 } { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua.5.2 } { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.2 } { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua.5.3 } { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.3 } { codehl-2D.def }
-\__codehl_keyset_register:nn { Mercury } { codehl-2E.def }
-\__codehl_lang_register:nn   { Mercury } { codehl-2E.def }
-\__codehl_keyset_register:nn { Miranda } { codehl-2F.def }
-\__codehl_lang_register:nn   { Miranda } { codehl-2F.def }
-\__codehl_keyset_register:nn { ML } { codehl-30.def }
+\__codehl_keyset_register:nn { Lisp.Auto }  { codehl-2C.def }
+\__codehl_lang_register:nn   { Lisp.Auto }  { codehl-2C.def }
+\__codehl_keyset_register:nn { Lua.5.0 }  { codehl-2D.def }
+\__codehl_lang_register:nn   { Lua.5.0 }  { codehl-2D.def }
+\__codehl_keyset_register:nn { Lua.5.1 }  { codehl-2D.def }
+\__codehl_lang_register:nn   { Lua.5.1 }  { codehl-2D.def }
+\__codehl_keyset_register:nn { Lua.5.2 }  { codehl-2D.def }
+\__codehl_lang_register:nn   { Lua.5.2 }  { codehl-2D.def }
+\__codehl_keyset_register:nn { Lua.5.3 }  { codehl-2D.def }
+\__codehl_lang_register:nn   { Lua.5.3 }  { codehl-2D.def }
+\__codehl_lang_register:nn   { Lua } { codehl-2D.def }
+\__codehl_keyset_register:nn { Lua }  { codehl-2D.def }
+\__codehl_keyset_register:nn { Mercury }  { codehl-2E.def }
+\__codehl_lang_register:nn   { Mercury }  { codehl-2E.def }
+\__codehl_keyset_register:nn { Miranda }  { codehl-2F.def }
+\__codehl_lang_register:nn   { Miranda }  { codehl-2F.def }
+\__codehl_keyset_register:nn { ML }  { codehl-30.def }
 \__codehl_lang_register:nn   { ML } { codehl-30.def }
-\__codehl_keyset_register:nn { Oz } { codehl-31.def }
+\__codehl_keyset_register:nn { Oz }  { codehl-31.def }
 \__codehl_lang_register:nn   { Oz } { codehl-31.def }
-\__codehl_keyset_register:nn { Prolog } { codehl-32.def }
-\__codehl_lang_register:nn   { Prolog } { codehl-32.def }
-\__codehl_keyset_register:nn { Rexx } { codehl-33.def }
+\__codehl_keyset_register:nn { Prolog }  { codehl-32.def }
+\__codehl_lang_register:nn   { Prolog }  { codehl-32.def }
+\__codehl_keyset_register:nn { Rexx }  { codehl-33.def }
 \__codehl_lang_register:nn   { Rexx } { codehl-33.def }
-\__codehl_keyset_register:nn { Rexx.VM/XA } { codehl-33.def }
-\__codehl_lang_register:nn   { Rexx.VM/XA } { codehl-33.def }
-\__codehl_keyset_register:nn { OORexx } { codehl-33.def }
-\__codehl_lang_register:nn   { OORexx } { codehl-33.def }
-\__codehl_keyset_register:nn { Ruby } { codehl-34.def }
+\__codehl_keyset_register:nn { Rexx.VM/XA }  { codehl-33.def }
+\__codehl_lang_register:nn   { Rexx.VM/XA }  { codehl-33.def }
+\__codehl_keyset_register:nn { OORexx }  { codehl-33.def }
+\__codehl_lang_register:nn   { OORexx }  { codehl-33.def }
+\__codehl_keyset_register:nn { Ruby }  { codehl-34.def }
 \__codehl_lang_register:nn   { Ruby } { codehl-34.def }
-\__codehl_keyset_register:nn { SHELXL } { codehl-35.def }
-\__codehl_lang_register:nn   { SHELXL } { codehl-35.def }
-\__codehl_keyset_register:nn { tcl } { codehl-36.def }
+\__codehl_keyset_register:nn { SHELXL }  { codehl-35.def }
+\__codehl_lang_register:nn   { SHELXL }  { codehl-35.def }
+\__codehl_keyset_register:nn { tcl }  { codehl-36.def }
 \__codehl_lang_register:nn   { tcl } { codehl-36.def }
-\__codehl_keyset_register:nn { tcl.tk } { codehl-36.def }
-\__codehl_lang_register:nn   { tcl.tk } { codehl-36.def }
-\__codehl_keyset_register:nn { VRML.97 } { codehl-37.def }
-\__codehl_lang_register:nn   { VRML.97 } { codehl-37.def }
-\__codehl_keyset_register:nn { Assembler.Motorola68k } { codehl-38.def }
-\__codehl_lang_register:nn   { Assembler.Motorola68k } { codehl-38.def }
-\__codehl_keyset_register:nn { Assembler.x86masm } { codehl-39.def }
-\__codehl_lang_register:nn   { Assembler.x86masm } { codehl-39.def }
-\__codehl_keyset_register:nn { Assembler.riscv } { codehl-3A.def }
-\__codehl_lang_register:nn   { Assembler.riscv } { codehl-3A.def }
-\__codehl_keyset_register:nn { Clean } { codehl-3B.def }
+\__codehl_keyset_register:nn { tcl.tk }  { codehl-36.def }
+\__codehl_lang_register:nn   { tcl.tk }  { codehl-36.def }
+\__codehl_keyset_register:nn { VRML.97 }  { codehl-37.def }
+\__codehl_lang_register:nn   { VRML.97 }  { codehl-37.def }
+\__codehl_keyset_register:nn { asm.Motorola68k }  { codehl-38.def }
+\__codehl_lang_register:nn   { asm.Motorola68k }  { codehl-38.def }
+\__codehl_lang_register:nn   { Motorola68k }  { codehl-38.def }
+\__codehl_keyset_register:nn { Motorola68k }  { codehl-38.def }
+\__codehl_keyset_register:nn { asm.x86 }  { codehl-39.def }
+\__codehl_lang_register:nn   { asm.x86 }  { codehl-39.def }
+\__codehl_lang_register:nn   { x86 } { codehl-39.def }
+\__codehl_keyset_register:nn { x86 }  { codehl-39.def }
+\__codehl_keyset_register:nn { asm.riscv }  { codehl-3A.def }
+\__codehl_lang_register:nn   { asm.riscv }  { codehl-3A.def }
+\__codehl_lang_register:nn   { riscv } { codehl-3A.def }
+\__codehl_keyset_register:nn { riscv }  { codehl-3A.def }
+\__codehl_keyset_register:nn { Clean }  { codehl-3B.def }
 \__codehl_lang_register:nn   { Clean } { codehl-3B.def }
-\__codehl_keyset_register:nn { CIL } { codehl-3C.def }
+\__codehl_keyset_register:nn { CIL }  { codehl-3C.def }
 \__codehl_lang_register:nn   { CIL } { codehl-3C.def }
-\__codehl_keyset_register:nn { Comal.80 } { codehl-3D.def }
-\__codehl_lang_register:nn   { Comal.80 } { codehl-3D.def }
+\__codehl_keyset_register:nn { Comal.80 }  { codehl-3D.def }
+\__codehl_lang_register:nn   { Comal.80 }  { codehl-3D.def }
+\__codehl_lang_register:nn   { Comal } { codehl-3D.def }
+\__codehl_keyset_register:nn { Comal }  { codehl-3D.def }
 \__codehl_keyset_register:nn { command.com.WinXP } { codehl-3E.def }
-\__codehl_lang_register:nn   { command.com.WinXP } { codehl-3E.def }
-\__codehl_keyset_register:nn { Comsol } { codehl-3F.def }
-\__codehl_lang_register:nn   { Comsol } { codehl-3F.def }
-\__codehl_keyset_register:nn { Elan } { codehl-40.def }
+\__codehl_lang_register:nn   { command.com.WinXP }  { codehl-3E.def }
+\__codehl_keyset_register:nn { Comsol }  { codehl-3F.def }
+\__codehl_lang_register:nn   { Comsol }  { codehl-3F.def }
+\__codehl_keyset_register:nn { Elan }  { codehl-40.def }
 \__codehl_lang_register:nn   { Elan } { codehl-40.def }
-\__codehl_keyset_register:nn { erlang } { codehl-41.def }
-\__codehl_lang_register:nn   { erlang } { codehl-41.def }
-\__codehl_keyset_register:nn { Go } { codehl-42.def }
+\__codehl_keyset_register:nn { erlang }  { codehl-41.def }
+\__codehl_lang_register:nn   { erlang }  { codehl-41.def }
+\__codehl_keyset_register:nn { Go }  { codehl-42.def }
 \__codehl_lang_register:nn   { Go } { codehl-42.def }
-\__codehl_keyset_register:nn { Scala } { codehl-43.def }
+\__codehl_keyset_register:nn { Scala }  { codehl-43.def }
 \__codehl_lang_register:nn   { Scala } { codehl-43.def }
-\__codehl_keyset_register:nn { Scala.3.0 } { codehl-43.def }
-\__codehl_lang_register:nn   { Scala.3.0 } { codehl-43.def }
-\__codehl_keyset_register:nn { Lingo } { codehl-44.def }
+\__codehl_keyset_register:nn { Scala.3.0 }  { codehl-43.def }
+\__codehl_lang_register:nn   { Scala.3.0 }  { codehl-43.def }
+\__codehl_keyset_register:nn { Lingo }  { codehl-44.def }
 \__codehl_lang_register:nn   { Lingo } { codehl-44.def }
-\__codehl_keyset_register:nn { LLVM } { codehl-45.def }
+\__codehl_keyset_register:nn { LLVM }  { codehl-45.def }
 \__codehl_lang_register:nn   { LLVM } { codehl-45.def }
-\__codehl_keyset_register:nn { Logo } { codehl-46.def }
+\__codehl_keyset_register:nn { Logo }  { codehl-46.def }
 \__codehl_lang_register:nn   { Logo } { codehl-46.def }
-\__codehl_keyset_register:nn { MetaPost } { codehl-47.def }
-\__codehl_lang_register:nn   { MetaPost } { codehl-47.def }
-\__codehl_keyset_register:nn { PostScript } { codehl-48.def }
-\__codehl_lang_register:nn   { PostScript } { codehl-48.def }
-\__codehl_keyset_register:nn { PSTricks } { codehl-49.def }
-\__codehl_lang_register:nn   { PSTricks } { codehl-49.def }
-\__codehl_keyset_register:nn { Mizar } { codehl-4A.def }
+\__codehl_keyset_register:nn { MetaPost }  { codehl-47.def }
+\__codehl_lang_register:nn   { MetaPost }  { codehl-47.def }
+\__codehl_keyset_register:nn { PostScript }  { codehl-48.def }
+\__codehl_lang_register:nn   { PostScript }  { codehl-48.def }
+\__codehl_keyset_register:nn { PSTricks }  { codehl-49.def }
+\__codehl_lang_register:nn   { PSTricks }  { codehl-49.def }
+\__codehl_keyset_register:nn { Mizar }  { codehl-4A.def }
 \__codehl_lang_register:nn   { Mizar } { codehl-4A.def }
-\__codehl_keyset_register:nn { MuPAD } { codehl-4B.def }
+\__codehl_keyset_register:nn { MuPAD }  { codehl-4B.def }
 \__codehl_lang_register:nn   { MuPAD } { codehl-4B.def }
-\__codehl_keyset_register:nn { NASTRAN } { codehl-4C.def }
-\__codehl_lang_register:nn   { NASTRAN } { codehl-4C.def }
-\__codehl_keyset_register:nn { Oberon-2 } { codehl-4D.def }
-\__codehl_lang_register:nn   { Oberon-2 } { codehl-4D.def }
-\__codehl_keyset_register:nn { OCL.OMG } { codehl-4E.def }
-\__codehl_lang_register:nn   { OCL.OMG } { codehl-4E.def }
-\__codehl_keyset_register:nn { OCL.decorative } { codehl-4E.def }
-\__codehl_lang_register:nn   { OCL.decorative } { codehl-4E.def }
-\__codehl_keyset_register:nn { Plasm } { codehl-4F.def }
+\__codehl_keyset_register:nn { NASTRAN }  { codehl-4C.def }
+\__codehl_lang_register:nn   { NASTRAN }  { codehl-4C.def }
+\__codehl_keyset_register:nn { Oberon-2 }  { codehl-4D.def }
+\__codehl_lang_register:nn   { Oberon-2 }  { codehl-4D.def }
+\__codehl_keyset_register:nn { OCL.OMG }  { codehl-4E.def }
+\__codehl_lang_register:nn   { OCL.OMG }  { codehl-4E.def }
+\__codehl_keyset_register:nn { OCL.decorative }  { codehl-4E.def }
+\__codehl_lang_register:nn   { OCL.decorative }  { codehl-4E.def }
+\__codehl_lang_register:nn   { OCL } { codehl-4E.def }
+\__codehl_keyset_register:nn { OCL }  { codehl-4E.def }
+\__codehl_keyset_register:nn { Plasm }  { codehl-4F.def }
 \__codehl_lang_register:nn   { Plasm } { codehl-4F.def }
-\__codehl_keyset_register:nn { Promela } { codehl-50.def }
-\__codehl_lang_register:nn   { Promela } { codehl-50.def }
-\__codehl_keyset_register:nn { Reduce } { codehl-51.def }
-\__codehl_lang_register:nn   { Reduce } { codehl-51.def }
-\__codehl_keyset_register:nn { RSL } { codehl-52.def }
+\__codehl_keyset_register:nn { Promela }  { codehl-50.def }
+\__codehl_lang_register:nn   { Promela }  { codehl-50.def }
+\__codehl_keyset_register:nn { Reduce }  { codehl-51.def }
+\__codehl_lang_register:nn   { Reduce }  { codehl-51.def }
+\__codehl_keyset_register:nn { RSL }  { codehl-52.def }
 \__codehl_lang_register:nn   { RSL } { codehl-52.def }
-\__codehl_keyset_register:nn { Simula.67 } { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.67 } { codehl-53.def }
-\__codehl_keyset_register:nn { Simula.DEC } { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.DEC } { codehl-53.def }
-\__codehl_keyset_register:nn { Simula.CII } { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.CII } { codehl-53.def }
-\__codehl_keyset_register:nn { Simula.IBM } { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.IBM } { codehl-53.def }
-\__codehl_keyset_register:nn { SPARQL } { codehl-54.def }
-\__codehl_lang_register:nn   { SPARQL } { codehl-54.def }
-\__codehl_keyset_register:nn { Swift } { codehl-55.def }
+\__codehl_keyset_register:nn { Simula.67 }  { codehl-53.def }
+\__codehl_lang_register:nn   { Simula.67 }  { codehl-53.def }
+\__codehl_keyset_register:nn { Simula.DEC }  { codehl-53.def }
+\__codehl_lang_register:nn   { Simula.DEC }  { codehl-53.def }
+\__codehl_keyset_register:nn { Simula.CII }  { codehl-53.def }
+\__codehl_lang_register:nn   { Simula.CII }  { codehl-53.def }
+\__codehl_keyset_register:nn { Simula.IBM }  { codehl-53.def }
+\__codehl_lang_register:nn   { Simula.IBM }  { codehl-53.def }
+\__codehl_lang_register:nn   { Simula }  { codehl-53.def }
+\__codehl_keyset_register:nn { Simula }  { codehl-53.def }
+\__codehl_keyset_register:nn { SPARQL }  { codehl-54.def }
+\__codehl_lang_register:nn   { SPARQL }  { codehl-54.def }
+\__codehl_keyset_register:nn { Swift }  { codehl-55.def }
 \__codehl_lang_register:nn   { Swift } { codehl-55.def }
 \__codehl_keyset_register:nn { R } { codehl-56.def }
 \__codehl_lang_register:nn   { R } { codehl-56.def }
 \__codehl_keyset_register:nn { S } { codehl-56.def }
 \__codehl_lang_register:nn   { S } { codehl-56.def }
-\__codehl_keyset_register:nn { S.PLUS } { codehl-56.def }
-\__codehl_lang_register:nn   { S.PLUS } { codehl-56.def }
-\__codehl_keyset_register:nn { SAS } { codehl-57.def }
+\__codehl_keyset_register:nn { S.PLUS }  { codehl-56.def }
+\__codehl_lang_register:nn   { S.PLUS }  { codehl-56.def }
+\__codehl_keyset_register:nn { SAS }  { codehl-57.def }
 \__codehl_lang_register:nn   { SAS } { codehl-57.def }
-\__codehl_keyset_register:nn { TeX.l3kernel } { codehl-58.def }
+\__codehl_keyset_register:nn { TeX.l3kernel }  { codehl-58.def }
 \__codehl_keyset_register:nn { TeX.l3kernelsign } { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3exp } { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3expsign } { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3ams } { codehl-59.def }
-\__codehl_keyset_register:nn { TeX.l3amssign } { codehl-59.def }
-\__codehl_keyset_register:nn { TeX.l3pgf } { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.l3pgfsign } { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.l3bibtex } { codehl-5A.def }
+\__codehl_keyset_register:nn { TeX.l3exp }  { codehl-58.def }
+\__codehl_keyset_register:nn { TeX.l3expsign }  { codehl-58.def }
+\__codehl_keyset_register:nn { TeX.l3ams }  { codehl-59.def }
+\__codehl_keyset_register:nn { TeX.l3amssign }  { codehl-59.def }
+\__codehl_keyset_register:nn { TeX.l3pgf }  { codehl-5A.def }
+\__codehl_keyset_register:nn { TeX.l3pgfsign }  { codehl-5A.def }
+\__codehl_keyset_register:nn { TeX.l3bibtex }  { codehl-5A.def }
 \__codehl_keyset_register:nn { TeX.l3bibtexsign } { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.babel } { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.hyperref } { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.kernel } { codehl-5B.def }
-\__codehl_keyset_register:nn { TeX.xpacks } { codehl-5B.def }
-\__codehl_keyset_register:nn { TeX.ams } { codehl-5C.def }
-\__codehl_keyset_register:nn { TeX.bibtex } { codehl-5C.def }
-\__codehl_keyset_register:nn { TeX.pgf } { codehl-5D.def }
-\__codehl_keyset_register:nn { TeX.pgfplots } { codehl-5D.def }
+\__codehl_keyset_register:nn { TeX.babel }  { codehl-5A.def }
+\__codehl_keyset_register:nn { TeX.hyperref }  { codehl-5A.def }
+\__codehl_keyset_register:nn { TeX.kernel }  { codehl-5B.def }
+\__codehl_keyset_register:nn { TeX.xpacks }  { codehl-5B.def }
+\__codehl_keyset_register:nn { TeX.ams }  { codehl-5C.def }
+\__codehl_keyset_register:nn { TeX.bibtex }  { codehl-5C.def }
+\__codehl_keyset_register:nn { TeX.pgf }  { codehl-5D.def }
+\__codehl_keyset_register:nn { TeX.pgfplots }  { codehl-5D.def }
 
 
+%%%%%%%
+%%% package settings
+%%%%%%%
 
+\keys_define:nn { codehl / pkg settings }
+  {
+
+    suppress ~ notes .choices:nn =
+      { true , false }
+      {
+        \if_case:w \l_keys_choice_int
+        \or:
+          \msg_redirect_name:nnn { codehl / lang } { info note } { none }
+          \msg_redirect_name:nnn { codehl / keyset } { info note } { none }
+          \msg_redirect_name:nnn { codehl / hlset } { info note } { none }
+          \msg_redirect_name:nnn { codehl / basefmt } { info note } { none }
+        \or:
+          \msg_redirect_name:nnn { codehl / lang } { info note } { }
+          \msg_redirect_name:nnn { codehl / keyset } { info note } { }
+          \msg_redirect_name:nnn { codehl / hlset } { info note } { }
+          \msg_redirect_name:nnn { codehl / basefmt } { info note } { }
+        \fi:
+      } ,
+    suppress ~ notes .default:n = true ,
+  }
+
+\cs_new_protected:Npn \codehl_pkg_settings:n #1
+  {
+    \keys_set:nn { codehl / pkg settings } { #1 }
+  }
+\cs_set_eq:NN \hlPackSettings \codehl_pkg_settings:n
 
 
 %%%%%%%
@@ -849,7 +1187,7 @@
 
 
 \tl_new:N     \l__codehl_def_basefmt_tl
-\tl_new:N     \l__codehl_def_hlfmtset_tl
+\tl_new:N     \l__codehl_def_hlset_tl
 \tl_new:N     \l__codehl_def_keyset_tl
 \tl_new:N     \l__codehl_def_lang_tl
 
@@ -868,19 +1206,31 @@
 \seq_new:N    \l__codehl_basedon_tmpa_seq
 \int_new:N    \l__codehl_remapcount_int
 
-\seq_new:N    \l__codehl_langsets_seq
+\tl_new:N     \l__codehl_basedon_tmpa_tl
+\tl_new:N     \l__codehl_basedon_tmpb_tl
+\tl_new:N     \l__codehl_basedon_tmpc_tl
+\tl_new:N     \l__codehl_basedon_tmpd_tl
+
+%%%
+%%% These are for: 1.if exist 2.alias
+\prop_new_linked:N    \l__codehl_sets_lang_prop
+\prop_new_linked:N    \l__codehl_sets_keyset_prop
+\prop_new_linked:N    \l__codehl_sets_hlset_prop
+\prop_new_linked:N    \l__codehl_sets_basefmt_prop
+
+\tl_new:N    \l__codehl_alias_lang_tl
+\tl_new:N    \l__codehl_alias_keyset_tl
+\tl_new:N    \l__codehl_alias_hlset_tl
+\tl_new:N    \l__codehl_alias_basefmt_tl
 
 \int_new:N    \l__codehl_lang_dlimit_cntA_int
 \int_new:N    \l__codehl_lang_dlimit_cntB_int
 
-
+\bool_new:N \l__codehl_keyset_lc_key_bool
 
 \tl_new:N \l__codehl_lang_opt_key_tl
 \tl_new:N \l__codehl_lang_opt_nestkey_tl
 \tl_new:N \l__codehl_lang_opt_tagkey_tl
-
-
-
 
 \bool_new:N   \l__codehl_tok_lineset_bool
 
@@ -893,10 +1243,11 @@
 \bool_new:N   \l__codehl_display_bool
 \tl_new:N     \l__codehl_tok_inline_aux_tl
 
-\tl_new:N     \l__codehl_tok_tmp_tl
+\tl_new:N     \l__codehl_tok_tmpa_tl
+\tl_new:N     \l__codehl_tok_tmpb_tl
 
 \tl_new:N     \l__codehl_tok_activ_basefmt_tl
-\tl_new:N     \l__codehl_tok_activ_hlfmtset_tl
+\tl_new:N     \l__codehl_tok_activ_hlset_tl
 \tl_new:N     \l__codehl_tok_activ_keyset_tl
 \tl_new:N     \l__codehl_tok_activ_lang_tl
 
@@ -944,7 +1295,6 @@
 \cs_set:Npn   \__codehl_tok_current_base:N {}
 
 
-
 %%%%%%%
 %%% yeah... for 'nested' identifiers
 %%%%%%%
@@ -956,13 +1306,6 @@
 %%% <tok> stack related ones
 %%%%%%%
 \bool_new:N \l__codehl_tok_upto_eol_bool
-
-%\seq_new:N  \g__codehl_stack_nestedfmt_seq
-%\bool_const:Nn \c__codehl_stack_fmtsave_bool
-%  { \c_true_bool }
-%\bool_const:Nn \c__codehl_stack_no_fmtsave_bool
-%  { \c_false_bool }
-
 
 
 %%%%%%%
@@ -1053,6 +1396,7 @@
         \cs_set_eq:NN \__codehl_tok_next_line:w \prg_do_nothing:
       }
       {
+
         \bool_if:NTF \l__codehl_tok_lineset_bool
           {
             \coffin_typeset:Nnnnn \l__codehl_line_coffin
@@ -1069,7 +1413,6 @@
 
         \int_incr:N \l__codehl_tok_line_int
         \int_zero:N \l__codehl_tok_col_int
-
 
         \__codehl_tok_proc:N #1 \q_nil %%%
         \__codehl_tok_disp_line:
@@ -1109,7 +1452,6 @@
 %        \@width\z@}%
 %\makeatother
 %\def\strutX{ \relax\ifmmode\copy\strutbox\else\unhcopy\strutbox\fi }
-
 
 
 \cs_new_protected:Npn \__codehl_attach_leftnum:
@@ -1355,12 +1697,74 @@
           { \__codehl_set_build_false:nn { #1 } { ##1 } }
       }
   }
+\cs_generate_variant:Nn \__codehl_set_build_derived_false:nn { no }
 
 %%%%%%%
 %%% generic based on
 %%%%%%%
 \regex_const:Nn \c__codehl_basedon_regex
   { ([RS])\[(\d+)\](.+) }
+
+
+%%%
+%%% what needs to be saved right before potentially loading a file (and triggering a nested definition)
+%%% \l__codehl_basedon_tmp[a-c]_tl
+%%% \l__codehl_def_[...]_tl
+%%% \__codehl_basedon_AUX_if_def:nNTF
+%%%
+%%% TODO: others if 'the logic changes' :/
+%%%
+\globalstack_csnew:n    { __codehl_basedon_stack }
+\cs_generate_variant:Nn  \__codehl_basedon_stack_gpush:n { e }
+
+\prg_new_conditional:Npnn \__codehl_basedon_if_def:nN #1#2 { TF }
+  {
+    \__codehl_basedon_stack_gpush:e
+      {
+        %%% 'local' ones (not always needed)
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_basedon_tmpa_tl
+          { \exp_not:o \l__codehl_basedon_tmpa_tl }
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_basedon_tmpb_tl
+          { \exp_not:o \l__codehl_basedon_tmpb_tl }
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_basedon_tmpc_tl
+          { \exp_not:o \l__codehl_basedon_tmpc_tl }
+
+        %%% the loading file might contain more than one declaration
+        %%% only one (at a time) really needed... which one is the nag.
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_def_lang_tl
+          { \exp_not:o \l__codehl_def_lang_tl }
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_def_keyset_tl
+          { \exp_not:o \l__codehl_def_keyset_tl }
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_def_hlset_tl
+          { \exp_not:o \l__codehl_def_hlset_tl }
+        \exp_not:N \tl_set:Nn
+          \exp_not:N \l__codehl_def_basefmt_tl
+          { \exp_not:o \l__codehl_def_basefmt_tl }
+
+        %%% the current _if_def:nNTF
+        \exp_not:N \cs_set:Npn
+          \exp_not:N \__codehl_basedon_eff_if_def:nNTF
+          { \exp_not:o \__codehl_basedon_eff_if_def:nNTF }
+      }
+
+    %%% _eff_if_def: might trigger a file loading (if pre-defs)
+    \__codehl_basedon_eff_if_def:nNTF { #1 } #2
+      {
+        \__codehl_basedon_stack_gpop:
+        \prg_return_true:
+      }
+      {
+        \__codehl_basedon_stack_gpop:
+        \prg_return_false:
+      }
+  }
+\prg_generate_conditional_variant:Nnn \__codehl_basedon_if_def:nN { o } { TF }
 
 
 \prg_new_protected_conditional:Npnn \__codehl_basedon_extract:nnn #1#2#3 { TF }
@@ -1372,21 +1776,24 @@
         \seq_pop_left:NN \l__codehl_basedon_tmpa_seq \l__codehl_basedon_tmpb_tl %% <int>
         \seq_pop_left:NN \l__codehl_basedon_tmpa_seq \l__codehl_basedon_tmpc_tl %% parent
 
-        \seq_if_exist:cTF { l__codehl_ #1 _ \l__codehl_basedon_tmpc_tl _derived_seq }
+
+        \__codehl_basedon_if_def:oNTF
+          \l__codehl_basedon_tmpc_tl \l__codehl_basedon_tmpd_tl
+%        \seq_if_exist:cTF { l__codehl_ #1 _ \l__codehl_basedon_tmpc_tl _derived_seq }
           {
             \str_case:onTF \l__codehl_basedon_tmpa_tl
               {
                 { R }   %% remap case
                   {
-                    \seq_put_right:co { l__codehl_ #1 _ #2 _basedon_seq } \l__codehl_basedon_tmpc_tl
-                    \seq_put_right:ce { l__codehl_ #1 _ #2 _basedonB_seq } { { 1 } { \l__codehl_basedon_tmpb_tl } { \l__codehl_basedon_tmpc_tl } }
-                    \seq_put_right:cn { l__codehl_ #1 _ \l__codehl_basedon_tmpc_tl _derived_seq } { #2 }
+                    \seq_put_right:co { l__codehl_ #1 _ #2 _basedon_seq } \l__codehl_basedon_tmpd_tl
+                    \seq_put_right:ce { l__codehl_ #1 _ #2 _basedonB_seq } { { 1 } { \l__codehl_basedon_tmpb_tl } { \l__codehl_basedon_tmpd_tl } }
+                    \seq_put_right:cn { l__codehl_ #1 _ \l__codehl_basedon_tmpd_tl _derived_seq } { #2 }
                   }
                 { S }   %% set case
                   {
-                    \seq_put_right:co { l__codehl_ #1 _ #2 _basedon_seq } \l__codehl_basedon_tmpc_tl
-                    \seq_put_right:ce { l__codehl_ #1 _ #2 _basedonB_seq } { { 2 } { \l__codehl_basedon_tmpb_tl } { \l__codehl_basedon_tmpc_tl } }
-                    \seq_put_right:cn { l__codehl_ #1 _ \l__codehl_basedon_tmpc_tl _derived_seq } { #2 }
+                    \seq_put_right:co { l__codehl_ #1 _ #2 _basedon_seq } \l__codehl_basedon_tmpd_tl
+                    \seq_put_right:ce { l__codehl_ #1 _ #2 _basedonB_seq } { { 2 } { \l__codehl_basedon_tmpb_tl } { \l__codehl_basedon_tmpd_tl } }
+                    \seq_put_right:cn { l__codehl_ #1 _ \l__codehl_basedon_tmpd_tl _derived_seq } { #2 }
                   }
               }
               { \prg_return_true: }
@@ -1396,21 +1803,23 @@
                 \prg_return_false:
               } %% err
           }
-          { % non-existant hlfmtset
+          {
             \msg_error:nnne { codehl / #1 } { non existant base }
               { based02 } \l__codehl_basedon_tmpc_tl
             \prg_return_false:
           }
       }
       {
-        \seq_if_exist:cTF { l__codehl_ #1 _ #3 _derived_seq }
+        \__codehl_basedon_if_def:nNTF
+          { #3 } \l__codehl_basedon_tmpd_tl
+%        \seq_if_exist:cTF { l__codehl_ #1 _ #3 _derived_seq }
           {
-            \seq_put_right:cn { l__codehl_ #1 _ #2 _basedon_seq } { #3 }
-            \seq_put_right:cn { l__codehl_ #1 _ #2 _basedonB_seq } { { 0 } { 0 } { #3 } }
-            \seq_put_right:cn { l__codehl_ #1 _ #3 _derived_seq } { #2 }
+            \seq_put_right:ce { l__codehl_ #1 _ #2 _basedon_seq } { \exp_not:o \l__codehl_basedon_tmpd_tl }
+            \seq_put_right:ce { l__codehl_ #1 _ #2 _basedonB_seq } { { 0 } { 0 } { \exp_not:o \l__codehl_basedon_tmpd_tl } }
+            \seq_put_right:cn { l__codehl_ #1 _ \l__codehl_basedon_tmpd_tl _derived_seq } { #2 }
             \prg_return_true:
           }
-          { % non-existant hlfmtset
+          {
             \msg_error:nnnn { codehl / #1 } { non existant base }
               { based03 } { #3 }
             \prg_return_false:
@@ -1438,6 +1847,7 @@
         \__codehl_basedon_extract:nnnTF { #1 } { #2 } { ##1 }
           { } %% OK, no errors
           {
+            %%% TODO: there was already an error mensage !
             \msg_error:nnnn { codehl /  #1  } { based on syntax }
               { based04 } { ##1 }
           }
@@ -1596,7 +2006,7 @@
 
 %%%%%%%
 %%% <keys> internal => external labels
-%%% The ones 'not defined here' won't show at \codehl_baseformat_show:n
+%%% The ones 'not defined here' won't show at \codehl_basefmt_show:n
 %%% (hidden properties)
 %%%%%%%
 \prop_const_linked_from_keyval:Nn \c__codehl_basefmt_keys_name_prop
@@ -1635,11 +2045,13 @@
     based ~ on .code:n =
       {
         \bool_if:NTF \l__codehl_display_bool
-          { %%% TODO err, not allowed
+          {
             \msg_error:nnnn { codehl / display } { based on err }
               { disp01 } { base~fmt }
           }
           {
+            \cs_set:Npn \__codehl_basedon_eff_if_def:nNTF
+              { \__codehl_basefmt_if_def:nNTF }
             \__codehl_basedon:non { base fmt } \l__codehl_def_basefmt_tl { #1 }
             \__codehl_set_build_false:no { base fmt } \l__codehl_def_basefmt_tl
           }
@@ -1687,6 +2099,16 @@
         \fi:
       } ,
     numbers .value_required:n = true ,
+
+    info / note .code:n =
+      {
+        \msg_info:nnneen { codehl / basefmt } { info note }
+          { basemft00 }
+          \l__codehl_def_keyset_tl
+          { \g_file_curr_name_str \g_file_curr_ext_str }
+          { #1 }
+      } ,
+
 
   }
 
@@ -1810,31 +2232,6 @@
       { \cs_set_eq:NN \__codehl_Brule_coffin_attach: \prg_do_nothing: }
   }
 
-%\__codehl_basefmt_keys_define_bool:nnnn { nested ~ keywd } { keywd } { true }
-%  {
-%    \bool_if:NTF \l__codehl_tok_style_keywd_bool
-%      {
-%        \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
-%          { \__codehl_tok_keyfmt:Ncoo }
-%      }
-%      {
-%        \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
-%          { \__codehl_tok_keyfmt_less:Ncoo }
-%      }
-%  }
-
-%\__codehl_basefmt_keys_define_bool:nnnn { case ~ sensitive } { keywdcase } { true }
-%  {
-%    \bool_if:NTF \l__codehl_tok_style_keywdcase_bool
-%      {
-%        \cs_set:Npn \__codehl_tok_keywd_case:N
-%          { \__codehl_tok_keywd_casesensitive:N }
-%      }
-%      {
-%        \cs_set:Npn \__codehl_tok_keywd_case:N
-%          { \__codehl_tok_keywd_caseless:N }
-%      }
-%  }
 
 \__codehl_basefmt_keys_define:nnn { gobble } { gbbl }
   {
@@ -1972,14 +2369,86 @@
       { }
   }
 
-\cs_new_protected:Npn \codehl_baseformat:nn #1#2
+
+\prg_new_conditional:Npnn \__codehl_basefmt_if_def:nN #1#2 { TF }
   {
-    \tl_set:Nn \l__codehl_def_basefmt_tl { #1 }
-    \prop_if_exist:cTF { l__codehl_basefmt_  \l__codehl_def_basefmt_tl _keys_prop }
+    \prop_get:NnNTF \l__codehl_sets_basefmt_prop
+      { #1 } #2
+      { \prg_return_true: }
       {
-        \__codehl_set_build_derived_false:nn { base fmt } { #1 }
+        \__codehl_basefmt_load_if_predef:nTF { #1 }
+          {
+            \prop_get:NnNTF \l__codehl_sets_basefmt_prop
+              { #1 } #2
+              { \prg_return_true: }
+              { \prg_return_false: } %%% it shouldn't be the case
+          }
+          { \prg_return_false: }
+      }
+  }
+\prg_generate_conditional_variant:Nnn \__codehl_basefmt_if_def:nN { o } { TF }
+
+\prg_new_conditional:Npnn \__codehl_basefmt_alias:n #1 { TF }
+  {
+    \__codehl_basefmt_if_def:nNTF
+      { #1 } \l__codehl_def_basefmt_tl
+      {
+        \str_if_eq:noTF { #1 } \l__codehl_def_basefmt_tl
+          { \prg_return_false: }
+          { \prg_return_true: }
+      }
+      { \prg_return_true: }
+  }
+
+\cs_new_protected:Npn \codehl_basefmt_alias:nn #1#2
+  {
+    \__codehl_basefmt_alias:nTF { #1 }
+      {
+        %%% OK... new or redefining an alias
+        \__codehl_basefmt_if_def:nNTF
+          { #2 } \l__codehl_def_basefmt_tl
+          {
+            \prop_put:Nno \l__codehl_sets_basefmt_prop
+              { #1 }
+              \l__codehl_def_basefmt_tl
+
+            \msg_info:nnnnen { codehl / basefmt } { info note }
+              { basefmt02c }
+              { #1 }
+              { \g_file_curr_name_str \g_file_curr_ext_str }
+              { Alias ~ definition: ~ \{ #1 \} ~ => ~ \{ #2 \} }
+          }
+          {
+            \msg_error:nnnn { codehl / basefmt } { non existant }
+              { basefmt02a } { #2 }
+          }
       }
       {
+        %%% Err... it's a 'basefmt definition'
+        \msg_error:nnnn { codehl / basefmt } { alias err }
+          { basefmt02b } { #1 }
+      }
+  }
+\cs_set_eq:NN \hlBasefmtAlias \codehl_basefmt_alias:nn
+
+
+\cs_new_protected:Npn \codehl_basefmt_def:nn #1#2
+  {
+
+%    \prop_get:NnNTF \l__codehl_sets_basefmt_prop
+    \__codehl_basefmt_if_def:nNTF
+      { #1 } \l__codehl_def_basefmt_tl
+      {
+        \__codehl_set_build_derived_false:no { basefmt } \l__codehl_def_basefmt_tl
+      }
+      {
+        \tl_set:Nn \l__codehl_def_basefmt_tl { #1 }
+
+        \prop_put:Nnn \l__codehl_sets_basefmt_prop
+          { #1 }
+          { #1 }
+
+
         %% this will store common itens (background, numbers, frame ...)
         \prop_new_linked:c { l__codehl_basefmt_  #1 _keys_prop }
         \prop_new_linked:c { l__codehl_basefmt_  #1 _build_keys_prop } %% same, when building up a format
@@ -2001,9 +2470,10 @@
         \seq_new:c  { l__codehl_basefmt_ #1 _basedonB_seq }
 
       }
+
     \keys_set:nn { codehl / base fmt } { #2 }
   }
-\cs_set_eq:NN \hlBaseFormat \codehl_baseformat:nn
+\cs_set_eq:NN \hlBasefmtDef \codehl_basefmt_def:nn
 
 \cs_new_protected:Npn \__codehl_basefmt_build_cmd:nn #1#2
   {
@@ -2039,22 +2509,6 @@
   }
 \cs_generate_variant:Nn \__codehl_basefmt_build_ifnot:nn { o }
 
-%%% full/generic test
-\prg_new_protected_conditional:Npnn \__codehl_basefmt_test_n_build:n #1 { TF }
-  {
-    \bool_if_exist:cTF { l__codehl_basefmt_ #1 _build_bool }
-      {
-        \bool_if:cTF { l__codehl_basefmt_ #1 _build_bool }
-          { \prg_return_true: }
-          {
-            \__codehl_basefmt_build:n { #1 }
-            \prg_return_true:
-          }
-      }
-      { \prg_return_false: }
-  }
-\prg_generate_conditional_variant:Nnn \__codehl_basefmt_test_n_build:n { o } { TF }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2062,256 +2516,318 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\keys_define:nn { codehl / hlfmtset }
+\keys_define:nn { codehl / hlset }
   {
     based ~ on .code:n =
       {
         \bool_if:NTF \l__codehl_display_bool
-          { %%% TODO err, not allowed
+          {
             \msg_error:nnnn { codehl / display } { based on err }
               { disp02 } { hl~set }
           }
           {
-            \__codehl_basedon:non { hlfmtset } \l__codehl_def_hlfmtset_tl { #1 }
-            \__codehl_set_build_false:no { hlfmtset } \l__codehl_def_hlfmtset_tl
+            \cs_set:Npn \__codehl_basedon_eff_if_def:nNTF
+              { \__codehl_hlset_if_def:nNTF }
+            \__codehl_basedon:non { hlset } \l__codehl_def_hlset_tl { #1 }
+            \__codehl_set_build_false:no { hlset } \l__codehl_def_hlset_tl
           }
       } ,
     based ~ on .value_required:n = true ,
 
     comment .code:n =
       {
-        \__codehl_hlfmtset_set:nn { comment } { #1 }
+        \__codehl_hlset_set:nn { comment } { #1 }
       } ,
     comment .value_required:n = true ,
 
     string .code:n =
       {
-        \__codehl_hlfmtset_set:nn { string } { #1 }
+        \__codehl_hlset_set:nn { string } { #1 }
       } ,
     string .value_required:n = true ,
 
     keywd .code:n =
       {
-        \__codehl_hlfmtset_set:nn { keywd } { #1 }
+        \__codehl_hlset_set:nn { keywd } { #1 }
       } ,
     keywd .value_required:n = true ,
 
     unknown .code:n =
       {
-        \__codehl_hlfmtset_set:on \l_keys_key_str { #1 }
+        \__codehl_hlset_set:on \l_keys_key_str { #1 }
       } ,
     unknown .value_required:n = true ,
+
+    info / note .code:n =
+      {
+        \msg_info:nnneen { codehl / hlset } { info note }
+          { hlset00 }
+          \l__codehl_def_keyset_tl
+          { \g_file_curr_name_str \g_file_curr_ext_str }
+          { #1 }
+      } ,
+
   }
 
-\cs_new_protected:Npn \__codehl_hlfmtset_set:nn #1#2
+\cs_new_protected:Npn \__codehl_hlset_set:nn #1#2
   {
      \__codehl_test_ii:nwTF #2 \q_nil \q_stop
       {
-        \__codehl_hlfmtset_set:nnnwn { #1 } #2 \q_nil \q_stop { #2 }
+        \__codehl_hlset_set:nnnwn { #1 } #2 \q_nil \q_stop { #2 }
       }
       {
-        \msg_error:nnnenn { codehl /  hlfmtset } { syntax err }
-          { hlfmtset01b }
-          \l__codehl_def_hlfmtset_tl
+        \msg_error:nnnenn { codehl /  hlset } { syntax err }
+          { hlset01b }
+          \l__codehl_def_hlset_tl
           { #1 ~=~ #2 }
           { #1 ~=~ { <class> } { <format~cmds> } }
       }
   }
-\cs_generate_variant:Nn \__codehl_hlfmtset_set:nn { o }
+\cs_generate_variant:Nn \__codehl_hlset_set:nn { o }
 
 %%%%%%%
-%%% <hlfmtset-key> ~=~ { <hlfmtset-key> } { <class> } { <format> } \q_nil \q_stop { <key-val> }
+%%% <hlset-key> ~=~ { <hlset-key> } { <class> } { <format> } \q_nil \q_stop { <key-val> }
 %%%%%%%
-\cs_new_protected:Npn \__codehl_hlfmtset_set:nnnwn #1#2#3 #4 \q_stop #5
+\cs_new_protected:Npn \__codehl_hlset_set:nnnwn #1#2#3 #4 \q_stop #5
   {
     \quark_if_nil:nTF { #4 }
       {
-        \prop_if_exist:cTF { l__codehl_hlfmtset_  \l__codehl_def_hlfmtset_tl _ #1 _prop }
+        \prop_if_exist:cTF { l__codehl_hlset_  \l__codehl_def_hlset_tl _ #1 _prop }
           {
           }
           {
-            \prop_new_linked:c { l__codehl_hlfmtset_  \l__codehl_def_hlfmtset_tl _ #1 _prop }
-            \seq_put_right:cn { l__codehl_hlfmtset_  \l__codehl_def_hlfmtset_tl _seq } { #1 }
+            \prop_new_linked:c { l__codehl_hlset_  \l__codehl_def_hlset_tl _ #1 _prop }
+            \seq_put_right:cn { l__codehl_hlset_  \l__codehl_def_hlset_tl _seq } { #1 }
           }
-        \prop_put:cnn { l__codehl_hlfmtset_  \l__codehl_def_hlfmtset_tl _ #1 _prop }
+        \prop_put:cnn { l__codehl_hlset_  \l__codehl_def_hlset_tl _ #1 _prop }
           { #2 }
           { #3 }
-        \bool_if:cTF { l__codehl_hlfmtset_  \l__codehl_def_hlfmtset_tl _build_bool }
+        \bool_if:cTF { l__codehl_hlset_  \l__codehl_def_hlset_tl _build_bool }
           {
-            \__codehl_hlfmtset_build_prop:on \l__codehl_def_hlfmtset_tl { #1 }
-            \prop_put:cen { l__codehl_hlfmtset_ \l__codehl_def_hlfmtset_tl _ #1 _prop }
+            \__codehl_hlset_build_prop:on \l__codehl_def_hlset_tl { #1 }
+            \prop_put:cen { l__codehl_hlset_ \l__codehl_def_hlset_tl _ #1 _prop }
               { #2 } { #3 }
-            \prop_put:cen { l__codehl_hlfmtset_ \l__codehl_def_hlfmtset_tl _ #1 _build_prop }
+            \prop_put:cen { l__codehl_hlset_ \l__codehl_def_hlset_tl _ #1 _build_prop }
               { #2 } { #3 }
 
-            \__codehl_hlfmtset_build_set:onnn \l__codehl_def_hlfmtset_tl { #1 } { #2 } { #3 }
+            \__codehl_hlset_build_set:onnn \l__codehl_def_hlset_tl { #1 } { #2 } { #3 }
           }
           { }
       }
       { %err
-        \msg_error:nnnenn { codehl /  hlfmtset } { syntax err }
-          { hlfmtset01a }
-          \l__codehl_def_hlfmtset_tl
+        \msg_error:nnnenn { codehl /  hlset } { syntax err }
+          { hlset01a }
+          \l__codehl_def_hlset_tl
           { #1 ~=~ #5 }
           { #1 ~=~ { <class> } { <format~cmds> } }
       }
   }
 
-\cs_new_protected:Npn \codehl_hlset:nn #1#2
+
+\prg_new_conditional:Npnn \__codehl_hlset_if_def:nN #1#2 { TF }
   {
-    \tl_set:Nn \l__codehl_def_hlfmtset_tl { #1 }
-    \seq_if_exist:cTF { l__codehl_hlfmtset_  \l__codehl_def_hlfmtset_tl _seq }
+    \prop_get:NnNTF \l__codehl_sets_hlset_prop
+      { #1 } #2
+      { \prg_return_true: }
       {
-        \__codehl_set_build_derived_false:nn { hlfmtset } { #1 }
+        \__codehl_hlset_load_if_predef:nTF { #1 }
+          {
+            \prop_get:NnNTF \l__codehl_sets_hlset_prop
+              { #1 } #2
+              { \prg_return_true: }
+              { \prg_return_false: } %%% it shouldn't be the case
+          }
+          { \prg_return_false: }
+      }
+  }
+\prg_generate_conditional_variant:Nnn \__codehl_hlset_if_def:nN { o } { TF }
+
+\prg_new_conditional:Npnn \__codehl_hlset_alias:n #1 { TF }
+  {
+    \__codehl_hlset_if_def:nNTF
+      { #1 } \l__codehl_def_hlset_tl
+      {
+        \str_if_eq:noTF { #1 } \l__codehl_def_hlset_tl
+          { \prg_return_false: }
+          { \prg_return_true: }
+      }
+      { \prg_return_true: }
+  }
+
+\cs_new_protected:Npn \codehl_hlset_alias:nn #1#2
+  {
+    \__codehl_hlset_alias:nTF { #1 }
+      {
+        %%% OK... new or redefining an alias
+        \__codehl_hlset_if_def:nNTF
+          { #2 } \l__codehl_def_hlset_tl
+          {
+            \prop_put:Nno \l__codehl_sets_hlset_prop
+              { #1 }
+              \l__codehl_def_hlset_tl
+
+            \msg_info:nnnnen { codehl / hlset } { info note }
+              { hlset02c }
+              { #1 }
+              { \g_file_curr_name_str \g_file_curr_ext_str }
+              { Alias ~ definition: ~ \{ #1 \} ~ => ~ \{ #2 \} }
+          }
+          {
+            \msg_error:nnnn { codehl / hlset } { non existant }
+              { hlset02a } { #2 }
+          }
       }
       {
-        %% this will store the many  'keys' (comment,string,keywd...) each key will have its prop...
-        \seq_new:c { l__codehl_hlfmtset_  #1 _seq }
+        %%% Err... it's a 'hlsetuage definition'
+        \msg_error:nnnn { codehl / hlset } { alias err }
+          { hlset02b } { #1 }
+      }
+  }
+\cs_set_eq:NN \hlHLsetAlias \codehl_hlset_alias:nn
 
-        \bool_new:c { l__codehl_hlfmtset_ #1 _build_bool }
-        \seq_new:c  { l__codehl_hlfmtset_ #1 _build_seq }
-        \tl_new:c   { l__codehl_hlfmtset_ #1 _clear_tl }  %% this undefines all tl variables (in case of re-definitions)
+
+\cs_new_protected:Npn \codehl_hlset_def:nn #1#2
+  {
+    \prop_get:NnNTF \l__codehl_sets_hlset_prop
+      { #1 } \l__codehl_def_hlset_tl
+      {
+        \__codehl_set_build_derived_false:no { hlset } \l__codehl_def_hlset_tl
+      }
+      {
+        \tl_set:Nn \l__codehl_def_hlset_tl { #1 }
+
+        \prop_put:Nnn \l__codehl_sets_hlset_prop
+          { #1 }
+          { #1 }
+
+        %% this will store the many  'keys' (comment,string,keywd...) each key will have its prop...
+        \seq_new:c { l__codehl_hlset_  #1 _seq }
+
+        \bool_new:c { l__codehl_hlset_ #1 _build_bool }
+        \seq_new:c  { l__codehl_hlset_ #1 _build_seq }
+        \tl_new:c   { l__codehl_hlset_ #1 _clear_tl }  %% this undefines all tl variables (in case of re-definitions)
 
         %%% plain seq of derived ones from this
-        \seq_new:c  { l__codehl_hlfmtset_ #1 _derived_seq }
+        \seq_new:c  { l__codehl_hlset_ #1 _derived_seq }
 
         %%% those are the 'to be' remapped ones
         %%% _basedon_ contains just a plain list
         %%% _basedonB_ contains { <case> } { <int> } { <basedon> }
-        \seq_new:c  { l__codehl_hlfmtset_ #1 _basedon_seq }
-        \seq_new:c  { l__codehl_hlfmtset_ #1 _basedonB_seq }
-
+        \seq_new:c  { l__codehl_hlset_ #1 _basedon_seq }
+        \seq_new:c  { l__codehl_hlset_ #1 _basedonB_seq }
       }
-    \keys_set:nn { codehl / hlfmtset } { #2 }
-  }
-\cs_set_eq:NN  \hlHLset \codehl_hlset:nn
 
+    \keys_set:nn { codehl / hlset } { #2 }
+  }
+\cs_set_eq:NN  \hlHLsetDef \codehl_hlset_def:nn
 
 
 \cs_new_protected:Npn \codehl_hlset_fmt:nn
-  { \codehl_hlset_fmt:nnn \l__codehl_tok_activ_hlfmtset_tl }
+  { \codehl_hlset_fmt:nnn \l__codehl_tok_activ_hlset_tl }
 \cs_set_eq:NN \hlFmt \codehl_hlset_fmt:nn
 
 \cs_new_protected:Npn \codehl_hlset_fmt:nnn #1#2#3
-  { \use:c { l__codehl_hlfmtset_ #1 _ #2 _ #3 _tl } }
+  { \use:c { l__codehl_hlset_ #1 _ #2 _ #3 _tl } }
 \cs_set_eq:NN \hlSetFmt \codehl_hlset_fmt:nnn
 
 %%% for ref. that would be cleaner... but \use:c expands to nothing, if not defined.
-%%%    \tl_if_exist:cT { l__codehl_hlfmtset_ #1 _ #2 _ #3 _tl }
-%%%      { \use:c { l__codehl_hlfmtset_ #1 _ #2 _ #3 _tl } }
+%%%    \tl_if_exist:cT { l__codehl_hlset_ #1 _ #2 _ #3 _tl }
+%%%      { \use:c { l__codehl_hlset_ #1 _ #2 _ #3 _tl } }
 
 
-\cs_new_protected:Npn \__codehl_hlfmtset_build_set:nnnn #1#2#3#4
+\cs_new_protected:Npn \__codehl_hlset_build_set:nnnn #1#2#3#4
   {
     \tl_if_blank:nTF { #4 }
       {
-        \cs_undefine:c { l__codehl_hlfmtset_ #1 _ #2 _ #3 _tl }
+        \cs_undefine:c { l__codehl_hlset_ #1 _ #2 _ #3 _tl }
       }
       {
-        \tl_set:cn { l__codehl_hlfmtset_ #1 _ #2 _ #3 _tl }
+        \tl_set:cn { l__codehl_hlset_ #1 _ #2 _ #3 _tl }
           { #4 }
         \tl_put_left:ce
-          { l__codehl_hlfmtset_ #1 _clear_tl }
+          { l__codehl_hlset_ #1 _clear_tl }
           {
             \exp_not:N \cs_undefine:N
-              \exp_not:c { l__codehl_hlfmtset_ #1 _ #2 _ #3 _tl }
+              \exp_not:c { l__codehl_hlset_ #1 _ #2 _ #3 _tl }
           }
       }
   }
-\cs_generate_variant:Nn \__codehl_hlfmtset_build_set:nnnn { o }
+\cs_generate_variant:Nn \__codehl_hlset_build_set:nnnn { o }
 
 
-\cs_new_protected:Npn \__codehl_hlfmtset_build:nn #1#2
+\cs_new_protected:Npn \__codehl_hlset_build:nn #1#2
   {
-    \seq_map_inline:cn { l__codehl_hlfmtset_  #1 _build_seq }
+    \seq_map_inline:cn { l__codehl_hlset_  #1 _build_seq }
       {
-        \prop_map_inline:cn { l__codehl_hlfmtset_  #1 _ ##1 _build_prop }
+        \prop_map_inline:cn { l__codehl_hlset_  #1 _ ##1 _build_prop }
           {
-            \__codehl_hlfmtset_build_set:nnnn { #2 } { ##1 } { ####1 } { ####2 }
+            \__codehl_hlset_build_set:nnnn { #2 } { ##1 } { ####1 } { ####2 }
           }
       }
   }
-\cs_generate_variant:Nn \__codehl_hlfmtset_build:nn { o }
+\cs_generate_variant:Nn \__codehl_hlset_build:nn { o }
 
-\cs_new_protected:Npn \__codehl_hlfmtset_build_prop:nn #1#2
+\cs_new_protected:Npn \__codehl_hlset_build_prop:nn #1#2
   {
     \prop_if_exist:cF
-      { l__codehl_hlfmtset_ #1 _ #2 _build_prop }
+      { l__codehl_hlset_ #1 _ #2 _build_prop }
       {
-        \prop_new:c { l__codehl_hlfmtset_ #1 _ #2 _build_prop }
+        \prop_new:c { l__codehl_hlset_ #1 _ #2 _build_prop }
         \tl_put_left:ce
-          { l__codehl_hlfmtset_ #1 _clear_tl }
+          { l__codehl_hlset_ #1 _clear_tl }
           {
             \exp_not:N \prop_clear:N
-              \exp_not:c { l__codehl_hlfmtset_ #1 _ #2 _build_prop }
+              \exp_not:c { l__codehl_hlset_ #1 _ #2 _build_prop }
           }
       }
   }
-\cs_generate_variant:Nn \__codehl_hlfmtset_build_prop:nn { o }
+\cs_generate_variant:Nn \__codehl_hlset_build_prop:nn { o }
 
-\cs_new_protected:Npn \__codehl_hlfmtset_build_cmd:nn #1#2
+\cs_new_protected:Npn \__codehl_hlset_build_cmd:nn #1#2
   {
     \seq_concat:ccc
-      { l__codehl_hlfmtset_ #1 _build_seq }
-      { l__codehl_hlfmtset_ #1 _build_seq }
-      { l__codehl_hlfmtset_ #2 _seq }
+      { l__codehl_hlset_ #1 _build_seq }
+      { l__codehl_hlset_ #1 _build_seq }
+      { l__codehl_hlset_ #2 _seq }
 
-    \seq_map_inline:cn { l__codehl_hlfmtset_  #2 _seq }
+    \seq_map_inline:cn { l__codehl_hlset_  #2 _seq }
       {
-        \__codehl_hlfmtset_build_prop:nn { #1 } { ##1 }
-        \prop_map_inline:cn { l__codehl_hlfmtset_ #2 _ ##1 _prop }
+        \__codehl_hlset_build_prop:nn { #1 } { ##1 }
+        \prop_map_inline:cn { l__codehl_hlset_ #2 _ ##1 _prop }
           {
-            \prop_put:cen { l__codehl_hlfmtset_ #1 _ ##1 _build_prop }
+            \prop_put:cen { l__codehl_hlset_ #1 _ ##1 _build_prop }
               { \__codehl_class_remap:n { ####1 } } { ####2 }
           }
       }
   }
 
 
-\cs_new_protected:Npn \__codehl_hlfmtset_build:n #1
+\cs_new_protected:Npn \__codehl_hlset_build:n #1
   {
-    \tl_clear:c { l__codehl_hlfmtset_ #1 _clear_tl }
-    \seq_clear:c { l__codehl_hlfmtset_ #1 _build_seq }
+    \tl_clear:c { l__codehl_hlset_ #1 _clear_tl }
+    \seq_clear:c { l__codehl_hlset_ #1 _build_seq }
 
     \int_zero:N  \l__codehl_remapcount_int
 
     \cs_set_eq:NN \__codehl_class_remap:n \__codehl_class_remap_n:n
-    \cs_set_eq:NN \__codehl_build_cmd:nn \__codehl_hlfmtset_build_cmd:nn
-    \__codehl_build_remap:nnnnn { hlfmtset } { #1 } { 0 } { 0 } { #1 }
+    \cs_set_eq:NN \__codehl_build_cmd:nn \__codehl_hlset_build_cmd:nn
+    \__codehl_build_remap:nnnnn { hlset } { #1 } { 0 } { 0 } { #1 }
 
     \cs_set_eq:NN \__codehl_class_remap:n \__codehl_class_remap_default:n
-    \seq_remove_duplicates:c { l__codehl_hlfmtset_ #1 _build_seq }
+    \seq_remove_duplicates:c { l__codehl_hlset_ #1 _build_seq }
 
-    \__codehl_hlfmtset_build:nn { #1 } { #1 }
+    \__codehl_hlset_build:nn { #1 } { #1 }
 
-    \bool_set_true:c { l__codehl_hlfmtset_ #1 _build_bool }
+    \bool_set_true:c { l__codehl_hlset_ #1 _build_bool }
   }
 
 %%% This assumes it exists!
-\cs_new_protected:Npn \__codehl_hlfmtset_build_ifnot:n #1
+\cs_new_protected:Npn \__codehl_hlset_build_ifnot:n #1
   {
-    \bool_if:cF { l__codehl_hlfmtset_ #1 _build_bool }
-      { \__codehl_hlfmtset_build:n { #1 } }
+    \bool_if:cF { l__codehl_hlset_ #1 _build_bool }
+      { \__codehl_hlset_build:n { #1 } }
   }
-\cs_generate_variant:Nn \__codehl_hlfmtset_build_ifnot:n { o }
-
-%%% full/generic test
-\prg_new_protected_conditional:Npnn \__codehl_hlfmtset_test_n_build:n #1 { TF }
-  {
-    \bool_if_exist:cTF { l__codehl_hlfmtset_ #1 _build_bool }
-      {
-        \bool_if:cTF { l__codehl_hlfmtset_ #1 _build_bool }
-          { \prg_return_true: }
-          {
-            \__codehl_hlfmtset_build:n { #1 }
-            \prg_return_true:
-          }
-      }
-      {
-        \prg_return_false:
-      }
-  }
-\prg_generate_conditional_variant:Nnn \__codehl_hlfmtset_test_n_build:n { o } { TF }
+\cs_generate_variant:Nn \__codehl_hlset_build_ifnot:n { o }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2332,19 +2848,18 @@
 \regex_const:Nn \c__codehl_suppress_regex {suppress\s+(\S.*)}
 \regex_const:Nn \c__codehl_lc_regex {(.*)\*}
 
-
-\bool_new:N \l__codehl_keys_set_lc_bool
-
-\keys_define:nn { codehl / keys set }
+\keys_define:nn { codehl / keyset }
   {
     based ~ on .code:n =
       {
         \bool_if:NTF \l__codehl_display_bool
-          { %%% TODO err, not allowed
+          {
             \msg_error:nnnn { codehl / display } { based on err }
               { disp03 } { keywd ~set }
           }
           {
+            \cs_set:Npn \__codehl_basedon_eff_if_def:nNTF
+              { \__codehl_keyset_if_def:nNTF }
             \__codehl_basedon:non { keyset } \l__codehl_def_keyset_tl {  #1 }
             \__codehl_set_build_false:no { keyset } \l__codehl_def_keyset_tl
           }
@@ -2353,51 +2868,47 @@
 
     info / note .code:n =
       {
-        \msg_note:nnneen { codehl / keyset } { info note }
+        \msg_info:nnneen { codehl / keyset } { info note }
           { keyset00 }
           \l__codehl_def_keyset_tl
           { \g_file_curr_name_str \g_file_curr_ext_str }
           { #1 }
-%        \msg_note:nnnen { codehl / keyset } { info note }
-%          { keyset00 }
-%          \l__codehl_def_keyset_tl
-%          { #1 }
       } ,
 
     keywd .code:n =
       {
-        \bool_set_false:N \l__codehl_keys_set_lc_bool
+        \bool_set_false:N \l__codehl_keyset_lc_key_bool
         \__codehl_keys_set:nn { keywd } { #1 }
       } ,
     keywd .value_required:n = true ,
 
     keywd* .code:n =
       {
-        \bool_set_true:N \l__codehl_keys_set_lc_bool
+        \bool_set_true:N \l__codehl_keyset_lc_key_bool
         \__codehl_keys_set:nn { keywd } { #1 }
       } ,
     keywd* .value_required:n = true ,
 
     emph .code:n =
       {
-        \bool_set_false:N \l__codehl_keys_set_lc_bool
+        \bool_set_false:N \l__codehl_keyset_lc_key_bool
         \__codehl_keys_set:nn { emph } { #1 }
       } ,
     emph .value_required:n = true ,
 
     emph* .code:n =
       {
-        \bool_set_true:N \l__codehl_keys_set_lc_bool
+        \bool_set_true:N \l__codehl_keyset_lc_key_bool
         \__codehl_keys_set:nn { emph } { #1 }
       } ,
     emph* .value_required:n = true ,
 
     unknown .code:n =
       {
-        \bool_set_false:N \l__codehl_keys_set_lc_bool
+        \bool_set_false:N \l__codehl_keyset_lc_key_bool
         \regex_replace_once:NnNTF \c__codehl_lc_regex {\1} \l_keys_key_str
-          { \bool_set_true:N \l__codehl_keys_set_lc_bool }
-          { \bool_set_false:N \l__codehl_keys_set_lc_bool }
+          { \bool_set_true:N \l__codehl_keyset_lc_key_bool }
+          { \bool_set_false:N \l__codehl_keyset_lc_key_bool }
         \regex_replace_once:NnNTF \c__codehl_suppress_regex {\1} \l_keys_key_str
           { \__codehl_keys_set_suppress:on \l_keys_key_str { #1 } }
           { \__codehl_keys_set:on \l_keys_key_str { #1 } }
@@ -2462,7 +2973,7 @@
   {
     \quark_if_nil:nTF { #4 }
       {
-        \bool_if:NTF \l__codehl_keys_set_lc_bool
+        \bool_if:NTF \l__codehl_keyset_lc_key_bool
           {
             \seq_set_from_clist:Nn \l__codehl_tmpb_seq { #3 }
             \seq_clear:N \l__codehl_tmpa_seq
@@ -2536,16 +3047,83 @@
       }
   }
 
-\cs_new_protected:Npn \codehl_keywdset:nn #1#2
-  {
-    \tl_set:Nn \l__codehl_def_keyset_tl { #1 }
 
-    \prop_if_exist:cTF { l__codehl_keyset_  #1 _prop }
+\prg_new_conditional:Npnn \__codehl_keyset_if_def:nN #1#2 { TF }
+  {
+    \prop_get:NnNTF \l__codehl_sets_keyset_prop
+      { #1 } #2
+      { \prg_return_true: }
       {
-        %\__codehl_set_build_false:nn { keyset } { #1 }
-        \__codehl_set_build_derived_false:nn { keyset } { #1 }
+        \__codehl_keyset_load_if_predef:nTF { #1 }
+          {
+            \prop_get:NnNTF \l__codehl_sets_keyset_prop
+              { #1 } #2
+              { \prg_return_true: }
+              { \prg_return_false: }  %%% it shouldn't be the case
+          }
+          { \prg_return_false: }
+      }
+  }
+\prg_generate_conditional_variant:Nnn \__codehl_keyset_if_def:nN { o } { TF }
+
+\prg_new_conditional:Npnn \__codehl_keyset_alias:n #1 { TF }
+  {
+    \__codehl_keyset_if_def:nNTF
+      { #1 } \l__codehl_def_keyset_tl
+      {
+        \str_if_eq:noTF { #1 } \l__codehl_def_keyset_tl
+          { \prg_return_false: }
+          { \prg_return_true: }
+      }
+      { \prg_return_true: }
+  }
+
+\cs_new_protected:Npn \codehl_keyset_alias:nn #1#2
+  {
+    \__codehl_keyset_alias:nTF { #1 }
+      {
+        %%% OK... new or redefining an alias
+        \__codehl_keyset_if_def:nNTF
+          { #2 } \l__codehl_def_keyset_tl
+          {
+            \prop_put:Nno \l__codehl_sets_keyset_prop
+              { #1 }
+              \l__codehl_def_keyset_tl
+
+            \msg_info:nnnnen { codehl / keyset } { info note }
+              { keyset02c }
+              { #1 }
+              { \g_file_curr_name_str \g_file_curr_ext_str }
+              { Alias ~ definition: ~ \{ #1 \} ~ => ~ \{ #2 \} }
+          }
+          {
+            \msg_error:nnnn { codehl / keyset } { non existant }
+              { keyset02a } { #2 }
+          }
       }
       {
+        %%% Err... it's a 'keyset definition'
+        \msg_error:nnnn { codehl / keyset } { alias err }
+          { keyset02b } { #1 }
+      }
+  }
+\cs_set_eq:NN \hlKeysetAlias \codehl_keyset_alias:nn
+
+
+\cs_new_protected:Npn \codehl_keyset_def:nn #1#2
+  {
+    \__codehl_keyset_if_def:nNTF
+      { #1 } \l__codehl_def_keyset_tl
+      {
+        \__codehl_set_build_derived_false:no { keyset } \l__codehl_def_keyset_tl
+      }
+      {
+        \prop_put:Nnn \l__codehl_sets_keyset_prop
+          { #1 }
+          { #1 }
+
+        \tl_set:Nn \l__codehl_def_keyset_tl { #1 }
+
         %% This will store 'keywd', 'emph', ... 'texcs'...etc
         %% value will be .. #1 _ <key> _prop which shall have the <keys><=><class>
         \prop_new_linked:c  { l__codehl_keyset_  #1 _prop }
@@ -2566,10 +3144,10 @@
         \prop_new_linked:c  { l__codehl_keyset_  #1 _build_prop }
       }
 
-    \keys_set:nn { codehl / keys set } { #2 }
+    \keys_set:nn { codehl / keyset } { #2 }
   }
 
-\cs_set_eq:NN \hlKeywdset \codehl_keywdset:nn
+\cs_set_eq:NN \hlKeysetDef \codehl_keyset_def:nn
 
 
 %%%%%%%
@@ -2579,7 +3157,7 @@
   {
     \tl_set:ce
       { l__codehl_keyset_ #1 _ #3 _ #2 _tl }
-      { \exp_not:N \use:c { l__codehl_hlfmtset_ \exp_not:N \l__codehl_tok_activ_hlfmtset_tl _ #4 _ #5 _tl } }
+      { \exp_not:N \use:c { l__codehl_hlset_ \exp_not:N \l__codehl_tok_activ_hlset_tl _ #4 _ #5 _tl } }
     \tl_put_right:ce { l__codehl_keyset_ #1 _clear_tl }
       {
         \exp_not:N \cs_undefine:N
@@ -2655,24 +3233,6 @@
   }
 \cs_generate_variant:Nn \__codehl_keyset_build_ifnot:n { o }
 
-%%% full/generic test
-\prg_new_protected_conditional:Npnn \__codehl_keyset_test_n_build:n #1 { TF }
-  {
-    \bool_if_exist:cTF { l__codehl_keyset_ #1 _build_bool }
-      {
-        \bool_if:cTF { l__codehl_keyset_ #1 _build_bool }
-          { \prg_return_true: }
-          {
-            \__codehl_keyset_build:n { #1 }
-            \prg_return_true:
-          }
-      }
-      {
-        \prg_return_false:
-      }
-  }
-\prg_generate_conditional_variant:Nnn \__codehl_keyset_test_n_build:n { o } { TF }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2715,6 +3275,8 @@
 
     based ~ on .code:n =
       {
+        \cs_set:Npn \__codehl_basedon_eff_if_def:nNTF
+          { \__codehl_lang_if_def:nNTF }
         \__codehl_basedon:non { lang } \l__codehl_def_lang_tl { #1 }
       } ,
     based ~ on .value_required:n = true ,
@@ -2889,7 +3451,7 @@
 
     oletter .code:n =
       {
-        \__codehl_lang_keyset:nn
+        \__codehl_lang_keys:nn
           { oletter }
           { #1 }
       } ,
@@ -2897,7 +3459,7 @@
 
     digits .code:n =
       {
-        \__codehl_lang_keyset:nn
+        \__codehl_lang_keys:nn
           { digits }
           { 0-9#1 }
       } ,
@@ -2905,7 +3467,7 @@
 
     digits* .code:n =
       {
-        \__codehl_lang_keyset:nn
+        \__codehl_lang_keys:nn
           { digits }
           { #1 }
       } ,
@@ -2958,15 +3520,13 @@
 
     info / note .code:n =
       {
-        \msg_note:nnneen { codehl /  lang } { info note }
+        \msg_info:nnneen { codehl / lang } { info note }
           { lang00 }
           \l__codehl_def_lang_tl
           { \g_file_curr_name_str \g_file_curr_ext_str }
           { #1 }
       } ,
   }
-
-
 
 
 %%%%%%%
@@ -3000,9 +3560,7 @@
   }
 
 
-%%% TODO: remove backslash by default
-%%% sanitize !!!
-\cs_new_protected:Npn \__codehl_lang_keyset:nn #1#2
+\cs_new_protected:Npn \__codehl_lang_keys:nn #1#2
   {
     \tl_if_empty:nTF { #2 }
       {
@@ -3019,26 +3577,84 @@
           { #1 }
           \l__codehl_tmpb_tl
       }
-
-%    \str_set:Nn \l__codehl_tmpa_tl { #2 }
-%    \tl_remove_all:Nn \l__codehl_tmpa_tl { ~ }
-%    \prop_put:cno { l__codehl_lang_  \l__codehl_def_lang_tl _keys_prop }
-%      { #1 }
-%      \l__codehl_tmpa_tl
   }
 
-
-\cs_new_protected:Npn \codehl_lang:nn #1#2
+\prg_new_conditional:Npnn \__codehl_lang_if_def:nN #1#2 { TF }
   {
-    \tl_set:Nn \l__codehl_tok_activ_lang_tl { #1 }
-    \tl_set:Nn \l__codehl_def_lang_tl { #1 }
-
-    \prop_if_exist:cTF { l__codehl_lang_ #1 _pattern_prop }
+    \prop_get:NnNTF \l__codehl_sets_lang_prop
+      { #1 } #2
+      { \prg_return_true: }
       {
-        \__codehl_set_build_false:nn { lang } { #1 }
+        \__codehl_lang_load_if_predef:nTF { #1 }
+          {
+            \prop_get:NnNTF \l__codehl_sets_lang_prop
+              { #1 } #2
+              { \prg_return_true: }
+              { \prg_return_false: } %%% it shouldn't be the case
+          }
+          { \prg_return_false: }
+      }
+  }
+\prg_generate_conditional_variant:Nnn \__codehl_lang_if_def:nN { o } { TF }
+
+\prg_new_conditional:Npnn \__codehl_lang_alias:n #1 { TF }
+  {
+    \__codehl_lang_if_def:nNTF
+      { #1 } \l__codehl_def_lang_tl
+      {
+        \str_if_eq:noTF { #1 } \l__codehl_def_lang_tl
+          { \prg_return_false: }
+          { \prg_return_true: }
+      }
+      { \prg_return_true: }
+  }
+
+\cs_new_protected:Npn \codehl_lang_alias:nn #1#2
+  {
+    \__codehl_lang_alias:nTF { #1 }
+      {
+        %%% OK... new or redefining an alias
+        \__codehl_lang_if_def:nNTF
+          { #2 } \l__codehl_def_lang_tl
+          {
+            \prop_put:Nno \l__codehl_sets_lang_prop
+              { #1 }
+              \l__codehl_def_lang_tl
+
+            \msg_info:nnnnen { codehl / lang } { info note }
+              { lang02c }
+              { #1 }
+              { \g_file_curr_name_str \g_file_curr_ext_str }
+              { Alias ~ definition: ~ \{ #1 \} ~ => ~ \{ #2 \} }
+          }
+          {
+            \msg_error:nnnn { codehl / lang } { non existant }
+              { lang02a } { #2 }
+          }
       }
       {
-        \seq_put_right:Nn \l__codehl_langsets_seq { #1 }
+        %%% Err... it's a 'language definition'
+        \msg_error:nnnn { codehl / lang } { alias err }
+          { lang02b } { #1 }
+      }
+  }
+\cs_set_eq:NN \hlLangAlias \codehl_lang_alias:nn
+
+
+\cs_new_protected:Npn \codehl_lang_def:nn #1#2
+  {
+    \tl_set:Nn \l__codehl_alias_lang_tl { #1 }
+    \__codehl_lang_if_def:nNTF
+      { #1 } \l__codehl_def_lang_tl
+      {
+        \__codehl_set_build_false:no { lang } \l__codehl_def_lang_tl
+      }
+      {
+        \tl_set:Nn \l__codehl_def_lang_tl { #1 }
+
+        \prop_put:Nnn \l__codehl_sets_lang_prop
+          { #1 }
+          { #1 }
 
         %%% plain seq of derived ones from this
         \seq_new:c         { l__codehl_lang_ #1 _derived_seq }
@@ -3074,14 +3690,11 @@
         %% this will store boolean itens IF (if digits set, if case set...)
         \prop_new_linked:c { l__codehl_lang_  #1 _bool_keys_prop }
         \prop_new_linked:c { l__codehl_lang_  #1 _build_bool_keys_prop } %% same, when building up
-
       }
-
-%\tl_show:n {<<lang~def>>(#2)}
 
     \keys_set:nn { codehl / lang } { #2 }
   }
-\cs_set_eq:NN \hlLang \codehl_lang:nn
+\cs_set_eq:NN \hlLangDef \codehl_lang_def:nn
 
 
 %% #1 => \l__codehl_lang_BUILD_prop
@@ -3119,8 +3732,6 @@
   }
 
 
-
-
 %%%%%%%
 %%% This will build up the many auxiliary properties
 %%% based on #2 case (set via _lang_case_split:
@@ -3142,14 +3753,10 @@
 
 \cs_new_protected:Npn \__codehl_lang_dlimit_add:nnnnnnn #1#2#3 #4#5#6#7
   {
-
-%\tl_show:n {<<_add:>>(#1)(#2)(#3)(#4)(#5)(#6)(#7)}
     \__codehl_lang_case_split:w #2
 
-%\tl_show:n {<<after~split>>}
     \bool_if:NTF \l__codehl_lang_case_intag_bool
       {
-            % => \l__codehl_lang_BUILD_tag_prop
             \__codehl_lang_dlimit_add:NNnnn
               \l__codehl_lang_BUILD_tag_prop
               \l__codehl_lang_tag_int
@@ -3168,7 +3775,6 @@
           {
             \bool_if:NTF \l__codehl_lang_case_instr_bool
               {
-                % => \l__codehl_lang_BUILD_tagstr_prop
                 \__codehl_lang_dlimit_add:NNnnn
                   \l__codehl_lang_BUILD_tagstr_prop
                   \l__codehl_lang_tagstr_int
@@ -3187,7 +3793,6 @@
               { }
             \bool_if:NTF \l__codehl_lang_case_incmt_bool
               {
-                % => \l__codehl_lang_BUILD_tagcmt_prop
                 \__codehl_lang_dlimit_add:NNnnn
                   \l__codehl_lang_BUILD_tagcmt_prop
                   \l__codehl_lang_tagcmt_int
@@ -3209,7 +3814,6 @@
 
     \bool_if:NTF \l__codehl_lang_case_inbase_bool
       {
-            % => \l__codehl_lang_BUILD_base_prop
             \__codehl_lang_dlimit_add:NNnnn
               \l__codehl_lang_BUILD_base_prop
               \l__codehl_lang_base_int
@@ -3228,7 +3832,6 @@
           {
             \bool_if:NTF \l__codehl_lang_case_instr_bool
               {
-                % => \l__codehl_lang_BUILD_basestr_prop
                 \__codehl_lang_dlimit_add:NNnnn
                   \l__codehl_lang_BUILD_basestr_prop
                   \l__codehl_lang_basestr_int
@@ -3247,7 +3850,6 @@
               { }
             \bool_if:NTF \l__codehl_lang_case_incmt_bool
               {
-                % => \l__codehl_lang_BUILD_basecmt_prop
                 \__codehl_lang_dlimit_add:NNnnn
                   \l__codehl_lang_BUILD_basecmt_prop
                   \l__codehl_lang_basecmt_int
@@ -3272,7 +3874,6 @@
         %%% exception: _tr_ either appears in all above or only here
         \bool_set_true:N \l__codehl_lang_BUILD_tr_bool
 
-            % => \l__codehl_lang_BUILD_base_prop
             \__codehl_lang_dlimit_add:NNnnn
               \l__codehl_lang_BUILD_tr_prop
               \l__codehl_lang_tr_int
@@ -3334,9 +3935,9 @@
         \__codehl_lang_comment_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang10d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
       }
@@ -3351,18 +3952,18 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang10a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
           }
           {
             \tl_if_blank:nTF { #3 }
               { % nothing giving... => msg_error
-                \msg_error:nnneee { codehl /  lang } { syntax err }
+                \msg_error:nnneee { codehl / lang } { syntax err }
                   { lang10b }
-                  \l__codehl_def_lang_tl
+                  \l__codehl_alias_lang_tl
                   { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
                   { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
               }
@@ -3407,9 +4008,9 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang10c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
       }
@@ -3423,9 +4024,9 @@
         \__codehl_lang_act_comment_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang11d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
       }
@@ -3440,18 +4041,18 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang11a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
           }
           {
             \tl_if_blank:nTF { #3 }
               { % nothing giving... => msg_error
-                \msg_error:nnneee { codehl /  lang } { syntax err }
+                \msg_error:nnneee { codehl / lang } { syntax err }
                   { lang11b }
-                  \l__codehl_def_lang_tl
+                  \l__codehl_alias_lang_tl
                   { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
                   { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
               }
@@ -3496,9 +4097,9 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang11c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
       }
@@ -3512,9 +4113,9 @@
         \__codehl_lang_commentline_new:nnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang22c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { comment ~line ~=~ #1 }
           { comment ~line ~=~ { <class> } { <start-pattern> } { <options> } }
       }
@@ -3530,9 +4131,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnnenn { codehl /  lang } { syntax err }
+            \msg_error:nnnenn { codehl / lang } { syntax err }
               { lang22a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { comment ~line ~=~ #5 }
               { comment ~line ~=~ { <class> } { <start-pattern> } { <options> } }
           }
@@ -3570,15 +4171,14 @@
           }
       }
       {
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang22b }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { comment ~line ~=~ #5 }
           { comment ~line ~=~ { <class> } { <start-pattern> } { <options> } }
       }
 
   }
-
 
 
 \cs_new_protected:Npn \__codehl_lang_commentline_at_new:n #1
@@ -3588,9 +4188,9 @@
         \__codehl_lang_commentline_at_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang32c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { comment ~line ~ at ~ =~ #1 }
           { comment ~line ~ at ~ =~ { <class> } { <start-pattern> } { <column> } { <options> } }
       }
@@ -3606,9 +4206,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnnenn { codehl /  lang } { syntax err }
+            \msg_error:nnnenn { codehl / lang } { syntax err }
               { lang32a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { comment ~line ~ at ~ =~ #6 }
               { comment ~line ~ at ~ =~ { <class> } { <start-pattern> } { <column> } { <options> } }
           }
@@ -3644,15 +4244,14 @@
           }
       }
       {
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang32b }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { comment ~line ~ at ~ =~ #6 }
           { comment ~line ~ at ~ =~ { <class> } { <start-pattern> } { <column> } { <options> } }
       }
 
   }
-
 
 
 \cs_new_protected:Npn \__codehl_lang_act_commentline_new:n #1
@@ -3662,9 +4261,9 @@
         \__codehl_lang_act_commentline_new:nnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang23c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { active ~comment ~line ~=~ #1 }
           { active ~comment ~line ~=~ { <class> } { <start-pattern> } { <options> } }
       }
@@ -3679,9 +4278,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnnenn { codehl /  lang } { syntax err }
+            \msg_error:nnnenn { codehl / lang } { syntax err }
               { lang23a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { active ~comment ~line ~=~ #5 }
               { active ~comment ~line ~=~ { <class> } { <start-pattern> } { <options> } }
           }
@@ -3719,9 +4318,9 @@
           }
       }
       { % err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang23b }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { active ~comment ~line ~=~ #5 }
           { active ~comment ~line ~=~ { <class> } { <start-pattern> } { <options> } }
       }
@@ -3735,9 +4334,9 @@
         \__codehl_lang_discard_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang15d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl  ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl  ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
       }
@@ -3754,9 +4353,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang15a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl  ~=~ \exp_not:n { #6 } }
               { \l__codehl_lang_opt_key_tl  ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
           }
@@ -3765,9 +4364,9 @@
 
             \tl_if_blank:nTF { #3 }
               { % nothing giving... => msg_error
-                \msg_error:nnneee { codehl /  lang } { syntax err }
+                \msg_error:nnneee { codehl / lang } { syntax err }
                   { lang15b }
-                  \l__codehl_def_lang_tl
+                  \l__codehl_alias_lang_tl
                   { \l__codehl_lang_opt_key_tl  ~=~ \exp_not:n { #6 } }
                   { \l__codehl_lang_opt_key_tl  ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
               }
@@ -3810,9 +4409,9 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang15c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl  ~=~ \exp_not:n { #6 } }
           { \l__codehl_lang_opt_key_tl  ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <options> } }
       }
@@ -3826,9 +4425,9 @@
         \__codehl_lang_discardline_new:nnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang26c }
-            \l__codehl_def_lang_tl
+            \l__codehl_alias_lang_tl
             { discard ~comment  ~line ~=~ #1 }
             { discard ~comment  ~line ~=~ { <class> } { <start-pattern> } { <options> } }
       }
@@ -3844,9 +4443,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnnenn { codehl /  lang } { syntax err }
+            \msg_error:nnnenn { codehl / lang } { syntax err }
               { lang26a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { discard ~comment  ~line ~=~ #5 }
               { discard ~comment  ~line ~=~ { <class> } { <start-pattern> } { <options> } }
           }
@@ -3884,9 +4483,9 @@
           }
       }
       { % err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang26b }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { discard ~comment  ~line ~=~ #5 }
           { discard ~comment  ~line ~=~ { <class> } { <start-pattern> } { <options> } }
       }
@@ -3899,9 +4498,9 @@
         \__codehl_lang_discardline_at_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang36c }
-            \l__codehl_def_lang_tl
+            \l__codehl_alias_lang_tl
             { discard ~comment  ~line ~ at ~ =~ #1 }
             { discard ~comment  ~line ~ at ~ =~ { <class> } { <start-pattern> } { <column> } { <options> } }
       }
@@ -3918,9 +4517,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnnenn { codehl /  lang } { syntax err }
+            \msg_error:nnnenn { codehl / lang } { syntax err }
               { lang36a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { discard ~comment  ~line ~ at ~ =~ #6 }
               { discard ~comment  ~line ~ at ~ =~ { <class> } { <start-pattern> } { <column> } { <options> } }
           }
@@ -3958,14 +4557,13 @@
           }
       }
       { % err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang36b }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { discard ~comment  ~line ~ at ~ =~ #6 }
           { discard ~comment  ~line ~ at ~ =~ { <class> } { <start-pattern> } { <column> } { <options> } }
       }
   }
-
 
 
 \cs_new_protected:Npn \__codehl_lang_string_new:n #1
@@ -3975,9 +4573,9 @@
         \__codehl_lang_string_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang14d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <pattern> } { <escape-char> }  }
       }
@@ -3997,9 +4595,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang14a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <pattern> } { <escape-char> }  }
           }
@@ -4072,9 +4670,9 @@
 
                   }
                   { %err, more than one char
-                    \msg_error:nnneee { codehl /  lang } { syntax err }
+                    \msg_error:nnneee { codehl / lang } { syntax err }
                       { lang14b }
-                      \l__codehl_def_lang_tl
+                      \l__codehl_alias_lang_tl
                       { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
                       { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <pattern> } { <escape-char> }  }
                   }
@@ -4082,9 +4680,9 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang14c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <pattern> } { <escape-char> }  }
       }
@@ -4098,9 +4696,9 @@
         \__codehl_lang_string_new:nnnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang64ie }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
       }
@@ -4117,18 +4715,18 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang64ia }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #7 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
           }
           {
             \tl_if_blank:nTF { #3 }
               { % nothing giving... => msg_error
-                \msg_error:nnneee { codehl /  lang } { syntax err }
+                \msg_error:nnneee { codehl / lang } { syntax err }
                   { lang64ib }
-                  \l__codehl_def_lang_tl
+                  \l__codehl_alias_lang_tl
                   { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #7 } }
                   { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
               }
@@ -4176,9 +4774,9 @@
 
                   }
                   { %err, more than one char
-                    \msg_error:nnneee { codehl /  lang } { syntax err }
+                    \msg_error:nnneee { codehl / lang } { syntax err }
                       { lang64ic }
-                      \l__codehl_def_lang_tl
+                      \l__codehl_alias_lang_tl
                       { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #7 } }
                       { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
                   }
@@ -4186,9 +4784,9 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang64id }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #7 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
       }
@@ -4202,9 +4800,9 @@
         \__codehl_lang_ident_new:nnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang17d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <id-name> } { <char> } }
       }
@@ -4220,9 +4818,9 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang17a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #5 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <id-name> } { <char> } }
           }
@@ -4253,18 +4851,18 @@
                   }
               }
               { %err, more than one char
-                \msg_error:nnneee { codehl /  lang } { syntax err }
+                \msg_error:nnneee { codehl / lang } { syntax err }
                   { lang17b }
-                  \l__codehl_def_lang_tl
+                  \l__codehl_alias_lang_tl
                   { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #5 } }
                   { \l__codehl_lang_opt_key_tl ~=~ { <id-name> } { <char> } }
               }
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang17c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #5 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <id-name> } { <char> } }
       }
@@ -4277,22 +4875,20 @@
         \__codehl_lang_ident_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnnenn { codehl /  lang } { syntax err }
+        \msg_error:nnnenn { codehl / lang } { syntax err }
           { lang17d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { identifier ~=~ #1 }
           { identifier ~=~ { <id-name> } { <char> } }
       }
   }
 
-%%%%%%% TODO: will that be allowed?? implemented? ('easy' just another fully delimitted one.. and questionable)
+%%%%%%% TODO: will that be allowed?? implemented? ('easy' just another fully delimitted one.. but questionable)
 %%%%%%%
 \cs_new_protected:Npn \__codehl_lang_ident_new:nnnnwn #1#2#3#4 #5 \q_stop #6
   {   % TOBE DONE... including tok-state
   }
 
-
-%%% \__codehl_lang_tagged_new:n
 \cs_new_protected:Npn \__codehl_lang_tagged_new:n #1
   {
     \__codehl_test_iv:nwTF #1 \q_nil \q_stop
@@ -4300,9 +4896,9 @@
         \__codehl_lang_tagged_new:nnnnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang18d }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <tagged-ident> } { <start-pattern> } { <end-pattern> } }
       }
@@ -4317,18 +4913,18 @@
       {
         \tl_if_blank:nTF { #2 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang18a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <tagged-ident> } { <start-pattern> } { <end-pattern> } }
           }
           {
             \tl_if_blank:nTF { #3 }
               { % nothing giving... => msg_error
-                \msg_error:nnneee { codehl /  lang } { syntax err }
+                \msg_error:nnneee { codehl / lang } { syntax err }
                   { lang18b }
-                  \l__codehl_def_lang_tl
+                  \l__codehl_alias_lang_tl
                   { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
                   { \l__codehl_lang_opt_key_tl ~=~ { <tagged-ident> } { <start-pattern> } { <end-pattern> } }
               }
@@ -4374,18 +4970,15 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang18c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #6 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <tagged-ident> } { <start-pattern> } { <end-pattern> } }
       }
   }
 
 
-
-
-%%% \__codehl_lang_tr_new:n
 \cs_new_protected:Npn \__codehl_lang_tr_new:n #1
   {
     \__codehl_test_ii:nwTF #1 \q_nil \q_stop
@@ -4393,9 +4986,9 @@
         \__codehl_lang_tr_new:nnwn #1 \q_nil \q_stop { #1 }
       }
       { %err
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang19c }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #1 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <org-str> } { <replacement> } }
       }
@@ -4410,9 +5003,9 @@
       {
         \tl_if_blank:nTF { #1 }
           { % nothing giving... => msg_error
-            \msg_error:nnneee { codehl /  lang } { syntax err }
+            \msg_error:nnneee { codehl / lang } { syntax err }
               { lang19a }
-              \l__codehl_def_lang_tl
+              \l__codehl_alias_lang_tl
               { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #4 } }
               { \l__codehl_lang_opt_key_tl ~=~ { <org-str> } { <replacement> } }
           }
@@ -4476,16 +5069,13 @@
           }
       }
       {
-        \msg_error:nnneee { codehl /  lang } { syntax err }
+        \msg_error:nnneee { codehl / lang } { syntax err }
           { lang19b }
-          \l__codehl_def_lang_tl
+          \l__codehl_alias_lang_tl
           { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #4 } }
           { \l__codehl_lang_opt_key_tl ~=~ { <org-str> } { <replacement> } }
       }
   }
-
-
-
 
 
 %%%%%%%
@@ -4540,7 +5130,6 @@
       \prg_return_true:
       \prg_return_false:
   }
-
 
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -4682,8 +5271,6 @@
 \cs_generate_variant:Nn \__codehl_lang_set_dlimit_end:nn { no }
 
 
-
-
 \cs_new_protected:Npn \__codehl_lang_init_eol:
   {
     \tl_clear:N \l__codehl_stack_eol_tl
@@ -4720,7 +5307,7 @@
 
     \__codehl_stack_build_cs:Nn
       \l__codehl_stack_cmt_tl
-      { \__codehl_tok_end_scan: , \__codehl_tok_start:N , \__codehl_tok_keyfmt_eff:Ncoo }
+      { \__codehl_tok_end_scan: , \__codehl_tok_start:N , \__codehl_tok_keyfmt_eff:Ncoo , \__codehl_tok_nesting_keywd:N }
 
     \__codehl_stack_build_cs:NNN
       \l__codehl_stack_cmt_tl
@@ -4779,10 +5366,8 @@
 
         \exp_not:o \l__codehl_peek_build_scanTpre_tl
 
-
-        %%% TODO: review, NEW tok_fmt!
         \exp_not:N \__codehl_tok_set_fmt:c
-          { l__codehl_hlfmtset_ \exp_not:N \l__codehl_tok_activ_hlfmtset_tl _ comment _ \exp_not:n { #3 } _tl }
+          { l__codehl_hlset_ \exp_not:N \l__codehl_tok_activ_hlset_tl _ comment _ \exp_not:n { #3 } _tl }
 
         \exp_not:N \cs_set:Npn \exp_not:N \__codehl_tok_keyfmt_eff:Ncoo
           { \exp_not:N \__codehl_tok_keyfmt_less:Ncoo }
@@ -4790,6 +5375,10 @@
         \exp_not:N \cs_set:Npn
           \exp_not:N \__codehl_tok_start:N
             { \exp_not:N \__codehl_tok_dlimit:N }
+        \exp_not:N \cs_set:Npn
+          \exp_not:N \__codehl_tok_nesting_keywd:N
+            { \exp_not:N \__codehl_tok_keywd_dlimit:N }
+
         \exp_not:N \cs_set_eq:NN
           \exp_not:N \__codehl_tok_proc:N
           \exp_not:N \__codehl_tok_start:N
@@ -4807,7 +5396,6 @@
 
       }
   }
-
 
 
 %%%%%%%
@@ -4868,20 +5456,8 @@
         \exp_not:N \bool_set_false:N
           \exp_not:N \l__codehl_tok_upto_eol_bool
 
-% TODO: Hm, really ?!
-%        \exp_not:N \__codehl_nested_stack_add:n
-%          {
-%            \exp_not:N \exp_not:N
-%              \exp_not:N \tl_clear:N
-%            \exp_not:N \exp_not:N
-%              \exp_not:N \l__codehl_tok_build_dlimit_tl
-%          }
-%%% This might(is) an error... should be 'formatted/displayed' first...
-%        \exp_not:N \tl_clear:N
-%          \exp_not:N \l__codehl_tok_build_dlimit_tl
-
         \exp_not:N \__codehl_tok_set_fmt:c
-          { l__codehl_hlfmtset_ \exp_not:N \l__codehl_tok_activ_hlfmtset_tl _ active _ \exp_not:n { #3 } _tl }
+          { l__codehl_hlset_ \exp_not:N \l__codehl_tok_activ_hlset_tl _ active _ \exp_not:n { #3 } _tl }
         \exp_not:N \cs_set:Npn
           \exp_not:N \__codehl_tok_start:N
             { \exp_not:N \__codehl_tok_dlimit_tex:N }
@@ -4919,7 +5495,7 @@
 
     \__codehl_stack_build_cs:Nn
       \l__codehl_stack_cmtline_tl
-      { \__codehl_tok_keyfmt_eff:Ncoo }
+      { \__codehl_tok_keyfmt_eff:Ncoo , \__codehl_tok_nesting_keywd:N }
 
     \__codehl_stack_build_cs:NNN
       \l__codehl_stack_cmtline_tl
@@ -4949,13 +5525,15 @@
         \exp_not:N \cs_set:Npn \exp_not:N \__codehl_tok_keyfmt_eff:Ncoo
           { \exp_not:N \__codehl_tok_keyfmt_less:Ncoo }
 
-        %%% TODO: review, NEW tok_fmt!
         \exp_not:N \__codehl_tok_set_fmt:c
-          { l__codehl_hlfmtset_ \exp_not:N \l__codehl_tok_activ_hlfmtset_tl _ comment _ \exp_not:n { #1 } _tl }
+          { l__codehl_hlset_ \exp_not:N \l__codehl_tok_activ_hlset_tl _ comment _ \exp_not:n { #1 } _tl }
 
         \exp_not:N \cs_set:Npn
           \exp_not:N \__codehl_tok_proc:N
             { \exp_not:N \__codehl_tok_dlimit_line:N }  % single line comment
+        \exp_not:N \cs_set:Npn
+          \exp_not:N \__codehl_tok_nesting_keywd:N
+            { \exp_not:N \__codehl_tok_keywd_dlimit_line:N }
       }
   }
 
@@ -4997,9 +5575,8 @@
 
         \exp_not:o \l__codehl_peek_build_scanTpre_tl
 
-        %%% TODO: review, NEW tok_fmt!
         \exp_not:N \__codehl_tok_set_fmt:c
-          { l__codehl_hlfmtset_ \exp_not:N \l__codehl_tok_activ_hlfmtset_tl _ active _ \exp_not:n { #1 } _tl }
+          { l__codehl_hlset_ \exp_not:N \l__codehl_tok_activ_hlset_tl _ active _ \exp_not:n { #1 } _tl }
 
         \exp_not:N \cs_set:Npn
           \exp_not:N \__codehl_tok_proc:N
@@ -5019,7 +5596,7 @@
 
     \__codehl_stack_build_cs:Nn
       \l__codehl_stack_string_tl
-      { \__codehl_tok_end_scan: , \__codehl_tok_test_escape: , \__codehl_tok_start:N , \__codehl_tok_keyfmt_eff:Ncoo }
+      { \__codehl_tok_end_scan: , \__codehl_tok_test_escape: , \__codehl_tok_start:N , \__codehl_tok_keyfmt_eff:Ncoo , \__codehl_tok_nesting_keywd:N }
 
     \__codehl_stack_build_cs:NNN
       \l__codehl_stack_string_tl
@@ -5079,13 +5656,16 @@
           \exp_not:N \__codehl_tok_keyfmt_eff:Ncoo
           \exp_not:N \__codehl_tok_keyfmt_nested:Ncoo
 
-        %%% TODO: review, NEW tok_fmt!
         \exp_not:N \__codehl_tok_set_fmt:c
-          { l__codehl_hlfmtset_ \exp_not:N \l__codehl_tok_activ_hlfmtset_tl _ string _ \exp_not:n { #4 } _tl }
+          { l__codehl_hlset_ \exp_not:N \l__codehl_tok_activ_hlset_tl _ string _ \exp_not:n { #4 } _tl }
 
         \exp_not:N \cs_set:Npn
           \exp_not:N \__codehl_tok_start:N
             { \exp_not:N \__codehl_tok_string:N }
+        \exp_not:N \cs_set:Npn
+          \exp_not:N \__codehl_tok_nesting_keywd:N
+            { \exp_not:N \__codehl_tok_keywd_string:N }
+
         \exp_not:N \cs_set_eq:NN
           \exp_not:N \__codehl_tok_proc:N
           \exp_not:N \__codehl_tok_start:N
@@ -5254,11 +5834,6 @@
   {
     \tl_clear:N \l__codehl_stack_cmtdiscline_tl
 
-%%% TODO: review... discard_line:w...
-%    \__codehl_stack_build_bool:Nn
-%      \l__codehl_stack_cmtdiscline_tl
-%      { \l__codehl_tok_upto_eol_bool  }
-
     \__codehl_stack_build_cs:NNN
       \l__codehl_stack_cmtdiscline_tl
       \__codehl_tok_proc:N
@@ -5333,15 +5908,13 @@
 
         \exp_not:N \cs_set_eq:NN
           \exp_not:N \__codehl_tok_proc:N
-          \exp_not:N \l__codehl_tok_nesting_keywd:N
+          \exp_not:N \__codehl_tok_nesting_keywd:N
 
         \exp_not:N \cs_set_eq:NN
           \exp_not:N \__codehl_tok_keyfmt_eff:Ncoo
           \exp_not:N \__codehl_tok_keyfmt_base:Ncoo
       }
   }
-
-
 
 
 %%%%%%%
@@ -5357,7 +5930,7 @@
 
     \__codehl_stack_build_cs:Nn
       \l__codehl_stack_tagged_tl
-      { \__codehl_tok_end_scan: , \__codehl_tok_start:N , \__codehl_tok_keyfmt_eff:Ncoo }
+      { \__codehl_tok_end_scan: , \__codehl_tok_start:N , \__codehl_tok_keyfmt_eff:Ncoo , \__codehl_tok_nesting_keywd:N }
 
     \__codehl_stack_build_cs:Nn
       \l__codehl_stack_tagged_tl
@@ -5412,11 +5985,7 @@
         \exp_not:N \__codehl_nested_stack:o
           \exp_not:N \l__codehl_stack_tagged_tl
 
-%        \exp_not:N \bool_set_false:N
-%          \exp_not:N \l__codehl_tok_upto_eol_bool
-
         \exp_not:o \l__codehl_peek_build_scanTpre_tl
-
 
         \exp_not:N \cs_set_eq:NN
           \exp_not:N \__codehl_tok_other_scan:
@@ -5435,6 +6004,10 @@
         \exp_not:N \cs_set:Npn
           \exp_not:N \__codehl_tok_start:N
             { \exp_not:N \__codehl_tok_tagged:N }
+        \exp_not:N \cs_set:Npn
+          \exp_not:N \__codehl_tok_nesting_keywd:N
+            { \exp_not:N \__codehl_tok_keywd_tagged:N }
+
         \exp_not:N \cs_set_eq:NN
           \exp_not:N \__codehl_tok_proc:N
           \exp_not:N \__codehl_tok_start:N
@@ -5488,7 +6061,6 @@
 %%%%%%%
 %%% {start 1st char}{start-rest} {end 1st char}{end-rest} {escape} {class} { case }
 %%%%%%%
-
 %%% #2 -> {regex}{tex pattern}
 %%% #4 -> {regex}{tex pattern}
 \cs_new_protected:Npn \__codehl_lang_peek_build:nnnnnnnNN #1#2#3#4#5#6#7#8#9  %%% #8 cmtX_prop #9 strX_prop
@@ -5561,9 +6133,6 @@
       \or:
         %%% case 8
         \bool_set_true:N \l__codehl_lang_BUILD_tagged_bool
-
-        %%% tagged_ident... TODO
-        %%% shall receive a _tagX_prop (BIG exception...)
         \__codehl_lang_peek_tagged:nnnN { #3 }{ #4 }{ #6 }  \l__codehl_lang_BUILD_tagX_prop
 
       \or:
@@ -5785,7 +6354,7 @@
                 \exp_not:N \regex_if_match:NnTF \exp_not:c { l__codehl_lang_ \l__codehl_def_lang_tl _oletter_regex } { ##1 }
                   {
                     \exp_not:N \tl_set:Nn \exp_not:N \l__codehl_tok_build_keywd_tl ##1
-                    \exp_not:N \cs_set_eq:NN \exp_not:N \__codehl_tok_proc:n \exp_not:N \l__codehl_tok_nesting_keywd:N
+                    \exp_not:N \cs_set_eq:NN \exp_not:N \__codehl_tok_proc:n \exp_not:N \__codehl_tok_nesting_keywd:N
                     \exp_not:N \tl_set_eq:NN \exp_not:N \l__codehl_tok_curr_ident_tl \exp_not:N \l__codehl_tok_curr_tag_tl
                     \exp_not:N \__codehl_tok_scan_stop:w % jumping to \scan_stop:
                   }
@@ -5824,10 +6393,8 @@
     \__codehl_build_remap:nnnnn { lang } { #1 _build } { 0 } { 0 } { #1 }
     \cs_set_eq:NN \__codehl_class_remap:n \__codehl_class_remap_default:n
 
-
-
   %%%
-  %%% single case (for now)
+  %%% single cases (for now)
   %%%
     \prop_get:cnN { l__codehl_lang_ #1 _build_keys_prop }
       { digits }
@@ -5844,8 +6411,6 @@
       \l__codehl_tmpc_tl
       \l__codehl_tmpa_tl
       \l__codehl_tmpb_tl
-
-
 
   %%%
     \int_zero:N \l__codehl_lang_base_int
@@ -5867,7 +6432,6 @@
     \prop_clear:N \l__codehl_lang_BUILD_tagcmtX_prop
     \prop_clear:N \l__codehl_lang_BUILD_tagstr_prop
     \prop_clear:N \l__codehl_lang_BUILD_tagstrX_prop
-
 
 
   %%%
@@ -5979,24 +6543,6 @@
   }
 \cs_generate_variant:Nn \__codehl_lang_build_ifnot:n { o }
 
-%%% full/generic test
-\prg_new_protected_conditional:Npnn \__codehl_lang_test_n_build:n #1 { TF }
-  {
-    \bool_if_exist:cTF { l__codehl_lang_ #1 _build_bool }
-      {
-        \bool_if:cTF { l__codehl_lang_ #1 _build_bool }
-          { \prg_return_true: }
-          {
-            \__codehl_lang_build:n { #1 }
-            \prg_return_true:
-          }
-      }
-      {
-        \prg_return_false:
-      }
-  }
-\prg_generate_conditional_variant:Nnn \__codehl_lang_test_n_build:n { o } { TF }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6004,140 +6550,147 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\cs_new_protected:Npn \codehl_baseformat_show:n #1
+\cs_new_protected:Npn \codehl_basefmt_show:n #1
   {
-    \__codehl_basefmt_test_n_build:nTF { #1 }
-      { }
+    \__codehl_basefmt_if_def:nNTF
+      { #1 } \l__codehl_def_basefmt_tl
+      {
+          \__codehl_basefmt_build_ifnot:on \l__codehl_def_basefmt_tl { }
+        \group_begin:
+          \tl_clear:N \l__codehl_tmpa_tl
+
+          \tl_put_right:Nn \l__codehl_tmpa_tl
+            { \exp_not:n { ~~ } Booleans: \iow_newline: }
+          \prop_map_inline:cn { l__codehl_basefmt_  \l__codehl_def_basefmt_tl _build_bool_keys_prop }
+            {
+              \prop_get:NnNTF \c__codehl_basefmt_keys_name_prop { ##1 } \l__codehl_tmpb_tl
+                {
+                  \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
+                  \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
+
+                  \bool_if:nTF { ##2 }
+                    { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {true}  \iow_newline: } }
+                    { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {false} \iow_newline: } }
+                }
+                {  }
+
+            }
+
+          \tl_put_right:Nn \l__codehl_tmpa_tl
+            { \exp_not:n { ~~ } Values: \iow_newline: }
+          \prop_map_inline:cn { l__codehl_basefmt_  \l__codehl_def_basefmt_tl _build_keys_prop }
+            {
+              \prop_get:NnNTF \c__codehl_basefmt_keys_name_prop { ##1 } \l__codehl_tmpb_tl
+                {
+                  \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
+                  \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
+                  \tl_put_right:Nn \l__codehl_tmpa_tl     {  ~ =>~ { \exp_not:n { ##2 } } \iow_newline: }
+                }
+                {  }
+
+            }
+          \msg_show:nnne { codehl / basefmt } { struct info }
+            { #1 } \l__codehl_tmpa_tl
+        \group_end:
+      }
       {
         \msg_error:nnnn { codehl / basefmt } { non existant }
           { basefmt01a } { #1 }
       }
-
-    \group_begin:
-      \tl_clear:N \l__codehl_tmpa_tl
-
-      \tl_put_right:Nn \l__codehl_tmpa_tl
-        { \exp_not:n { ~~ } Booleans: \iow_newline: }
-      \prop_map_inline:cn { l__codehl_basefmt_  #1 _build_bool_keys_prop }
-        {
-          \prop_get:NnNTF \c__codehl_basefmt_keys_name_prop { ##1 } \l__codehl_tmpb_tl
-            {
-              \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
-              \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
-
-              \bool_if:nTF { ##2 }
-                { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {true}  \iow_newline: } }
-                { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {false} \iow_newline: } }
-            }
-            {  }
-
-        }
-
-      \tl_put_right:Nn \l__codehl_tmpa_tl
-        { \exp_not:n { ~~ } Values: \iow_newline: }
-      \prop_map_inline:cn { l__codehl_basefmt_  #1 _build_keys_prop }
-        {
-          \prop_get:NnNTF \c__codehl_basefmt_keys_name_prop { ##1 } \l__codehl_tmpb_tl
-            {
-              \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
-              \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
-              \tl_put_right:Nn \l__codehl_tmpa_tl     {  ~ =>~ { \exp_not:n { ##2 } } \iow_newline: }
-            }
-            {  }
-
-        }
-      \msg_show:nnne { codehl / basefmt } { struct info }
-        { #1 } \l__codehl_tmpa_tl
-    \group_end:
   }
-\cs_set_eq:NN \hlBaseFormatShow \codehl_baseformat_show:n
+\cs_set_eq:NN \hlBasefmtShow \codehl_basefmt_show:n
 
 
 \cs_new_protected:Npn \codehl_hlset_show:n #1
   {
-    \__codehl_hlfmtset_test_n_build:nTF { #1 }
-      { }
+    \prop_get:NnNTF \l__codehl_sets_hlset_prop
+      { #1 } \l__codehl_def_hlset_tl
       {
-        \msg_error:nnnn { codehl / hlfmtset } { non existant }
-          { hlfmtset01a } { #1 }
-      }
+        \__codehl_hlset_build_ifnot:o \l__codehl_def_hlset_tl
 
-    \group_begin:
-      \tl_clear:N \l__codehl_tmpa_tl
+        \group_begin:
+          \tl_clear:N \l__codehl_tmpa_tl
 
-      \seq_map_inline:cn { l__codehl_hlfmtset_ #1 _build_seq }
-        {
-          \tl_put_right:Nn \l__codehl_tmpa_tl
-            { ~~group:~{ ##1 }  \iow_newline: }
-          \prop_map_inline:cn { l__codehl_hlfmtset_ #1 _ ##1 _build_prop }
+          \seq_map_inline:cn { l__codehl_hlset_ \l__codehl_def_hlset_tl _build_seq }
             {
               \tl_put_right:Nn \l__codehl_tmpa_tl
+                { ~~group:~{ ##1 }  \iow_newline: }
+              \prop_map_inline:cn { l__codehl_hlset_ \l__codehl_def_hlset_tl _ ##1 _build_prop }
                 {
-                  \exp_not:n { ~~ } \exp_not:n { ~~ } class:~{ \exp_not:n { ####1 } } ~ =>~ { \exp_not:n { ####2 } } \iow_newline:
+                  \tl_put_right:Nn \l__codehl_tmpa_tl
+                    {
+                      \exp_not:n { ~~ } \exp_not:n { ~~ } class:~{ \exp_not:n { ####1 } } ~ =>~ { \exp_not:n { ####2 } } \iow_newline:
+                    }
                 }
             }
-        }
 
-      \msg_show:nnnx { codehl / hlfmtset } { struct info }
-        { #1 } \l__codehl_tmpa_tl
-    \group_end:
+          \msg_show:nnnx { codehl / hlset } { struct info }
+            { #1 } \l__codehl_tmpa_tl
+        \group_end:
+      }
+      {
+        \msg_error:nnnn { codehl / hlset } { non existant }
+          { hlset01a } { #1 }
+      }
   }
 \cs_set_eq:NN \hlHLsetShow \codehl_hlset_show:n
 
 
-\cs_new_protected:Npn \codehl_keywdset_show:n #1
+\cs_new_protected:Npn \codehl_keyset_show:n #1
   {
-    \__codehl_keyset_test_n_build:nTF { #1 }
-      { }
+    \__codehl_keyset_if_def:nNTF
+      { #1 } \l__codehl_def_keyset_tl
+      {
+        \__codehl_keyset_build_ifnot:o \l__codehl_def_keyset_tl
+
+        \group_begin:
+          \tl_clear:N \l__codehl_tmpa_tl
+
+          \prop_map_inline:cn { l__codehl_keyset_ \l__codehl_def_keyset_tl _build_prop }
+            {
+              \seq_clear:N \l__codehl_tmpi_seq
+              \tl_clear:N \l__codehl_tmpb_tl
+
+              \prop_map_inline:Nn ##2
+                {
+                  \clist_if_exist:cTF { l__codehl_keyset_tmpshow_ ####2 _clist }
+                    { }
+                    {
+                      \clist_set_eq:cN { l__codehl_keyset_tmpshow_ ####2 _clist } \c_empty_clist
+                      \seq_put_right:Nn \l__codehl_tmpi_seq { ####2 }
+                      \tl_put_right:Nn \l__codehl_tmpb_tl
+                        { \cs_undefine:c { l__codehl_keyset_tmpshow_ ####2 _clist } }
+                    }
+                  \clist_put_right:cn
+                    { l__codehl_keyset_tmpshow_ ####2 _clist }
+                    { ####1 }
+                }
+              \tl_put_right:Nn \l__codehl_tmpa_tl
+                { ~~group:~{ ##1 }  \iow_newline: }
+
+              \seq_map_inline:Nn \l__codehl_tmpi_seq
+                {
+                  \tl_put_right:Ne \l__codehl_tmpa_tl
+                    {
+                      \exp_not:n {~~} \exp_not:n {~~~ class:~{ ####1 } ~ => ~ }
+                      { \clist_use:c { l__codehl_keyset_tmpshow_ ####1 _clist } }
+                      \exp_not:N \iow_newline:
+                    }
+                }
+              \l__codehl_tmpb_tl
+            }
+
+          \msg_show:nnnx { codehl / keyset } { struct info }
+            { #1 } \l__codehl_tmpa_tl
+        \group_end:
+      }
       {
         \msg_error:nnnn { codehl / keyset } { non existant }
           { keyset01a } { #1 }
       }
-
-    \group_begin:
-      \tl_clear:N \l__codehl_tmpa_tl
-
-      \prop_map_inline:cn { l__codehl_keyset_ #1 _build_prop }
-        {
-          \seq_clear:N \l__codehl_tmpi_seq
-          \tl_clear:N \l__codehl_tmpb_tl
-
-          \prop_map_inline:Nn ##2
-            {
-              \clist_if_exist:cTF { l__codehl_keyset_tmpshow_ ####2 _clist }
-                { }
-                {
-                  \clist_set_eq:cN { l__codehl_keyset_tmpshow_ ####2 _clist } \c_empty_clist
-                  \seq_put_right:Nn \l__codehl_tmpi_seq { ####2 }
-                  \tl_put_right:Nn \l__codehl_tmpb_tl
-                    { \cs_undefine:c { l__codehl_keyset_tmpshow_ ####2 _clist } }
-                }
-              \clist_put_right:cn
-                { l__codehl_keyset_tmpshow_ ####2 _clist }
-                { ####1 }
-            }
-          \tl_put_right:Nn \l__codehl_tmpa_tl
-            { ~~group:~{ ##1 }  \iow_newline: }
-
-          \seq_map_inline:Nn \l__codehl_tmpi_seq
-            {
-              \tl_put_right:Ne \l__codehl_tmpa_tl
-                {
-                  \exp_not:n {~~} \exp_not:n {~~~ class:~{ ####1 } ~ => ~ }
-                  { \clist_use:c { l__codehl_keyset_tmpshow_ ####1 _clist } }
-                  \exp_not:N \iow_newline:
-                }
-            }
-          \l__codehl_tmpb_tl
-        }
-
-      \msg_show:nnnx { codehl / keyset } { struct info }
-        { #1 } \l__codehl_tmpa_tl
-    \group_end:
   }
 %%%
-
-\cs_set_eq:NN \hlKeywdsetShow \codehl_keywdset_show:n
+\cs_set_eq:NN \hlKeysetShow \codehl_keyset_show:n
 
 
 \cs_new_protected:Npn \__codehl_lang_show:nnnnnnn #1#2#3#4#5#6#7
@@ -6243,7 +6796,6 @@
     \fi:
     \bool_if:NTF \l__codehl_lang_case_nestable_bool
       {
-        %%% TODO: test for case 9 (replace)...
         \int_compare:nNnTF { " \l__codehl_lang_case_case_tl } = { 9 }
           { }
           {
@@ -6273,61 +6825,65 @@
 
 \cs_new_protected:Npn \codehl_lang_show:n #1
   {
-    \__codehl_lang_test_n_build:nTF { #1 }
-      { }
+    \__codehl_lang_if_def:nNTF
+      { #1 } \l__codehl_def_lang_tl
       {
-        \msg_error:nnnn { codehl /  lang } { non existant }
+        \__codehl_lang_build_ifnot:o \l__codehl_def_lang_tl
+
+        \group_begin:
+          \tl_clear:N \l__codehl_tmpa_tl
+
+          \tl_put_right:Nn \l__codehl_tmpa_tl
+            { \exp_not:n { ~~ } Booleans: \iow_newline: }
+          \prop_map_inline:cn { l__codehl_lang_  \l__codehl_def_lang_tl _build_bool_keys_prop }
+            {
+              \prop_get:NnNTF \c__codehl_lang_keys_name_prop { ##1 } \l__codehl_tmpb_tl
+                {
+                  \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
+                  \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
+
+                  \bool_if:nTF { ##2 }
+                    { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {true}  \iow_newline: } }
+                    { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {false} \iow_newline: } }
+                }
+                {  }
+
+            }
+
+          \tl_put_right:Nn \l__codehl_tmpa_tl
+            { \exp_not:n { ~~ } Values: \iow_newline: }
+          \prop_map_inline:cn { l__codehl_lang_  \l__codehl_def_lang_tl _build_keys_prop }
+            {
+              \prop_get:NnNTF \c__codehl_lang_keys_name_prop { ##1 } \l__codehl_tmpb_tl
+                {
+                  \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
+                  \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
+                  \tl_put_right:Nn \l__codehl_tmpa_tl     {  ~ =>~ { \exp_not:n { ##2 } } \iow_newline: }
+                }
+                {  }
+
+            }
+          \tl_put_right:Nn \l__codehl_tmpa_tl
+            { \exp_not:n { ~~ } Patterns: \iow_newline: }
+
+          \cs_set_eq:NN \__codehl_lang_dlimit_add:nnnnnnn \__codehl_lang_show:nnnnnnn
+          \seq_map_inline:cn { l__codehl_lang_ \l__codehl_def_lang_tl _build_pattern_seq }
+            {
+              \prop_get:cnN { l__codehl_lang_ \l__codehl_def_lang_tl _build_pattern_prop }
+                { ##1 }
+                \l__codehl_tmpb_tl
+              \l__codehl_tmpb_tl
+            }
+
+          \msg_show:nnnx { codehl / lang } { struct info }
+             { #1 } \l__codehl_tmpa_tl
+        \group_end:
+      }
+      {
+        \msg_error:nnnn { codehl / lang } { non existant }
           { lang01a } { #1 }
       }
 
-    \group_begin:
-      \tl_clear:N \l__codehl_tmpa_tl
-
-      \tl_put_right:Nn \l__codehl_tmpa_tl
-        { \exp_not:n { ~~ } Booleans: \iow_newline: }
-      \prop_map_inline:cn { l__codehl_lang_  #1 _build_bool_keys_prop }
-        {
-          \prop_get:NnNTF \c__codehl_lang_keys_name_prop { ##1 } \l__codehl_tmpb_tl
-            {
-              \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
-              \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
-
-              \bool_if:nTF { ##2 }
-                { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {true}  \iow_newline: } }
-                { \tl_put_right:Nn \l__codehl_tmpa_tl { ~ =>~ {false} \iow_newline: } }
-            }
-            {  }
-
-        }
-
-      \tl_put_right:Nn \l__codehl_tmpa_tl
-        { \exp_not:n { ~~ } Values: \iow_newline: }
-      \prop_map_inline:cn { l__codehl_lang_  #1 _build_keys_prop }
-        {
-          \prop_get:NnNTF \c__codehl_lang_keys_name_prop { ##1 } \l__codehl_tmpb_tl
-            {
-              \tl_put_right:Nn \l__codehl_tmpa_tl     { \exp_not:n { ~~ } \exp_not:n { ~~ } }
-              \tl_put_right:Ne \l__codehl_tmpa_tl     { { \l__codehl_tmpb_tl } }
-              \tl_put_right:Nn \l__codehl_tmpa_tl     {  ~ =>~ { \exp_not:n { ##2 } } \iow_newline: }
-            }
-            {  }
-
-        }
-      \tl_put_right:Nn \l__codehl_tmpa_tl
-        { \exp_not:n { ~~ } Patterns: \iow_newline: }
-
-      \cs_set_eq:NN \__codehl_lang_dlimit_add:nnnnnnn \__codehl_lang_show:nnnnnnn
-      \seq_map_inline:cn { l__codehl_lang_ #1 _build_pattern_seq }
-        {
-          \prop_get:cnN { l__codehl_lang_ #1 _build_pattern_prop }
-            { ##1 }
-            \l__codehl_tmpb_tl
-          \l__codehl_tmpb_tl
-        }
-
-      \msg_show:nnnx { codehl / lang } { struct info }
-        { #1 } \l__codehl_tmpa_tl
-    \group_end:
   }
 
 \cs_set_eq:NN \hlLangShow \codehl_lang_show:n
@@ -6342,33 +6898,37 @@
   {
     language        .code:n   =
       {
-
-        \__codehl_lang_test_n_build:nTF { #1 }
-          { \tl_set:Nn  \l__codehl_tok_activ_lang_tl { #1 } }
+        \__codehl_lang_if_def:nNTF
+          { #1 } \l__codehl_tok_activ_lang_tl
+          {
+            \__codehl_lang_build_ifnot:o \l__codehl_tok_activ_lang_tl
+          }
           {
             \tl_clear:N \l__codehl_tok_activ_lang_tl
             \tl_if_empty:nTF { #1 }
               { }
               {
-                \msg_error:nnno { codehl /  lang } { non existant }
-                  { lang01 } \l__codehl_tok_activ_lang_tl
+                \msg_error:nnnn { codehl / lang } { non existant }
+                  { lang01 } { #1 }
               }
           }
-
       } ,
     language        .default:n = { } ,
 
     hl ~ set        .code:n   =
       {
-        \__codehl_hlfmtset_test_n_build:nTF { #1 }
-          { \tl_set:Nn  \l__codehl_tok_activ_hlfmtset_tl { #1 } }
+        \__codehl_hlset_if_def:nNTF
+          { #1 } \l__codehl_tok_activ_hlset_tl
           {
-            \tl_clear:N \l__codehl_tok_activ_hlfmtset_tl
+            \__codehl_hlset_build_ifnot:o \l__codehl_tok_activ_hlset_tl
+          }
+          {
+            \tl_clear:N \l__codehl_tok_activ_hlset_tl
             \tl_if_empty:nTF { #1 }
               { }
               {
-                \msg_error:nnno { codehl /  hlfmtset } { non existant }
-                  { hlfmtset01 } \l__codehl_tok_activ_hlfmtset_tl
+                \msg_error:nnnn { codehl /  hlset } { non existant }
+                  { hlset01 } { #1 }
               }
           }
       } ,
@@ -6376,16 +6936,18 @@
 
     keywd ~ set  .code:n   =
       {
-
-        \__codehl_keyset_test_n_build:nTF { #1 }
-          { \tl_set:Nn  \l__codehl_tok_activ_keyset_tl { #1 } }
+        \__codehl_keyset_if_def:nNTF
+          { #1 } \l__codehl_tok_activ_keyset_tl
+          {
+            \__codehl_keyset_build_ifnot:o \l__codehl_tok_activ_keyset_tl
+          }
           {
             \tl_clear:N \l__codehl_tok_activ_keyset_tl
             \tl_if_empty:nTF { #1 }
               { }
               {
-                \msg_error:nnno { codehl / keyset } { non existant }
-                  { keyset01 } \l__codehl_tok_activ_keyset_tl
+                \msg_error:nnnn { codehl /  keyset } { non existant }
+                  { keyset01 } { #1 }
               }
           }
       } ,
@@ -6394,31 +6956,33 @@
     base ~format    .code:n   =
       {
         \tl_if_empty:nTF { #1 }
-          { \tl_set:Nn \l__codehl_tok_tmp_tl { std-fmt } }
-          { \tl_set:Nn \l__codehl_tok_tmp_tl { #1 } }
-        \str_compare:oNoTF \l__codehl_tok_tmp_tl = \l__codehl_tok_activ_basefmt_tl
-          { }
-          {
-            \tl_set_eq:NN  \l__codehl_tok_activ_basefmt_tl \l__codehl_tok_tmp_tl
-            \bool_set_true:N \l__codehl_activ_basefmt_change_bool
-          }
+          { \tl_set:Nn \l__codehl_tok_tmpa_tl { std-fmt } }
+          { \tl_set:Nn \l__codehl_tok_tmpa_tl { #1 } }
 
-        \__codehl_basefmt_test_n_build:oTF \l__codehl_tok_activ_basefmt_tl
-          { }
+        \__codehl_basefmt_if_def:oNTF
+          \l__codehl_tok_tmpa_tl \l__codehl_tok_tmpb_tl
           {
-            \msg_error:nnno { codehl /  base fmt } { non existant }
-              { keyset01 } \l__codehl_tok_activ_basefmt_tl
-
-            \tl_set:Nn \l__codehl_tok_activ_hlfmtset_tl { std-fmt }
-            \bool_set_true:N \l__codehl_activ_basefmt_change_bool
-            \__codehl_basefmt_test_n_build:oTF \l__codehl_tok_activ_basefmt_tl
-              { } %%% it SHOULD alwasy be true...
+            \str_compare:oNoTF \l__codehl_tok_tmpb_tl = \l__codehl_tok_activ_basefmt_tl
               { }
+              {
+                \tl_set_eq:NN  \l__codehl_tok_activ_basefmt_tl \l__codehl_tok_tmpb_tl
+                \bool_set_true:N \l__codehl_activ_basefmt_change_bool
+              }
+            \__codehl_basefmt_build_ifnot:on \l__codehl_tok_activ_basefmt_tl { }
           }
+          {
+            \msg_error:nnnn { codehl /  base fmt } { non existant }
+              { keyset01 } { #1 }
+
+            %%% so that, there is a 'correct' default...
+            \tl_set:Nn \l__codehl_tok_activ_basefmt_tl { std-fmt }
+            \bool_set_true:N \l__codehl_activ_basefmt_change_bool
+            \__codehl_basefmt_build_ifnot:on \l__codehl_tok_activ_basefmt_tl { }
+          }
+
       } ,
     base ~format    .default:n = { } ,
   }
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6434,12 +6998,12 @@
     %%% to extend an HL set
     hl ~ set    .code:n =
       {
-        \tl_if_empty:NTF \l__codehl_tok_activ_hlfmtset_tl
+        \tl_if_empty:NTF \l__codehl_tok_activ_hlset_tl
           { %%% err: can't expand this
             \msg_error:nnnn { codehl / display } { undef }
               {disp01} { hl~set }
           }
-          { \keys_set:nn { codehl / hlfmtset } { #1 } }
+          { \keys_set:nn { codehl / hlset } { #1 } }
       } ,
 
     %%% to extend a keywd set
@@ -6450,7 +7014,7 @@
             \msg_error:nnnn { codehl / display } { undef }
               {disp02} { keywd~set }
           }
-          { \keys_set:nn { codehl / keys set } { #1 } }
+          { \keys_set:nn { codehl / keyset } { #1 } }
       } ,
 
     inline      .bool_set:N         = \l__codehl_tok_inline_bool ,
@@ -6461,15 +7025,109 @@
 
   }
 
-\cs_new_protected:Npn \codehl_settings:n #1
+\cs_new_protected:Npn \codehl_display_settings:n #1
   {
-        \bool_set_false:N \l__codehl_activ_basefmt_change_bool
-        \keys_set:nn { codehl / settings } { #1 }
+    \bool_set_false:N \l__codehl_activ_basefmt_change_bool
+    \keys_set:nn { codehl / settings } { #1 }
 
-        \bool_if:NTF \l__codehl_activ_basefmt_change_bool
-          { \__codehl_basefmt_set_style: }
-          { }
+    \bool_if:NTF \l__codehl_activ_basefmt_change_bool
+      { \__codehl_basefmt_set_style: }
+      { }
+
+    \__codehl_lang_tok_settings:
+
+    \bool_lazy_or:nnTF { \tl_if_empty_p:N \l__codehl_tok_activ_keyset_tl } { \tl_if_empty_p:N \l__codehl_tok_activ_hlset_tl }
+      {
+        \cs_set:Npn \__codehl_tok_keyfmt_base:Ncoo
+          { \__codehl_tok_keyfmt_less:Ncoo }
+        \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
+          { \__codehl_tok_keyfmt_less:Ncoo }
+      }
+      {
+        \cs_set:Npn \__codehl_tok_keyfmt_base:Ncoo
+          { \__codehl_tok_keyfmt:Ncoo }
+      }
+
   }
+\cs_set_eq:NN \hlDispSettings \codehl_display_settings:n
+
+
+\cs_new_protected:Npn \__codehl_lang_tok_settings:
+  {
+    \tl_if_empty:NTF \l__codehl_tok_activ_lang_tl
+      {
+        \cs_set_eq:NN \__codehl_tok_inbase:    \prg_do_nothing:
+        \cs_set_eq:NN \__codehl_tok_inbasecmt: \prg_do_nothing:
+        \cs_set_eq:NN \__codehl_tok_inbasestr: \prg_do_nothing:
+        \cs_set_eq:NN \__codehl_tok_intag:     \prg_do_nothing:
+        \cs_set_eq:NN \__codehl_tok_intagcmt:  \prg_do_nothing:
+        \cs_set_eq:NN \__codehl_tok_intagstr:  \prg_do_nothing:
+        \cs_set_eq:NN \__codehl_tok_intr:      \prg_do_nothing:
+
+        \cs_set:Npn \__codehl_tok_scan_digits:N ##1
+          { }
+        \cs_set:Npn \__codehl_tok_scan_oletter:N ##1
+          { }
+        \cs_set:Npn \__codehl_tok_keywd_case:N
+          { \__codehl_tok_keywd_casesensitive:N }
+        \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
+          { \__codehl_tok_keyfmt_less:Ncoo }
+
+      }
+      {
+        \cs_set:Npe  \__codehl_tok_inbase:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _base_scan_dlimit: } }
+        \cs_set:Npe  \__codehl_tok_inbasecmt:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _basecmt_scan_dlimit: } }
+        \cs_set:Npe  \__codehl_tok_inbasestr:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _basestr_scan_dlimit: } }
+        \cs_set:Npe  \__codehl_tok_intag:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tag_scan_dlimit: } }
+        \cs_set:Npe  \__codehl_tok_intagcmt:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tagcmt_scan_dlimit: } }
+        \cs_set:Npe  \__codehl_tok_intagstr:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tagstr_scan_dlimit: } }
+        \cs_set:Npe  \__codehl_tok_intr:
+          { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tr_scan_dlimit: } }
+
+        \prop_map_inline:cn { l__codehl_lang_ \l__codehl_tok_activ_lang_tl _build_keys_prop }
+          {
+            \tl_set:cn { l__codehl_tok_lang_style_ ##1 _tl } { ##2 }
+          }
+        \prop_map_inline:cn { l__codehl_lang_ \l__codehl_tok_activ_lang_tl _build_bool_keys_prop }
+          {
+            \bool_set_eq:cN { l__codehl_tok_lang_style_ ##1 _bool } ##2
+          }
+
+        \cs_set:Npe
+          \__codehl_tok_scan_digits:N
+          { \exp_not:c {  __codehl_lang_ \l__codehl_def_lang_tl _scan_digits:N } }
+        \cs_set:Npe
+          \__codehl_tok_scan_oletter:N
+          { \exp_not:c {  __codehl_lang_ \l__codehl_def_lang_tl _scan_oletter:N } }
+
+        \bool_if:NTF \l__codehl_tok_lang_style_case_bool
+          {
+            \cs_set:Npn \__codehl_tok_keywd_case:N
+              { \__codehl_tok_keywd_casesensitive:N }
+          }
+          {
+            \cs_set:Npn \__codehl_tok_keywd_case:N
+              { \__codehl_tok_keywd_caseless:N }
+          }
+
+        \bool_if:NTF \l__codehl_tok_lang_style_keywd_bool
+          {
+            \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
+              { \__codehl_tok_keyfmt:Ncoo }
+          }
+          {
+            \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
+              { \__codehl_tok_keyfmt_less:Ncoo }
+          }
+      }
+  }
+
 
 \cs_new_protected:Npn \__codehl_basefmt_set_style:
   {
@@ -6486,54 +7144,6 @@
             %%%
             \prop_map_inline:Nn \l__codehl_basefmt_cmds_prop
               { ##2 }
-
-
-%%%
-%%% TODO: this might be (probably IS) an error!
-%%% _activ_lang_ might change AND not trigger this !!!
-%%% same for _activ_keyset_
-%%% Those two should get a cmd: on their own
-%%%
-            \tl_if_empty:NTF \l__codehl_tok_activ_lang_tl
-              {
-                \cs_set_eq:NN \__codehl_tok_inbase:    \prg_do_nothing
-                \cs_set_eq:NN \__codehl_tok_inbasecmt: \prg_do_nothing
-                \cs_set_eq:NN \__codehl_tok_inbasestr: \prg_do_nothing
-                \cs_set_eq:NN \__codehl_tok_intag:     \prg_do_nothing
-                \cs_set_eq:NN \__codehl_tok_intagcmt:  \prg_do_nothing
-                \cs_set_eq:NN \__codehl_tok_intagstr:  \prg_do_nothing
-                \cs_set_eq:NN \__codehl_tok_intr:      \prg_do_nothing
-              }
-              {
-                \cs_set:Npe  \__codehl_tok_inbase:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _base_scan_dlimit: } }
-                \cs_set:Npe  \__codehl_tok_inbasecmt:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _basecmt_scan_dlimit: } }
-                \cs_set:Npe  \__codehl_tok_inbasestr:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _basestr_scan_dlimit: } }
-                \cs_set:Npe  \__codehl_tok_intag:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tag_scan_dlimit: } }
-                \cs_set:Npe  \__codehl_tok_intagcmt:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tagcmt_scan_dlimit: } }
-                \cs_set:Npe  \__codehl_tok_intagstr:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tagstr_scan_dlimit: } }
-                \cs_set:Npe  \__codehl_tok_intr:
-                  { \exp_not:c { __codehl_lang_ \l__codehl_tok_activ_lang_tl _tr_scan_dlimit: } }
-              }
-
-            \bool_lazy_or:nnTF { \tl_if_empty_p:N \l__codehl_tok_activ_keyset_tl } { \tl_if_empty_p:N \l__codehl_tok_activ_hlset_tl }
-              {
-                \cs_set:Npn \__codehl_tok_keyfmt_base:Ncoo
-                  { \__codehl_tok_keyfmt_less:Ncoo }
-                \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
-                  { \__codehl_tok_keyfmt_less:Ncoo }
-
-              }
-              {
-                \cs_set:Npn \__codehl_tok_keyfmt_base:Ncoo
-                  { \__codehl_tok_keyfmt:Ncoo }
-              }
-
   }
 
 
@@ -6543,13 +7153,13 @@
       { }
       {
         %%% verifying if all sets are really pre-build... :/
-        %%% might have changed after the last \codehl_settings:n
+        %%% might have changed after the last \codehl_display_settings:n
         %%% at least, _activ_ variables should be safe.
         %%%
         \tl_if_empty:NF \l__codehl_tok_activ_lang_tl
           { \__codehl_lang_build_ifnot:o \l__codehl_tok_activ_lang_tl }
-        \tl_if_empty:NF \l__codehl_tok_activ_hlfmtset_tl
-          { \__codehl_hlfmtset_build_ifnot:o \l__codehl_tok_activ_hlfmtset_tl }
+        \tl_if_empty:NF \l__codehl_tok_activ_hlset_tl
+          { \__codehl_hlset_build_ifnot:o \l__codehl_tok_activ_hlset_tl }
         \tl_if_empty:NF \l__codehl_tok_activ_keyset_tl
           { \__codehl_keyset_build_ifnot:o \l__codehl_tok_activ_keyset_tl }
 
@@ -6557,32 +7167,20 @@
           { \__codehl_basefmt_set_style: }
 
 
-        %%% TODO
-        %%% it might be worth (?!) to implement it like _basefmt_ (on change only)
-        %%% but, it is just digits, case and alpha
-        %%%
-        \prop_map_inline:cn { l__codehl_lang_ \l__codehl_tok_activ_lang_tl _build_keys_prop }
-          {
-            \tl_set:cn { l__codehl_tok_lang_style_ ##1 _tl } { ##2 }
-          }
-        \prop_map_inline:cn { l__codehl_lang_ \l__codehl_tok_activ_lang_tl _build_bool_keys_prop }
-          {
-            \bool_set_eq:cN { l__codehl_tok_lang_style_ ##1 _bool } ##2
-          }
-
         \group_begin:
 
-          \cs_set_eq:NN \__codehl_basefmt_display_set:nn       \__codehl_basefmt_display_set_tok_style:nn
-          \cs_set_eq:NN \__codehl_basefmt_display_bool_set:nn  \__codehl_basefmt_display_set_tok_bool_style:nn
+          \cs_set_eq:NN \__codehl_basefmt_display_set:nn
+            \__codehl_basefmt_display_set_tok_style:nn
+          \cs_set_eq:NN \__codehl_basefmt_display_bool_set:nn
+            \__codehl_basefmt_display_set_tok_bool_style:nn
 
-          \tl_set_eq:NN \l__codehl_def_hlfmtset_tl \l__codehl_tok_activ_hlfmtset_tl
+          \tl_set_eq:NN \l__codehl_def_hlset_tl    \l__codehl_tok_activ_hlset_tl
           \tl_set_eq:NN \l__codehl_def_keyset_tl   \l__codehl_tok_activ_keyset_tl
 
           \bool_set_true:N  \l__codehl_display_bool
 
           \keys_set:nn { codehl / display }
             { #1 }
-
 
           \bool_if:NTF \l__codehl_tok_inline_bool
             {
@@ -6603,7 +7201,6 @@
             }
 
 
-
           \cs_set:Npn \__codehl_tok_disp_line:
             { \__codehl_tok_set_line: }
           \cs_set_eq:NN \__codehl_tok_col_count:    \__codehl_tok_col_counting:
@@ -6612,12 +7209,16 @@
 
           \cs_set:Npn \__codehl_tok_start:N
             { \__codehl_tok_other:N  } %% it will (shall) handle just one token (byte) a time
+          \cs_set:Npn \__codehl_tok_nesting_keywd:N
+              { \__codehl_tok_keywd_other:N }
+
           \cs_set_eq:NN
             \__codehl_tok_proc:N
             \__codehl_tok_start:N
           \cs_set_eq:NN
             \__codehl_tok_keyfmt_eff:Ncoo
             \__codehl_tok_keyfmt_base:Ncoo
+
 
           \cs_set_eq:NN
             \__codehl_tok_other_scan:
@@ -6631,34 +7232,6 @@
           \cs_set_eq:NN
             \__codehl_tok_tr_scan:
             \__codehl_tok_intr:
-
-          \cs_set:Npe
-            \__codehl_tok_scan_digits:N
-            { \exp_not:c {  __codehl_lang_ \l__codehl_def_lang_tl _scan_digits:N } }
-          \cs_set:Npe
-            \__codehl_tok_scan_oletter:N
-            { \exp_not:c {  __codehl_lang_ \l__codehl_def_lang_tl _scan_oletter:N } }
-
-          \bool_if:NTF \l__codehl_tok_lang_style_case_bool
-            {
-              \cs_set:Npn \__codehl_tok_keywd_case:N
-                { \__codehl_tok_keywd_casesensitive:N }
-            }
-            {
-              \cs_set:Npn \__codehl_tok_keywd_case:N
-                { \__codehl_tok_keywd_caseless:N }
-            }
-
-          \bool_if:NTF \l__codehl_tok_lang_style_keywd_bool
-            {
-              \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
-                { \__codehl_tok_keyfmt:Ncoo }
-            }
-            {
-              \cs_set:Npn \__codehl_tok_keyfmt_nested:Ncoo
-                { \__codehl_tok_keyfmt_less:Ncoo }
-            }
-
 
           \tl_set:Nn \l__codehl_tok_curr_tag_tl
             { keywd }
@@ -6682,7 +7255,7 @@
 \NewDocumentCommand{\hlDisplay}{O{}m}
   { \codehl_display:nn { #1 } { #2 } }
 
-\NewDocumentCommand{\hlDisplayVar}{O{}m}
+\NewDocumentCommand{\hlDisplayV}{O{}m}
   { \codehl_display:no { #1 } #2 }
 
 \cs_new_protected:Npn \__codehl_tok_gobble_true:
@@ -6704,58 +7277,6 @@
       { }
       { \__codehl_tok_set_line: }
   }
-
-
-%%%%%%%%%
-%%%%%   Hm... aux debuging...
-%%%%%%%%%
-%\cs_new:Npn \__codehl_show_hack:nn #1#2
-%  {
-%    \tl_show:e
-%      {
-%        <<#1>> { \exp_not:n { #2 } }
-%        \iow_newline:
-%          \exp_not:N \l__codehl_tok_build_utf_tl ==>
-%            \iow_newline:
-%            { \exp_not:o \l__codehl_tok_build_utf_tl }
-%
-%        \iow_newline:
-%          \exp_not:N \l__codehl_tok_build_dlimit_tl ==>
-%            \iow_newline:
-%            { \exp_not:o \l__codehl_tok_build_dlimit_tl }
-%        \iow_newline:
-%          \exp_not:N \l__codehl_tok_build_line_tl ==>
-%            \iow_newline:
-%            { \exp_not:o \l__codehl_tok_build_line_tl }
-%        \iow_newline:
-%          \use:n{~} \use:n{~} <line~:~col>
-%          \exp_not:V \l__codehl_tok_line_int \use:n {~:~}
-%          \exp_not:V \l__codehl_tok_col_int
-%        \iow_newline:
-%      }
-%    \if_meaning:w \q_nil #2
-%      \tl_show:n {(--nil--)}
-%    \else:
-%      \if_int_compare:w 127 < ` #2 \relax
-%        \tl_show:n {gt-127}
-%      \else:
-%        \tl_show:n {lt-128}
-%      \fi:
-%    \fi:
-%  }
-%
-%
-%\cs_set:Npn \__codehl_show_hack:nn #1#2 { }
-%
-%
-%
-%\cs_new:Npn \__codehl_show_col_hack:nnn #1#2#3
-%  {
-%    \tl_show:n {col~count<<#1>> #2 (#3) }
-%  }
-%\cs_generate_variant:Nn \__codehl_show_col_hack:nnn { ne }
-%\cs_set:Npn \__codehl_show_col_hack:nnn #1#2#3 { }
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6823,7 +7344,6 @@
   }
 
 
-
 \cs_new_protected:Npn \__codehl_stack_build_fmtsave:N #1
   {
     \__codehl_stack_build_tl:Nn
@@ -6833,8 +7353,6 @@
       #1
       { \l__codehl_tok_fmtcmd_seq }
   }
-
-
 
 
 \__codehl_lang_init_comment:
@@ -6848,29 +7366,9 @@
 \__codehl_lang_init_tagged:
 
 
-
-
-
-%%% TODO: remove this... err/debuging.
-\int_new:N \l__codehl_stack_cnt_int
-
 \cs_new_protected:Npn \__codehl_nested_stack:n #1
   {
     \__codehl_nested_gpush:e { #1 }
-
-%          \int_incr:N \l__codehl_stack_cnt_int
-%          \tl_show:e
-%            {
-%              <<stacking>>(\int_use:N \l__codehl_stack_cnt_int)\iow_newline:
-%              \exp_not:n { #1 }
-%              \iow_newline: \iow_newline:
-%              { #1 }
-%            }
-%      \tl_show:c
-%        {
-%          g__globalstack_ __codehl_nested  _  \int_use:N \l__codehl_stack_cnt_int _tl
-%        }
-
   }
 \cs_generate_variant:Nn \__codehl_nested_stack:n { o }
 
@@ -6878,41 +7376,13 @@
 \cs_new_protected:Npn \__codehl_nested_stack_add:n #1
   {
     \__codehl_nested_gput_left:e { #1 }
-%    \tl_show:e
-%      {
-%        ~~<<stack-add>>(\int_use:N \l__codehl_stack_cnt_int)\iow_newline:
-%        \exp_not:n { #1 }
-%        \iow_newline: \iow_newline:
-%        { #1 }
-%      }
-%    \tl_show:c
-%      {
-%        g__globalstack_ __codehl_nested  _  \int_use:N \l__codehl_stack_cnt_int _tl
-%      }
-
-
   }
 \cs_generate_variant:Nn \__codehl_nested_stack_add:n { o }
 
 
 \cs_new:Npn \__codehl_nested_pop:
   {
-%      \tl_show:e
-%        {
-%          <<stack-pop>>(\int_use:N \l__codehl_stack_cnt_int)\iow_newline:
-%          \exp_not:v
-%            {
-%              g__globalstack_ __codehl_nested  _  \int_use:N \l__codehl_stack_cnt_int _tl
-%            }
-%        }
-%        \int_decr:N \l__codehl_stack_cnt_int
-
     \__codehl_nested_gpop:
-
-%    \tl_show:n {<<fmt~set~ON~POP>>}
-%    \tl_show:N \l__codehl_tok_fmtcmd_tl
-%    \seq_show:N \l__codehl_tok_fmtcmd_seq
-
   }
 
 
@@ -6991,8 +7461,6 @@
 \cs_generate_variant:Nn \__codehl_tok_fmt_retoken:n { o }
 
 
-
-
 \cs_new:Npn \__codehl_tok_keywd_caseless:N #1
   { \str_lowercase:f #1 }
 \cs_new:Npn \__codehl_tok_keywd_casesensitive:N
@@ -7014,7 +7482,6 @@
 \cs_generate_variant:Nn \__codehl_tok_keyfmt_less:NNnn { Ncoo }
 
 
-
 %%%%%%%
 %%% this will be used in an expansion context (retokenized)
 %%% using \relax to be latex2e safe
@@ -7032,7 +7499,6 @@
 
 \cs_new:Npn \__codehl_tok_col_nocount:
   { }
-
 
 
 %%%%%%%
@@ -7195,7 +7661,6 @@
   }
 
 
-
 %%%%%%%
 %%% <states> factory with keywd state
 %%%%%%%
@@ -7288,12 +7753,6 @@
 
               \__codehl_tok_scan_stop:w % jumping to \scan_stop:
             \fi:
-
-            %%% This is 'needed' to have a more uniforn _scan_ pattern
-            %%% (in case of 'identifiers')
-            %%% TODO: set those at the many _scanT_tl (peek) variables... to reduce assignments
-            \cs_set:Npn \l__codehl_tok_nesting_keywd:N
-              { #3 }
 
             #5 % 'end' code
 
@@ -7440,7 +7899,6 @@
   }
 
 
-
 %%%%%%%
 %%% \__codehl_tok_utf_dlimit:N
 %%% \__codehl_tok_dlimit:N
@@ -7524,7 +7982,6 @@
 %%%%%%%
 %%% Functionaly OK... but quite a few unnecessary assigments.
 %%%%%%%
-%%% TODO: use a dummy var instead of \l__codehl_tok_build_dlimit_tl
 \__codehl_tok_gen:nnn
   { dlimit_discard }
   { }
@@ -7538,7 +7995,7 @@
 %%% breaking the factory pattern.
 %%%%%%%
 %%% why not just 'discard' everything?
-%%% utf8 chars might be active (and the \peek_ahead commands can fail)
+%%% utf8 chars might be active (and the \peek_ahead commands will fail)
 %%%
 \cs_set:Npn  \__codehl_tok_utf_dlimit_discard:N #1
   {
@@ -7566,28 +8023,47 @@
 %%% standard sets
 %%%
 %%%%%%%
-\codehl_baseformat:nn { std-fmt }
+\codehl_basefmt_def:nn { std-fmt }
   { }
-\codehl_hlset:nn { std-hlset }
+\codehl_hlset_def:nn { std-hlset }
   {
-    comments  =   {1}{ \itshape } ,
-    comments  =   {2}{ \itshape } ,
-    comments  =   {3}{ \itshape } ,
+    comment  =   {1}{ \itshape } ,
+    comment  =   {2}{ \itshape } ,
+    comment  =   {3}{ \itshape } ,
+    comment  =   {4}{ \itshape } ,
+    comment  =   {5}{ \itshape } ,
+    comment  =   {6}{ \itshape } ,
     string    =   {1}{ \slshape } ,
     string    =   {2}{ \slshape } ,
     string    =   {3}{ \slshape } ,
+    string    =   {4}{ \slshape } ,
+    string    =   {5}{ \slshape } ,
+    string    =   {6}{ \slshape } ,
     keywd     =   {1}{ \bfseries } ,
     keywd     =   {2}{ \bfseries } ,
     keywd     =   {3}{ \bfseries } ,
+    keywd     =   {4}{ \bfseries } ,
+    keywd     =   {5}{ \bfseries } ,
+    keywd     =   {6}{ \bfseries } ,
     texcs     =   {1}{ \bfseries } ,
     texcs     =   {2}{ \bfseries } ,
     texcs     =   {3}{ \bfseries } ,
+    texcs     =   {4}{ \bfseries } ,
+    texcs     =   {5}{ \bfseries } ,
+    texcs     =   {6}{ \bfseries } ,
   }
 
+
+\codehl_display_settings:n
+  {
+    language = {} ,
+    keywd ~ set = {} ,
+    hl ~ set = std-hlset ,
+    base ~ format = std-fmt
+  }
 
 
 %%% search for (TEMP.tex)
 %%% oletter
 %%% other
 %%% TODO
-%%% comment*
