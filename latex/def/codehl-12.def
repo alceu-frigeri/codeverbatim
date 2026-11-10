@@ -1,0 +1,153 @@
+%%%==============================================================================
+%% Copyright 2026-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/18}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-12}
+  {
+     name        = {codehl-12} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/18} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~12}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { Ada.95 }
+  {
+    %%%
+    info / note  =
+     {
+       Ada ~ 87-95 ~ base ~ Language. ~ Some ~ references~\\
+       http://www.ada-auth.org/~\\
+       http://www.ada-auth.org/standards/ada22.html~\\
+       https://www.adaic.org/~\\
+       https://ada-lang.io/~\\
+     }  ,
+    %%%
+
+    comment ~ line           =      {1} { -- }        { } ,
+
+    string                   =      {1} { '  } { \\ } { }  ,
+    string                   =      {1} { "  } { \\ } { }  ,  
+    
+    alphanumeric             =      true  ,
+    oletter                  =      { \_ }  ,
+
+    case ~ sensitive         =      false  ,
+  }
+
+\codehl_lang_def:nn { Ada.22 }
+  {
+    %%%
+    info / note  =
+     {
+       Ada ~ 2022 ~ based ~ on  ~ Ada ~ 95
+     }  ,
+    %%%
+
+    based ~ on               =      { Ada.95 }  ,
+  }
+
+\codehl_keyset_def:nn { Ada.95 }
+  {
+    %%%
+    info / note  =
+     {
+       Ada ~87-95 ~ base ~ Language. ~ Some ~ references~\\
+       http://www.ada-auth.org/~\\
+       http://www.ada-auth.org/standards/ada22.html~\\
+       https://www.adaic.org/~\\
+       https://ada-lang.io/~\\
+     }  ,
+    %%%
+
+    keywd*                    =      {1}
+      { %%% original Ada.87
+        abort, abs, accept, access, all, and, array, at, 
+        begin, body, case, constant, declare, delay, delta, 
+        digits, do, else, elsif, end, entry, exception, exit, for, 
+        function, generic, goto, if, in, is, limited, loop, mod, new, 
+        not, null, of, or, others, out, package, pragma, private, 
+        procedure, raise, range, record, rem, renames, return, 
+        reverse, select, separate, subtype, task, terminate, then, 
+        type, use, when, while, with, xor,
+        pragma, 
+        %%% added with Ada.95
+        abstract, aliased, protected, requeue, tagged, until, 
+      }  ,
+  }
+
+\codehl_keyset_def:nn { Ada.22 }
+  {
+    %%%
+    info / note  =
+     {
+       Ada ~ 2022 ~ based ~ on  ~ Ada ~ 95
+     }  ,
+    %%%
+
+    based ~ on               =      { Ada.95 }  ,
+    
+    keywd*                    =      {1}
+      { %%% added with Ada.12
+        interface, overriding, synchronized, some,
+        %%% added with Ada.22
+        parallel, 
+      }  ,
+  }
+
+%%
+%% Aliases
+%%
+
+\codehl_lang_alias:nn   { Ada } { Ada.22 }
+\codehl_keyset_alias:nn { Ada } { Ada.22 }
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut
+
+

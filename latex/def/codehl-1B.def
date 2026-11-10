@@ -1,0 +1,362 @@
+%%%==============================================================================
+%% Copyright 2026-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/18}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-1B}
+  {
+     name        = {codehl-1B} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/18} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~1B}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { TeX } 
+  {
+    %%%
+    info / note  =
+     {
+       Base / Usual ~ TeX ~ Language ~ setup.~\\
+       https://ctan.org/
+     }  ,
+    %%%
+
+    identifier               =      { texcs }   { \\ }  { }  ,
+    comment ~ line           =      {1} { \%  }         { }  ,
+  }
+  
+\codehl_lang_def:nn { TeX.l3 } 
+  {
+    %%%
+    info / note  =
+     {
+       This ~ includes ~ an  ~ underscore ~ ' _ ' ~ as ~ an ~ oletter,
+       ~ and ~ sets ~ alphanumeric ~ true. ~
+       Better ~ approach: ~ capture ~ it ~ as ~ a ~ letter ~ (codeverbatim).
+        ~ and ~ use ~ TeX ~ base ~ language ~ instead.
+     }  ,
+    %%%
+
+    based ~ on               =      { TeX }  ,
+
+    %%% Argh!
+    %%% It's better to just redefine those chars as letter (codeverbatim)
+    %%% this (TeX.l3) is just 'in case' for those that don't want to adjust
+    %%% the verbatim code before using it.
+    alphanumeric             =      true ,
+    oletter                  =      { \_ }  ,
+    digits*                  =      { } ,
+  }
+
+\codehl_lang_def:nn { TeX.l3sign }   
+  {
+    %%%
+    info / note  =
+     {
+       This ~ includes ~ underscore ~ ' _ ' ~ and ~ a ~ collon ~' : '~ as ~ oletter,
+       ~ and ~ sets ~ alphanumeric ~ true. ~
+       Better ~ approach: ~ capture ~ them ~ as ~ letter ~ (codeverbatim),
+        ~ and ~ use ~ TeX ~ base ~ language ~ instead.
+     }  ,
+    %%%
+
+    based ~ on               =      { TeX }  ,
+
+    %%% Argh!
+    %%% It's better to just redefine those chars as letter (codeverbatim)
+    %%% this (TeX.l3sign) is just 'in case' for those that don't want to adjust
+    %%% the verbatim code before using it.
+    alphanumeric             =      true ,
+    oletter                  =      { \_: }  ,
+    digits*                  =      { } ,
+  }
+
+
+
+\codehl_keyset_def:nn { TeX.primitives }
+  {
+    %%%
+    info / note  =
+     {
+       Primitives  ~ commands ~ ~\\
+       https://ctan.org/pkg/pdftex
+     }  ,
+    %%%
+
+    texcs                    =      {1}
+      { 
+        above, abovedisplayshortskip, abovedisplayskip, abovewithdelims, 
+        accent, adjdemerits, advance, afterassignment, aftergroup, 
+        atop, atopwithdelims, badness, baselineskip, batchmode, begingroup, 
+        belowdisplayshortskip, belowdisplayskip, binoppenalty, botmark, box, 
+        boxmaxdepth, brokenpenalty, catcode, char, chardef, cleaders, closein, 
+        closeout, clubpenalties, clubpenalty, copy, count, countdef, cr, crcr, 
+        csname, day, deadcycles, def, defaulthyphenchar, defaultskewchar, 
+        delcode, delimiter, delimiterfactor, delimitershortfall, dimen, 
+        dimendef, discretionary, displayindent, displaylimits, displaystyle, 
+        displaywidowpenalties, displaywidowpenalty, displaywidth, divide, 
+        doublehyphendemerits, dp, dump, edef, else, emergencystretch, end, 
+        endcsname, endgroup, endinput, endlinechar, eqno, errhelp, 
+        errmessage, errorcontextlines, errorstopmode, escapechar, 
+        everycr, everydisplay, everyhbox, everyjob, everymath, 
+        everypar, everyvbox, exhyphenpenalty, expandafter, fam, fi, 
+        finalhyphendemerits, firstmark, floatingpenalty, font, fontdimen, 
+        fontname, futurelet, gdef, global, globaldefs, halign, hangafter, 
+        hangindent, hbadness, hbox, hfil, hfill, hfilneg, hfuzz, hoffset, 
+        holdinginserts, hrule, hsize, hskip, hss, ht, hyphenation, hyphenchar, 
+        hyphenpenalty, if, ifcase, ifcat, ifdim, ifeof, iffalse, ifhbox, 
+        ifhmode, ifinner, ifmmode, ifnum, ifodd, iftrue, ifvbox, ifvmode, 
+        ifvoid, ifx, ignorespaces, immediate, indent, input, inputlineno, 
+        insert, insertpenalties, interlinepenalty, jobname, kern, language, 
+        lastbox, lastkern, lastpenalty, lastskip, lccode, leaders, left, 
+        lefthyphenmin, leftskip, leqno, let, limits, linepenalty, lineskip, 
+        lineskiplimit, long, looseness, lower, lowercase, mag, mark, 
+        mathaccent, mathbin, mathchar, mathchardef, mathchoice, mathclose, 
+        mathcode, mathinner, mathop, mathopen, mathord, mathpunct, mathrel, 
+        mathsurround, maxdeadcycles, maxdepth, meaning, medmuskip, message, 
+        middle, mkern, month, moveleft, moveright, mskip, multiply, muskip, 
+        muskipdef, newlinechar, noalign, noboundary, noexpand, noindent, 
+        nolimits, nonscript, nonstopmode, nulldelimiterspace, nullfont, 
+        number, omit, openin, openout, or, outer, output, outputpenalty, 
+        over, overfullrule, overline, overwithdelims, pagedepth, 
+        pagefilllstretch, pagefillstretch, pagefilstretch, pagegoal, 
+        pageshrink, pagestretch, pagetotal, par, parfillskip, parindent, 
+        parshape, parskip, patterns, pausing, penalty, postdisplaypenalty, 
+        predisplaypenalty, predisplaysize, pretolerance, prevdepth, 
+        prevgraf, radical, raise, read, relax, relpenalty, right, 
+        righthyphenmin, rightskip, romannumeral, scriptfont, 
+        scriptscriptfont, scriptscriptstyle, scriptspace, scriptstyle, 
+        scrollmode, setbox, setlanguage, sfcode, shipout, show, showbox, 
+        showboxbreadth, showboxdepth, showlists, showthe, skewchar, skip, 
+        skipdef, spacefactor, spaceskip, span, special, splitbotmark, 
+        splitfirstmark, splitmaxdepth, splittopskip, string, tabskip, 
+        textfont, textstyle, the, thickmuskip, thinmuskip, time, toks, 
+        toksdef, tolerance, topmark, topskip, tracingcommands, 
+        tracinglostchars, tracingmacros, tracingonline, tracingoutput, 
+        tracingpages, tracingparagraphs, tracingrestores, tracingstats, 
+        uccode, uchyph, underline, unhbox, unhcopy, unkern, unpenalty, 
+        unskip, unvbox, unvcopy, uppercase, vadjust, valign, vbadness, 
+        vbox, vcenter, vfil, vfill, vfilneg, vfuzz, voffset, vrule, 
+        vsize, vskip, vsplit, vss, vtop, wd, widowpenalties, widowpenalty, 
+        write, xdef, xleaders, xspaceskip, year
+        %%% eTeX primitives
+        botmarks, clubpenalties, currentgrouplevel, currentgrouptype, 
+        currentifbranch, currentiflevel, currentiftype, detokenize, 
+        dimexpr, displaywidowpenalties, everyeof, firstmarks, fontchardp, 
+        fontcharht, fontcharic, fontcharwd, glueshrink, glueshrinkorder, 
+        gluestretch, gluestretchorder, gluetomu, ifcsname, ifdefined, 
+        iffontchar, interactionmode, interlinepenalties, lastlinefit, 
+        lastnodetype, marks, muexpr, mutoglue, numexpr, pagediscards, 
+        parshapedimen, parshapeindent, parshapelength, 
+        predisplaydirection, protected, readline, savinghyphcodes, 
+        savingvdiscards, scantokens, showgroups, showifs, showtokens, 
+        splitdiscards, topmarks, tracingassigns, tracinggroups, 
+        tracingifs, tracingnesting, tracingscantokens, unexpanded, 
+        unless, widowpenalties
+      }  ,
+  }
+  
+\codehl_keyset_def:nn { TeX.pdfTeX }
+  {
+    %%%
+    info / note  =
+     {
+       Primitives  ~ commands ~ ~\\
+       https://ctan.org/pkg/pdftex
+     }  ,
+    %%%
+
+    based ~ on               =      { TeX.primitives }  ,
+    
+    texcs                    =      {2}
+      { %%% not all of them...
+        pdfadjustspacing, pdfannot, pdfcatalog, pdfcolorstack, 
+        pdfcolorstackinit, pdfcompresslevel, pdfcreationdate, 
+        pdfdecimaldigits, pdfdest, pdfdestmargin, pdfdraftmode, 
+        pdfendlink, pdfendthread, pdffakespace, pdffontattr, pdffontname, 
+        pdffontobjnum, pdffontexpand, pdfgamma, pdfgentounicode, 
+        pdfglyphtounicode, pdfhorigin, pdfimageapplygamma, 
+        pdfimagegamma, pdfimagehicolor, pdfimageresolution, 
+        pdfincludechars, pdfinclusioncopyfonts, pdfinclusionerrorlevel, 
+        pdfinfo, pdfinfoomitdate, pdfinterwordspaceoff, 
+        pdfinterwordspaceon, pdflastannot, pdflastlink, 
+        pdflastobj, pdflastxform, pdflastximage, pdflastximagepages, 
+        pdflastxpos, pdflastypos, pdflinkmargin, pdfliteral, pdfmapfile, 
+        pdfmapline, pdfmatch, pdfmdfivesum, pdfminorversion, 
+        pdfmajorversion, pdfnames, pdfnoligatures, pdfnormaldeviate, 
+        pdfobj, pdfobjcompresslevel, pdfomitcharset, pdfoutline, 
+        pdfoutput, pdfpageattr, pdfpagebox, pdfpageheight, 
+        pdfpageref, pdfpageresources, pdfpagesattr, pdfpagewidth, 
+        pdfpkmode, pdfpkresolution, pdfprimitive, pdfprotrudechars, 
+        pdfrefobj, pdfrefxform, pdfrefximage, pdfreplacefont, 
+        pdfrestore, pdfretval, pdfsave, pdfsavepos, pdfsetmatrix, 
+        pdfsetrandomseed, pdfshellescape, pdfstartlink, pdfstartthread, 
+        pdfstrcmp, pdftexbanner, pdftexrevision, pdftexversion, 
+        pdfthread, pdfthreadmargin, pdftrailer, pdftrailerid, 
+        pdftracingfonts, pdftrailer, pdfunescapehex, pdfuniformdeviate, 
+        pdfuniqueresname, pdfvorigin, pdfxform, pdfximage
+      }  ,
+  }
+  
+\codehl_keyset_def:nn { TeX.luaTeX }
+  {
+    %%%
+    info / note  =
+     {
+       Primitives  ~ commands ~ ~\\
+       https://ctan.org/pkg/pdftex
+     }  ,
+    %%%
+
+    based ~ on               =      { TeX.primitives }  ,
+    
+    texcs                    =      {2}
+      { %%% not all of them...
+        directlua, latelua, lateluafunction, luaescapestring, 
+        luafunction, luafunctioncall, luadef, luabytecode, luabytecodecall,
+        %%% Attribute
+        attribute, attributedef, boxattribute,
+        %%% Catcode
+        catcodetable, initcatcodetable, savecatcodetable,
+        %%% Tokens
+        expanded, immediateassignment, immediateassigned, glet, 
+        letcharcode, toksapp, tokspre, etoksapp, etokspre, 
+        gtoksapp, gtokspre, xtoksapp, xtokspre, csstring, 
+        begincsname, lastnamedcs, scantextokens, clearmarks, 
+        alignmark, aligntab, ifcondition,
+        %%% 
+        bodydir, pagedir, textdir, mathdir, pardir, 
+        breakafterdirmode, shapemode, hyphenationmin, 
+        boundary, noboundary, protrusionboundary, wordboundary,
+        %%% 
+        Uleft, Uright, Uhextensible, 
+        Uvextensible, Uchar, Ucharcat, Ustack,
+        %%% 
+        pdfextension, pdfvariable, pdffeedback,
+        %%%
+        outputmode, draftmode, pagewidth, pageheight, pxdimen, 
+        protrudechars, adjustspacing, copyfont, fontexpand,
+        expandglyphsinfont, ignoreligaturesinfont, normaldeviate, 
+        uniformdeviate, randomseed, setrandomseed, savepos, 
+        lastxpos, lastypos, fontid, setfontid, noligs, nokerns, 
+        nospaces, gleaders, nohrule, novrule, outputbox, vpack, hpack, 
+        tpack, suppressfontnotfounderror, suppresslongerror, 
+        suppressifcsnameerror, suppressoutererror, 
+        suppressmathparerror, suppressprimitiveerror, 
+        luatexbanner, luatexversion, luatexrevision, 
+      }  ,
+  }
+
+
+\codehl_keyset_def:nn { TeX.common }
+  {
+    %%%
+    info / note  =
+     {
+       some  ~ common ~ commands ~ ~\\
+       https://ctan.org/pkg/pdftex
+     }  ,
+    %%%
+
+    texcs                    =      {1}
+      { %%% not all of them...
+        documentclass, usepackage, 
+        title, author, date, maketitle, 
+        tableofcontents, listoffigures, listoftables,
+
+        part, section, subsection, subsubsection, 
+        paragraph, subparagraph,
+
+        label, ref, pageref, cite, nocite,
+
+        textbf, textit, texttt, textsc, textsf, textsl, 
+        emph, textnormal, textrm, textup, tiny, 
+        scriptsize, footnotesize, small, normalsize, 
+        large, Large, LARGE, huge, Huge, 
+
+        item, caption, centering, 
+        includegraphics,
+        linewidth, textwidth, textheight
+
+        newpage, clearpage, cleardoublepage, pagebreak, 
+        nopagebreak, linebreak, nolinebreak, newline, 
+        hspace, vspace, hfill, vfill, indent, 
+        noindent, par,
+
+        footnote, footnotemark, footnotetext, marginpar,
+
+        mbox, makebox, fbox, framebox, parbox, minipage, raisebox, rule,
+
+        setlength, addtolength, settowidth, settoheight, 
+        settodepth, newcounter, setcounter, addtocounter, 
+        value, arabic, roman, Roman, alph, Alph, fnsymbol,
+
+        newcommand, renewcommand, providecommand, newenvironment, 
+        renewenvironment, newtheorem,
+
+        today, newline, smallskip, medskip, bigskip, 
+        quad, qquad, ldots, dots, LaTeX, TeX, 
+        protect, typeout, typein
+      }  ,
+    keywd                    =      {1}
+      {  %%% environments
+        itemize, enumerate, description, document, center, 
+        flushleft, flushright, quote, quotation, verse, 
+        verbatim, abstract, figure, table, equation, eqnarray,
+      }
+  }
+
+%%
+%% Aliases
+%%
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut
+
+

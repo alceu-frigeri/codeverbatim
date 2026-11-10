@@ -65,12 +65,12 @@ The Current Maintainer of this work is Alceu Frigeri
 * codehighlight.sty
     - code highlighting
 
-* codehl-00.def ... codehl-5F.def       *(hexadecimal numbering)*
+* codehl-00.def ... codehl-21.def       *(hexadecimal numbering)*
     - the many pre-defined language files
 
 -------------
 
 ### Change log
 
-* Version 0.1
-    - Initial setup. (far from ready)
+* Version 1.0
+    - Initial release at CTAN

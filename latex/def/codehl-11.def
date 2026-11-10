@@ -1,0 +1,161 @@
+%%%==============================================================================
+%% Copyright 2026-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/18}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-11}
+  {
+     name        = {codehl-11} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/18} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~11}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { R }
+  {
+    %%%
+    info / note  =
+     {
+       R ~ base ~ Language. ~ Some ~ references~\\
+       https://cran.r-project.org/manuals.html~\\
+       https://rdrr.io/r/base/Reserved.html
+     }  ,
+    %%%
+
+    comment ~ line           =      {1} { \#        }                    { } ,
+
+    string                   =      {1} { '         }             { \\ } { }  ,
+    string                   =      {1} { "         }             { \\ } { }  ,
+    delimited ~ string       =      {2} { r"(       } { )"      } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"\{      } { \}"     } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"\[      } { \]"     } { \\ } { }  ,
+
+    delimited ~ string       =      {2} { r"--(     } { )--"    } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"--\{    } { \}--"   } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"--\[    } { \]--"   } { \\ } { }  ,
+
+    delimited ~ string       =      {2} { r"---(    } { )---"   } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"---\{   } { \}---"  } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"---\[   } { \]---"  } { \\ } { }  ,
+
+    delimited ~ string       =      {2} { r"----(   } { )----"  } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"----\{  } { \}----" } { \\ } { }  ,
+    delimited ~ string       =      {2} { r"----\[  } { \]----" } { \\ } { }  ,
+    
+    alphanumeric             =      true  ,
+    oletter                  =      { \_\. }  ,
+  }
+
+\codehl_keyset_def:nn { R }
+  {
+    %%%
+    info / note  =
+     {
+       R ~ base ~ Language. ~ Some ~ references~\\
+       https://cran.r-project.org/manuals.html~\\
+       https://rdrr.io/r/base/Reserved.html
+     }  ,
+    %%%
+
+    keywd                    =      {1}
+      { 
+        if, else, repeat, while, function, for, in, next, break,
+        TRUE, FALSE, NULL, Inf, NaN, NA,
+        NA_integer_, NA_real_, NA_complex_, NA_character
+      }  ,
+    keywd                    =      {2}
+      { %%% from diverse modules
+        %%% extremely incomplete
+        
+        %%% Language / evaluation
+        eval, expression, quote, bquote, substitute, do.call, call, force, 
+        on.exit, return, function, forceAndCall,
+        %%% Control flow & logic
+        if, for, while, repeat, break, next, switch, all, any, 
+        %%% Data structures
+        c, list, data.frame, matrix, array, factor, vector, 
+        family, length, dim, names, attr,
+        %%% Subsetting / extraction
+        subset, with, within, transform, replace,  
+        %%% Mathematics
+        sum, prod, mean, max, min, range, abs, sqrt, exp, log, sin/cos/tan + hyperbolic/inverse, gamma, lgamma, beta, choose, factorial, round, signif, cumsum,
+        %%% Complex numbers
+        Re, Im, Mod, Arg, Conj,
+        %%% Character / string
+        paste, paste0, sprintf, substr, substring, nchar, tolower, toupper, chartr, gsub, sub, gregexpr, regexpr, strsplit, trimws, startsWith, endsWith,
+        %%% Dates / times
+        Date, POSIXct, POSIXlt, Sys.Date, Sys.time, as.Date, format.Date, difftime, seq.Date,
+        %%% Environments / namespaces
+        environment, new.env, parent.env, ls, get, assign, rm, exists, search, searchpaths, loadNamespace, attach, detach,
+        %%% Connections / I/O
+        file, gzfile, bzfile, url, textConnection, readLines, writeLines, scan, cat, sink, readBin, writeBin, readChar, writeChar,
+        %%% System / process
+        system, system2, Sys.getenv, Sys.setenv, Sys.time, Sys.info, Sys.which, path.expand, normalizePath, tempfile, tempdir,
+        %%% Random numbers
+        runif, rnorm, set.seed, RNGkind,
+        %%% Apply family
+        apply, lapply, sapply, vapply, mapply, tapply, eapply, rapply, Map, Reduce, Filter, Find, Position,
+        %%% Object orientation (S3)
+        UseMethod, NextMethod, class, unclass, inherits, methods,
+        %%% Debugging / introspection
+        browser, debug, trace, traceback, body, formals, environment, str, summary, print,
+        %%% Package / library management
+        library, require, install.packages (actually in utils, but related), find.package, system.file,
+        %%% Special constants / values
+        NULL, NA, NaN, Inf, TRUE, FALSE, letters, LETTERS, month.abb, month.name, pi,
+      }  ,
+  }
+
+%%
+%% Aliases
+%%
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut
+
+
