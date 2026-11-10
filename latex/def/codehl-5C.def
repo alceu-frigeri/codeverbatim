@@ -1,0 +1,305 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-5C}
+  {
+     name        = {codehl-5C} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~5C}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+\codehl_keyset_def:nn { TeX.ams }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[ams]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+Aboxed , AmSfont , ArrowBetweenLines , Aut , Bar , Bbb , Bbbk , Bigg , Box , Bumpeq , C , CDat , CMcal , Cap , Coloneq
+, Coloneqq , Complex , Cup , DJ , DOTS , DOTSB , DOTSI , DOTSX , Dashcolon , DeclareBinaryPrefix , DeclareLeftDelimiter
+, DeclareMathOperator , DeclarePairedDelimiter , DeclarePairedDelimiterX , DeclarePairedDelimiterXPP , DeclareRightDelimiter ,
+DeclareSIPostPower , DeclareSIPower , DeclareSIPrePower , DeclareSIPrefix , DeclareSIQualifier , DeclareSIUnit ,
+DeclareSIUnitWithOptions , DeclareTranslation , Delta , DescribeOption , Dot , Doteq , ENDDNE , EmphEqMainEnv ,
+EmphEqdelimiterfactor , EmphEqdelimitershortfall , EmphEqdisplaydepth , EmphEqdisplayheight , EmphEqdisplaywidth ,
+EmphEqtagwidth , End , Eqcolon , EuFrak , EuScript , Finv , GHz , GPa , GW , Game , GeV , GetTranslation , Hom , Hz ,
+ISSN , Iat , InTheoType , Integer , Isom , LARGE , LRE , LaTeXoverbrace , LaTeXunderbrace , Lambda , Lleftarrow ,
+Longleftrightarrow , Longrightarrow , Lsh , MHInternalSyntaxOff , MHInternalSyntaxOn , MHPrecedingSpacesOff ,
+MHPrecedingSpacesOn , MPa , MR , MRhref , MTFlushSpaceAbove , MTFlushSpaceBelow , MTmultlined , MakeAboxedCommand
+, MakeTextUppercase , MaybeMHPrecedingSpacesOff , Mc , MeV , MoveEqLeft , MultiIntegral , MultlinedHook , N , Natural ,
+Octonion , Order , PII , Pa , PotEndMark , PrintDescribeOption , PrintSubscript , PrintSuperscript , ProvideMathFix ,
+Quaternion , Rational , Real , RestoreTags , Rrightarrow , Rsh , SI , SIInBookmark , SIUnitSymbolAngstrom ,
+SIUnitSymbolArcminute , SIUnitSymbolArcsecond , SIUnitSymbolCelsius , SIUnitSymbolDegree , SIUnitSymbolMicro ,
+SIUnitSymbolOhm , SIlist , SIlistInBookmark , SIrange , SIrangeInBookmark , Sb , SendSettingsToPgf , SetOnlyEndMark ,
+SetTagPlusEndMark , Sigma , Sp , Span , SpecialMainOptionIndex , SpecialOptionIndex , Subset , Supset ,
+SwapAboveDisplaySkip , THz , TagsPlusEndmarks , TeV , Textures , Tilde , Tiny , URL , URLhref , Vdash , VerbBox ,
+Vmatrix , Vvdash , abstractbox , accentedsymbol , activevert , addresses , adjustlimits , adjusttag , aindex , align , alignat ,
+allowdisplaybreaks , allowtthyphens , alph , altucnm , ampere , amslatex , amstex , and , andify , ang , angstrom , approxcolon
+, approxeq , arccot , arccsc , arcmin , arcminute , arcosh , arcoth , arcsch , arcsec , arcsecond , arrayargpatch , arsech , arsinh ,
+artanh , as , astronomicalunit , atchar , atomicmassunit , atto , aufm , authors , autoindex , backepsilon , backprime , backsim ,
+backsimeq , barefootnote , barn , barwedge , bcolumn , because , becquerel , bel , beth , bibliofont , bibsetup , bibtex , bigstar
+, bigtimes , binom , bit , blacklozenge , blacksquare , blacktriangle , blacktriangledown , blacktriangleleft , blacktriangleright ,
+bmatrix , bohr , bold , boldsymbol , boxdot , boxed , boxminus , boxplus , boxtimes , bslchar , bst , bumpeq , bysame , byte ,
+calclayout , cancel , candela , captionindent , celsius , centerdot , centi , cfrac , chapterrunhead , checkmark , circeq ,
+circlearrowleft , circlearrowright , circledR , circledS , circledast , circledcirc , circleddash , citeform , clight , cm , cnat , cnbang
+, cnbreak , cnm , cnmm , cnmsm , cnom , cnt , codom , coker , colonapprox , colondash , colonsim , commby , complement ,
+complexnum , complexqty , const , contentsnamefont , contrib , contribs , copyins , copyrightholder , copyrightinfo , copyrightyear
+, coulomb , cramped , crampedclap , crampedllap , crampedrlap , crampedsubarray , crampedsubstack , csch , cubed , cubic ,
+curl , curlyeqprec , curlyeqsucc , curlyvee , curlywedge , curraddr , curraddrname , currentissue , currentmonth , currentvolume ,
+currentyear , curvearrowleft , curvearrowright , dB , daleth , dalton , dasharrow , dashleftarrow , dashrightarrow , datename ,
+dateposted , dbinom , dblcolon , ddddot , dddot , deca , deci , decibel , dedicatory , defaultfont , defeq , degree , degreeCelsius
+, deka , delimsize , depthof , der , dfrac , diag , diagdown , diagup , diff , digamma , displaybreak , divideontimes , dm , dom ,
+doteqdot , dotplus , dotsc , dotsm , dotso , doublebarwedge , doublecap , doublecup , downbracketend , downbracketfill ,
+downdownarrows , downharpoonleft , downharpoonright , eV , ecolumn , econst , electronmass , electronvolt , elementarycharge ,
+emailaddrname , embrace , empheqeqrefbase , empheqset , endEmphEqMainEnv , endMTmultlined , endSb , endSp , endVmatrix ,
+endalign , endalignat , endaligned , endbmatrix , endcases , endcrampedsubarray , endgather , endmathdisplay , endmatrix ,
+endmultline , endmultlined , endpmatrix , endproof , endquote , endsmallmatrix , endsplit , endsubarray , endverse , endxalignat ,
+endxxalignat , eqcirc , eqdef , eqqcolon , eqsim , eqslantgtr , eqslantless , errexa , errexpl , errora , errorbullet , exa , exbi ,
+except , fF , fH , fallingdotseq , farad , femto , fg , fmol , fn , fnt , for , forany , fracwithdelims , frbinom , frfrac , fs ,
+fullwidthdisplay , gTblrLevelInt , gather , genfrac , geqq , geqslant , ggg , gggtr , gibi , giga , gimel , gloss , gnapprox , gneq ,
+gneqq , gnsim , grad , gram , gray , gtrapprox , gtrdot , gtreqless , gtreqqless , gtrless , gtrsim , gvertneqq , hDocInput ,
+hGetFileInfo , hartree , hdots , hdotsfor , hectare , hecto , heightof , henry , hertz , highlight , hl , hour , hslash , id ,
+idotsint , ifresetcontrib , iiiint , iiint , iint , impliedby , includegraphics , indentlabel , indexchap , indexcomment , indexcs ,
+indexintro , injlim , intercal , intertext , issueinfo , iunit , joule , kA , kHz , kJ , kN , kPa , kV , kW , kWh , katal , keV ,
+kelvin , keywords , keywordsname , kg , kibi , kilo , kilogram , km , kmol , knot , kohm , lapl , large , larger , lbracechar ,
+lcfrac , leftarrow , leftarrowtail , leftleftarrows , leftrightarrows , leftrightharpoons , leftrightsquigarrow , leftroot , leftthreetimes ,
+leqq , leqslant , lessapprox , lessdot , lesseqgtr , lesseqqgtr , lessgtr , lesssim , linespacing , listisep , liter , litre , llcorner , lll ,
+llless , lnapprox , lneq , lneqq , lnsim , looparrowleft , looparrowright , lozenge , lparen , lrcorner , lseries , ltimes , lumen ,
+lux , lvert , lvertneqq , mA , mC , mF , mH , mHz , mJ , mL , mN , mT , mV , mW , mail , makeindx , maltese ,
+markleft , mathaccentV , mathbb , mathbold , mathclap , mathdisplay , mathfrak , mathindent , mathllap , mathmakebox ,
+mathmbox , mathqed , mathrlap , mathtoolsset , mathxxx , mathxxxx , mdash , measuredangle , mebi , mega , meter , metre ,
+mg , micro , milli , minCDarrowwidth , minalignsep , mintagsep , mintagvsep , minute , mm , mmHg , mmol , mohm , mol ,
+mole , ms , mspace , multcenter , multfirst , multimap , multlast , multleft , multline , multlined , multlinedwidth , multlinegap
+, multlinetaggap , multmiddle , multright , nA , nC , nF , nH , nLeftrightarrow , nRightarrow , nV , nVDash , nW , nano ,
+nauticalmile , ncn , ncong , ndash , ndownarrow , neper , newcases , newcolumntype , newgathered , newswitch , newsymbol ,
+newtagform , newtheoremstyle , newton , nexists , ngeq , ngeqq , ngeqslant , ngtr , nleftarrow , nleq , nleqq , nleqslant , nless ,
+nm , nmid , nmol , nobreakdash , nobslash , noeqref , nonbreakingspace , nonslanted , nopunct , normalparindent , normaltopskip
+, notag , nparallel , nprec , npreceq , nrightarrow , ns , nshortmid , nshortparallel , nsim , nsubseteq , nsubseteqq , nsucc ,
+
+nsucceq , nsupseteq , nsupseteqq , ntriangleleft , ntrianglelefteq , ntriangleright , ntrianglerighteq , num , numInBookmark ,
+numberwithin , numlist , numproduct , numrange , numrangeInBookmark , numset , nuparrow , nvdash , nxandlist , ohm ,
+ommitude , openbox , operatorfont , operatorname , operatornamewithlimits , opt , option , ordinarycolon , origjot , overbracket ,
+overleftrightarrow , overset , overunderset , pF , pH , pV , pageinfo , pagespan , paragraphname , partauthor , partmark ,
+partrunhead , pascal , pebi , per , percent , peta , pg , pgfqkeys , phase , pico , piconst , pitchfork , planckbar , pmb , pmol ,
+pod , popQED , precapprox , preccurlyeq , precnapprox , precneqq , precnsim , precsim , prescript , primfrac , printindex ,
+printref , projlim , proof , proofname , providetranslation , publname , pushQED , qc , qcamp , qcat , qcbang , qed , qedhere ,
+qedsymbol , qopname , qq , qty , qtylist , qtyproduct , qtyrange , quecto , quetta , rVert , radian , raisetag , raiseto , rank ,
+rbracechar , rcfrac , reDeclarePairedDelimiterInnerWrapper , refeq , renewcases , renewgathered , renewtagform , reqno , res ,
+resetcontribfalse , resetcontribtrue , restriction , revertcopyright , rfrac , rightarrowtail , rightleftarrows , rightrightarrows ,
+rightsquigarrow , rightthreetimes , risingdotseq , rom , ronna , ronto , rotatebox , rparen , rtimes , rvert , s , sech , second ,
+secref , sectionname , sectionrunhead , seeonly , seeonlyname , setFalse , setTrue , sfrac , sgn , shadowbox , shadowsize ,
+shortauthors , shortintertext , shortmid , shortparallel , shorttitle , shortvdotswithin , shoveleft , shoveright , sideset , siemens ,
+sievert , simcolon , sisetup , skipfileheader , smaller , smallfrown , smallmatrix , smallsetminus , smallsmile , smashoperator ,
+spbreve , spcheck , spdddot , spddot , spdot , specialsection , sphat , sphericalangle , split , splitdfrac , splitfrac , sptilde ,
+square , squared , steradian , subarray , subjclass , subjclassname , subparagraphname , subsectionname , subseteqq , subsetneq ,
+subsetneqq , substack , subsubsectionname , succapprox , succcurlyeq , succnapprox , succneqq , succnsim , succsim , supp ,
+supseteqq , supsetneq , supsetneqq , swapnumbers , swappedhead , symAMSa , symAMSb , symit , symup , tablenum , tag ,
+tbinom , tebi , tera , tesla , textprime , textsquare , tfrac , thankses , theindexcomment , theorempreskipamount , theoremstyle ,
+theparentequation , therefore , thetag , thickapprox , thicksim , thmhead , thmheadnl , thmname , thmnote , thmnumber ,
+tocappendix , tocchapter , toccontribs , tocparagraph , tocpart , tocsection , tocsubparagraph , tocsubsection , tocsubsubsection ,
+tonne , tothe , tr , translate , translator , translname , triangledown , trianglelefteq , triangleq , trianglerighteq ,
+twoheadleftarrow , twoheadrightarrow , uA , uC , uF , uH , uJ , uT , uV , uW , ug , ul , ulcorner , um , umol , undefine ,
+underbracket , underleftarrow , underleftrightarrow , underrightarrow , underset , unit , upOmega , upbracketend , upbracketfill ,
+upharpoonleft , upharpoonright , upn , uppercasenonmath , uppi , uproot , upuparrows , urcorner , urladdr , urladdrname ,
+urlbreak , urlfix , urlsetup , us , usedictionary , usetagform , varDelta , varGamma , varLambda , varOmega , varPhi , varPi ,
+varPsi , varSigma , varTheta , varUpsilon , varXi , varinjlim , varkappa , varliminf , varlimsup , varnothing , varprojlim ,
+varpropto , varsubsetneq , varsubsetneqq , varsupsetneq , varsupsetneqq , vartriangle , vartriangleleft , vartriangleright , vcentcolon
+, vdotswithin , veebar , veqno , vfrac , volinfo , volt , watt , weber , widthof , wraptoccontribs , xLeftarrow , xLeftrightarrow ,
+xLongleftarrow , xLongrightarrow , xRightarrow , xalignat , xandlist , xcontribs , xhookleftarrow , xhookrightarrow , xleftarrow ,
+xleftharpoondown , xleftharpoonup , xleftrightharpoons , xmapsto , xmathstrut , xrightarrow , xrightharpoondown ,
+xrightharpoonup , xrightleftharpoons , xspace , xxalignat , xypic , yen , yobi , yocto , yotta , zebi , zepto , zetta
+      }
+  }  %% end of ams 
+
+
+  
+\codehl_keyset_def:nn { TeX.bibtex }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[bibtex]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+AddBabelHook , AddtoDoHook , AtBeginBibliography , AtBeginBiblist , AtBeginRefsection , AtDataInput , AtEachCitekey ,
+AtEveryBibitem , AtEveryBiblistitem , AtEveryCite , AtEveryCitekey , AtEveryEntrykey , AtEveryLositem , AtEveryMultiCite ,
+AtFollowingRefsections , AtNextBibliography , AtNextCite , AtNextCitekey , AtNextMultiCite , AtNextRefsection , AtUsedriver ,
+AtVolcite , BiblatexHungarianWarningOff , BiblatexLatvianWarningOff , BiblatexManualHyperrefOff , BiblatexManualHyperrefOn ,
+BiblatexSplitbibDefernumbersWarningOff , BibliographyWarning , BlockquoteDisable , DeclareAutoCiteCommand ,
+DeclareAutoPunctuation , DeclareBabelToExplLanguageMapping , DeclareBiblatexOption , DeclareBibliographyAlias ,
+DeclareBibliographyCategory , DeclareBibliographyDriver , DeclareBibliographyExtras , DeclareBibliographyOption ,
+DeclareBibliographyStrings , DeclareBiblistFilter , DeclareBibstringSet , DeclareBibstringSetFormat , DeclareCapitalPunctuation ,
+DeclareCaseLangs , DeclareCiteCommand , DeclareCitePunctuationPosition , DeclareDataInheritance , DeclareDatafieldSet ,
+DeclareDatamodelConstant , DeclareDatamodelConstraints , DeclareDatamodelEntryfields , DeclareDatamodelEntrytypes ,
+DeclareDatamodelFields , DeclareDatamodelMultiscriptEntryfields , DeclareDefaultOption , DeclareDelimAlias , DeclareDelimFormat ,
+DeclareDelimcontextAlias , DeclareDriverSourcemap , DeclareEntryOption , DeclareExtradate , DeclareExtradateContext ,
+DeclareFieldAlias , DeclareFieldFormat , DeclareFieldInputHandler , DeclareHyphenationExceptions , DeclareIndexFieldAlias ,
+DeclareIndexFieldFormat , DeclareIndexListAlias , DeclareIndexListFormat , DeclareIndexNameAlias , DeclareIndexNameFormat ,
+DeclareLabelalphaNameTemplate , DeclareLabelalphaTemplate , DeclareLabeldate , DeclareLabelname , DeclareLabeltitle ,
+DeclareLanguageMapping , DeclareLanguageMappingSuffix , DeclareListAlias , DeclareListFormat , DeclareListInputHandler ,
+DeclareListWrapperAlias , DeclareListWrapperFormat , DeclareMultiCiteCommand , DeclareNameAlias , DeclareNameFormat ,
+DeclareNameInputHandler , DeclareNameWrapperAlias , DeclareNameWrapperFormat , DeclareNamehashTemplate , DeclareNoinit ,
+DeclareNolabel , DeclareNolabelwidthcount , DeclareNonamestring , DeclareNosort , DeclareNumChars , DeclarePageCommands ,
+DeclarePrefChars , DeclarePresort , DeclarePrintbibliographyDefaults , DeclarePunctuationPairs , DeclareQuotePunctuation ,
+DeclareRangeChars , DeclareRangeCommands , DeclareRedundantLanguages , DeclareRefcontext , DeclareSortExclusion ,
+DeclareSortInclusion , DeclareSortTranslit , DeclareSortingNamekeyTemplate , DeclareSortingTemplate , DeclareSourcemap ,
+DeclareStringOption , DeclareStyleSourcemap , DeclareTypeOption , DeclareUniquenameTemplate , DeclareUrlCommand ,
+DefaultInheritance , DeferNextCitekeyHook , DefineBibliographyExtras , DefineBibliographyStrings , DefineHyphenationExceptions ,
+DeprecateField , DeprecateFieldFormatWithReplacement , DeprecateFieldWithReplacement ,
+DeprecateIndexFieldFormatWithReplacement , DeprecateIndexListFormatWithReplacement ,
+DeprecateIndexNameFormatWithReplacement , DeprecateList , DeprecateListFormatWithReplacement , DeprecateListWithReplacement
+, DeprecateListWrapperFormatWithReplacement , DeprecateName , DeprecateNameFormatWithReplacement ,
+DeprecateNameWithReplacement , DeprecateNameWrapperFormatWithReplacement , DisableKeyvalOption ,
+ExecuteBibliographyOptions , ExecuteDoHook , FirstWord , FirstWordLCSC , FirstWordSC , FirstWordUpper , GenRefcontextData
+, IfGivenIsInit , IfGivenIsInitial , IfInitial , InheritBibliographyExtras , InheritBibliographyStrings , InitializeBibliographyStyle ,
+InitializeCitationStyle , MakeCapital , MakeLowercase , MakeSentenceCase , NewBibliographyString , NewOption , NewValue ,
+NormalOrACCiteOrSCCite , NormalOrSC , NormalOrSCCite , NumCheckSetup , NumsCheckSetup , OnManualCitation ,
+PagesCheckSetup , ProcessLocalKeyvalOptions , RN , RequireBiber , RequireBibliographyStyle , RequireCitationStyle ,
+ResetDataInheritance , ResetDatamodelConstraints , ResetDatamodelEntryfields , ResetDatamodelEntrytypes , ResetDatamodelFields ,
+Rnfont , SetupKeyvalOptions , UndeclareBabelToExplLanguageMapping , UndeclareBibliographyExtras , UndeclareBibstringSet ,
+UndeclareBibstringSetFormat , UndeclareBibstringSets , UndeclareDelimcontextAlias , UndefineBibliographyExtras , UpperOrSC ,
+UpperOrSCCite , UrlFont , UseBibitemHook , UseEveryCiteHook , UseEveryCitekeyHook , UseEveryMultiCiteHook ,
+UseNextCiteHook , UseNextCitekeyHook , UseNextMultiCiteHook , UseUsedriverHook , UseVolciteHook , abntnum , addabbrvspace ,
+addabthinspace , addapud , addbibresource , addbnspace , addchap , addcolon , addcomma , adddot , adddotspace , addexclam ,
+addglobalbib , addhighpenspace , addhpthinspace , addlowpenspace , addlpthinspace , addnbspace , addnbthinspace , addot ,
+
+addperiod , addquestion , addsectionbib , addsemicolon , addslash , addspace , addthinspace , addto , addtocategory ,
+allowhyphens , annotation , apud , assignrefcontext , assignrefcontextcats , assignrefcontextentries , assignrefcontextkeyws , autocap
+, autocite , autocites , babelname , bblhook , begrelateddelim , bib , bibbycategory , bibbysection , bibbysegment , bibclosebracket
+, bibcloseparen , bibcplstring , bibcpsstring , bibcpstring , bibdatedash , bibdateeraendprefix , bibdateeraprefix , bibdatendsep ,
+bibdaterangesep , bibdatesep , bibdatetimesep , bibdateuncertain , bibeidpunct , bibendnotewrapper , bibfont , bibfootnotewrapper
+, bibhang , bibhyperlink , bibhyperref , bibhypertarget , bibindexinitdelim , bibindexinithyphendelim , bibindexinitperiod ,
+bibindexnamedelima , bibindexnamedelimb , bibindexnamedelimc , bibindexnamedelimd , bibindexnamedelimi , bibinitdelim ,
+bibinithyphendelim , bibinitperiod , bibinitsep , bibitemsep , biblabelcontents , biblabelextrahang , biblabelextraspace , biblabelprint
+, biblabelsep , biblclstring , biblcsstring , biblcstring , bibleftbracket , bibleftparen , biblistname , biblstring , bibnamedash ,
+bibnamedelima , bibnamedelimb , bibnamedelimc , bibnamedelimd , bibnamedelimi , bibnamesep , bibnameunderscore ,
+bibncplstring , bibncpsstring , bibncpstring , bibopenbracket , bibopenparen , bibpagerefpunct , bibpagespunct , bibparsep ,
+bibrangedash , bibrangessep , bibrightbracket , bibrightparen , bibsentence , bibsstring , bibstring , bibtimerangesep , bibtimesep ,
+bibtimezonesep , bibtzminsep , bibuclstring , bibucsstring , bibucstring , bibutctimezone , bibxlstring , bibxsstring , bibxstring ,
+binary , blxauxsuffix , blxcitecmd , blxciteicmd , blxendmcites , blxmciteicmd , blxmcites , blxmkbibnote , brackettext , captions ,
+category , citeauthor , citecount , citefield , citelastname , citelist , citename , citeorder , citeprint , citereset , cites , citesetup ,
+citetitle , citetrackerfalse , citeyear , citeyearorsh , clearfield , clearlist , clearname , cmdline , compcitedelim , csfield ,
+currentfield , currentlang , currentlist , currentname , datalist , datecircaprint , datecircaprintedtf , datecircaprintiso , dateeraprint
+, dateeraprintpre , dateuncertainprint , defbibcheck , defbibentryset , defbibenvironment , defbibfilter , defbibheading , defbibnote ,
+delimcontext , docsvfield , enddatalist , enddatecircaprint , enddatecircaprintedtf , enddatecircaprintiso , enddateuncertainprint ,
+endentry , endlverb , endnote , endnotetext , endrefcontext , endrefsection , endrefsegment , endverb , enoteformat , entrydata ,
+entryset , entrysetpunct , extpostnotedelim , extras , fakeset , false , field , fieldhascomputableequivalent , filter , filteror ,
+finalandcomma , finalandsemicolon , finalnamedelim , finalnamedelimorig , finentry , finentrypunct , footcite , footcites ,
+footcitetext , footcitetexts , forceD , forceDE , forceE , forceY , forcezeros , forcezerosmdt , forcezerosy , forcsvfield , generic ,
+getcomputableequivalent , getdateannotation , getfieldannotation , getitemannotation , getpartannotation , hascomputableequivalent ,
+hasdateannotation , hasfieldannotation , hasitemannotation , haspartannotation , hyphen , hyphenate , ifandothers , ifauthor ,
+ifbacktracker , ifbibindex , ifbibliography , ifbibmacroundef , ifbibstring , ifbibxstring , ifcapital , ifcaselang , ifcategory , ifcitation
+, ifciteibid , ifciteidem , ifciteindex , ifciteseen , ifcrossrefsource , ifcurrentfield , ifcurrentlist , ifcurrentname , ifdata ,
+ifdateannotation , ifdatecirca , ifdateera , ifdatehastime , ifdatehasyearonlyprecision , ifdatejulian , ifdaterangesequal , ifdatesequal ,
+ifdateshavedifferentprecision , ifdateuncertain , ifdateunknown , ifdateyearsequal , ifdriver , ifenddatecirca , ifenddateera ,
+ifenddatejulian , ifenddateuncertain , ifenddateunknown , ifentrycategory , ifentryinbib , ifentrykeyword , ifentryseen , ifentrytype ,
+iffieldannotation , iffieldbibstring , iffieldendswithpunct , iffieldequalcs , iffieldequals , iffieldequalstr , iffieldformatundef , iffieldint ,
+iffieldiscomputable , iffieldnum , iffieldnums , iffieldpages , iffieldplusstringbibstring , iffieldregex , iffieldsequal , iffieldundef ,
+iffieldxref , iffinalcitedelim , iffirstcitekey , iffirstonpage , iffootnote , ifgiveninits , ifhyperref , ifinteger , ifiscomputable ,
+ifitemannotation , ifkeyword , ifkomabibtotoc , ifkomabibtotocnumbered , iflabelalphanametemplatename , iflabeldatecirca ,
+iflabeldateera , iflabeldateisdate , iflabeldatejulian , iflabeldateuncertain , iflabelenddatecirca , iflabelenddateera , iflabelenddatejulian
+, iflabelenddateuncertain , iflastcitekey , iflistequalcs , iflistequals , iflistformatundef , iflistsequal , iflistundef ,
+iflistwrapperformatundef , iflistxref , ifloccit , ifmemoirbibintoc , ifmoreitems , ifmorenames , ifnameequalcs , ifnameequals ,
+ifnameformatundef , ifnamehashtemplatename , ifnamesequal , ifnameundef , ifnamewrapperformatundef , ifnamexref , ifnatbibmode ,
+ifnocite , ifnumeral , ifnumerals , ifopcit , ifpages , ifpartannotation , ifprefchar , ifpunct , ifpunctmark , ifrelatedloop ,
+ifsamepage , ifsingletitle , ifsortingnamekeytemplatename , ifterm , ifterseinits , ifuniquebaretitle , ifuniquenametemplatename ,
+ifuniqueprimaryauthor , ifuniquetitle , ifuniquework , ifuseauthor , ifuseeditor , ifuseprefix , ifusetranslator , ifvolcite , ifxrefsource ,
+indexfield , indexlist , indexnames , inherit , initiquote , initoquote , inset , intciteorder , intitlepunct , isdot , keypart , keyw ,
+keyword , labelalphaothers , labelalphawidth , labelelement , labelnamepunct , labelnumberwidth , labels , languagename ,
+letbibmacro , literal , localrefcontext , logrequest , ltxrequest , lverb , mainbabelname , mainlang , mancite , map , maps ,
+memUChead , memappchapinfo , memappchapstarinfo , member , memchapinfo , memchapstarinfo , mempartinfo , mempartstarinfo
+, memsecinfo , memsecstarinfo , midsentence , missing , mkautorange , mkbibacro , mkbibbold , mkbibbrackets , mkbibdatelong ,
+mkbibdateshort , mkbibemph , mkbibendnote , mkbibendnotetext , mkbibfemord , mkbibfootnote , mkbibfootnotetext , mkbibitalic
+, mkbibmascord , mkbibmonth , mkbibname , mkbibnamefamily , mkbibnamegiven , mkbibnameprefix , mkbibnamesuffix ,
+mkbibneutord , mkbibordedition , mkbibordinal , mkbibordseries , mkbibparens , mkbibquote , mkbibrange , mkbibseason ,
+mkbibseasondatelong , mkbibseasondateshort , mkbibsuperscript , mkbibtimezone , mkbibyeardivision , mkbibyeardivisiondatelong ,
+mkbibyeardivisiondateshort , mkcomprange , mkdaterange , mkdaterangecomp , mkdaterangecompextra , mkdaterangefull ,
+mkdaterangefullextra , mkdaterangeiso , mkdaterangeisoextra , mkdaterangelong , mkdaterangelongextra , mkdaterangeshort ,
+mkdaterangeshortextra , mkdaterangeterse , mkdaterangeterseextra , mkdaterangetrunc , mkdaterangetruncextra , mkdaterangeyear ,
+mkdaterangeyearextra , mkdaterangeyearmonth , mkdaterangeymd , mkdaterangeymdextra , mkdayzeros , mkfirstpage , mkibid ,
+mkidem , mkloccit , mkmonthzeros , mknormrange , mknumalph , mkopcit , mkpageprefix , mkpagetotal , mkrelatedstringtext ,
+mkseqrange , mktimehh , mktimerange , mktimezeros , mkyearzeros , multicitedelim , multiciterangedelim , multicitesubentrydelim ,
+multicitesubentryrangedelim , multinamedelim , multinamedelimorig , multivolcitecmd , namepart , namepartfamily , namepartfamilyi
+, namepartgiven , namepartgiveni , namepartprefix , namepartprefixi , nameparts , namepartsuffix , namepartsuffixi , nameyeardelim
+, nbhyphen , newbibmacro , newblockpunct , newrefcontext , newrefsection , newrefsegment , newunit , newunitpunct , nexts ,
+nocaptions , nocited , noextras , nohyphenation , noinherit , nolabel , noligature , nonamestring , nonameyeardelim , nopp ,
+nopunctdash , nosort , ogo , origmkbibnamefamily , origmkbibnamegiven , origmkbibnameprefix , origmkbibnamesuffix , pagenote ,
+pagenotetext , pagetrackerfalse , paramL , parencite , parencites , parentext , perdatasource , pernottype , pertype ,
+pghyphenation , phantomsection , plaincite , pnfmt , pno , postnotedelim , ppno , ppspace , predefinedfootnotetext , print ,
+printbetweencitations , printbibheading , printbibliography , printbiblist , printcitefinish , printcitenote , printcitestart , printdate ,
+printdateextra , printdelim , printeventdate , printfield , printfile , printlabeldate , printlabeldateextra , printlabeltime , printlist ,
+printnames , printtext , printunit , providebibmacro , provides , psq , psqq , range , rangelen , refcontext , refsection ,
+refsegment , regexp , relateddelim , renewbibmacro , requires , resetpunctfont , restorebibmacro , restorecommand , restorefield ,
+restorefieldformat , restorelistformat , restorelistwrapperformat , restorename , restorenameformat , restorenamewrapperformat ,
+savebibmacro , savecommand , savefield , savefieldcs , savefieldformat , savelist , savelistcs , savelistformat , savelistwrapperformat ,
+savename , savenamecs , savenameformat , savenamewrapperformat , segment , selectlanguage , set , setpunctfont , setunit ,
+shorthandwidth , skipentry , smartcite , smartcites , smartel , smartlcsc , smartlowercase , smartof , smartsc , smartuppercase ,
+sort , sortalphaothers , sptext , sqspace , strfield , strfirstlistitem , stripzeros , strlist , strname , strng , subtitlepunct , subtype ,
+supercite , supercitedelim , superciterangedelim , supercites , supercitesubentrydelim , supercitesubentryrangedelim , tempcnta ,
+textapud , textciquote , textcite , textcitedelim , textcites , textcoquote , textmainlang , textnohyphenation , textoiquote ,
+textooquote , textouterlang , theabbrvpenalty , theauthor , thebibliography , thecitecount , thecitetotal , theendnotes , thefield ,
+thefirstlistitem , thehighnamepenalty , theinstcount , thelist , thelistcount , theliststart , theliststop , thelisttotal ,
+thelownamepenalty , themaxcitecounter , themaxextraalpha , themaxextradate , themaxextraname , themaxextratitle ,
+themaxextratitleyear , themaxitems , themaxnames , themaxparens , theminitems , theminnames , themulticitecount ,
+themulticitetotal , thename , theparenlevel , therefsection , therefsegment , theuniquelist , theuniquename , traceparam ,
+traceparamA , traceparamB , traceparamC , traceparamD , traceparamE , traceparamS , translit , true , type , unspace , urlstyle
+, usebibmacro , usedriver , usefield , usefirstlistitem , uspunctuation , visibility , volcitecmd , warn
+      }
+  }  %% end of bibtex 
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

@@ -41,6 +41,8 @@
 \usepackage{codeverbatim}
 \usepackage{codehighlight}
 
+%%\hlLangLoad{00}
+
 \begin{codestore}[demo00]
 % This in the preamble only
 \hlLangLoad{C}
@@ -130,7 +132,7 @@ The aim of this package is to allow to construction of custom environments and c
 \end{itemize}
 Another point is that this package only offers ways to capture content in verbatim mode, leaving it to the user to define how to postprocess and display it, for instance, using \tsobj[pkg]{codehighlight} (see \ref{pkg:codehl}) package.
 
-\subsection{Characters Category Codes and Common Keys}\label{codeverb:commonkeys}
+\subsection{Characters Category Code and Common Keys}\label{codeverb:commonkeys}
 When capturing content in verbatim mode, many characters have their usual category code changed to other (12), but not all. In particular \tsfmt[verb]{\^{}\^{}M }  (char: 13, End Of Line character) always has its category code changed to other. 
 \begin{center}
 \begin{tabular}{clclcl}
@@ -249,7 +251,7 @@ These are meant to be used in the \tsobj[marg]{begin-code} of a custom environme
   
   \begin{myEnv}[letter = { @ , \_ }]
     some text
-  \end{myEnv
+  \end{myEnv}
 \end{codestore}
 
 \tscode*[codeprefix={}]{env-cctab}
@@ -1196,10 +1198,6 @@ Similarly, this will include the needed auxiliary packages. Whereas \tsobj[marg]
 
 The following table contain the current list of known languages and keyword sets. Languages like Fortran also have a pre-defined alias (in this case, just Fortran) normally pointing to the 'most recent' definition. Note: if a new variant is introduced, the alias shall point to it.
 
-\begin{tsremark}
-  The Language, Keywords sets, found on the auxiliary files were adapted from the language definitions used in the \tsobj[pkg]{listings}\cite{listings} package (October 2026, version 1.11b). The following table lists, for each language, the defined sets and aliases.
-\end{tsremark}
-
 
 \begingroup
 \footnotesize
@@ -1210,483 +1208,54 @@ The following table contain the current list of known languages and keyword sets
   Language & Language sets & Keywords sets & Alias / Obs. \\\hline\\[-7.85pt]\endhead
 
 \\[-7.85pt]
-ABAP & 
- ABAP.R/2-4.3 ABAP.R/2-5.0 ABAP.R/3-3.1 ABAP.R/3-4.6C ABAP.R/3-6.10 &
- ABAP.R/2-4.3 ABAP.R/2-5.0 ABAP.R/3-3.1 ABAP.R/3-4.6C ABAP.R/3-6.10 & ABAP $\rightarrow$ ABAP.R/3-6.10 \\ \cline{2-4}
-
-\\[-7.85pt]
-ACM &
- ACM ACMscript ACSL   &
- ACM ACMscript ACSL   &  \\  \cline{2-4}
-
-\\[-7.85pt]
-Ada &
-Ada.05 Ada.83 Ada.95 &  
-Ada.05 Ada.83 Ada.95 &  Ada   $\rightarrow$ Ada.05 \\  \cline{2-4}
-
-\\[-7.85pt]
-Algol &
- Algol.60  Algol.68   &
- Algol.60  Algol.68   & Algol  $\rightarrow$ Algol.68 \\  \cline{2-4}
-
-\\[-7.85pt]
-Ant &
- Ant &
- Ant & \\  \cline{2-4}
-
-asm & 
- asm.Motorola68k   &  
- asm.Motorola68k   &  Motorola68k \\  \cline{2-4}
- 
-asm & 
- asm.riscv   &  
- asm.riscv   &  riscv \\  \cline{2-4}
- 
-asm & 
- asm.x86   & 
- asm.x86   & x86 \\  \cline{2-4}
-
-\\[-7.85pt]
-awk &
- Awk.POSIX  Awk.gnu   &  
- Awk.POSIX  Awk.gnu   &  Awk  $\rightarrow$ Awk.gnu \\  \cline{2-4}
-
-\\[-7.85pt]
-Basic &
- Basic.Visual   & 
- Basic.Visual   &  VB  $\rightarrow$ Basic.Visual \\   \cline{2-4}
-
-\\[-7.85pt]
-C  &
- C.ANSI C.Handel C.Objective C.Sharp   &
- C.ANSI C.Handel C.Objective C.Sharp   & C $\rightarrow$ C.ANSI  \\   \cline{2-4}
+C & 
+   C.89 C.99 C.11  C.17  C.23 &
+   C.89 C.99 C.11  C.17  C.23 & C $\rightarrow$ C.23  \\ \cline{2-4}
 
 \\[-7.85pt]
 C++ & 
- C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   & 
- C++.11 C++.ANSI C++.GNU C++.ISO C++.Visual   & C++ $\rightarrow$ C++.ANSI  \\ \cline{2-4}
- 
-\\[-7.85pt]
-CIL &
- CIL   &
- CIL   &  \\   \cline{2-4}
- 
-\\[-7.85pt]
-CMake  &
- CMake   &
- CMake   &  \\   \cline{2-4}
- 
-\\[-7.85pt]
-Caml &
- Caml.Objective  Caml.light   &
- Caml.Objective  Caml.light   & Caml $\rightarrow$ Caml.Objetive\\   \cline{2-4}
- 
-\\[-7.85pt]
-Clean &
- Clean   &  
- Clean   &   \\   \cline{2-4}
+   C++.98  C++.11  C++.20  C++.23  &
+   C++.98  C++.11  C++.20  C++.23  & C++ $\rightarrow$ C++.23  \\ \cline{2-4}
 
 \\[-7.85pt]
-Cobol &
- Cobol.74  Cobol.85 Cobol.IBM   & 
- Cobol.74  Cobol.85 Cobol.IBM   & Cobol  $\rightarrow$ Cobol.IBM \\   \cline{2-4}
-
+Csharp &
+  Csharp.1  Csharp.6  Csharp.11  Csharp.13 &
+  Csharp.1  Csharp.6  Csharp.11  Csharp.13 & Csharp $\rightarrow$ Csharp.13  \\ \cline{2-4}
+  
+\\[-7.85pt]
+java  &
+  java.SE25 &
+  java.SE25 & java $\rightarrow$ java.SE25  \\ \cline{2-4}
 
 \\[-7.85pt]
-Comal &
-  Comal.80  &
-  Comal.80  & Comal \\    \cline{2-4}
-
-\\[-7.85pt]
-Comsol &
-  Comsol  &
-  Comsol  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Delphi &
-  Delphi  &
-  Delphi  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Eiffel &
-  Eiffel  &
-  Eiffel  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Elan &
-  Elan  &
-  Elan  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Euphoria &
-  Euphoria  &
-  Euphoria  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Fortran &
-  Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &
-  Fortran.03   Fortran.08  Fortran.18  Fortran.77  Fortran.90  Fortran.95  &  Fortran  $\rightarrow$\break Fortran.03 \\    \cline{2-4}
-
-\\[-7.85pt]
-GAP &
-  GAP  &
-  GAP  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-GCL  &
-  GCL  &
-  GCL  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Gnuplot  &
-  Gnuplot  &
-  Gnuplot  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Go  &
-  Go  &
-  Go  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-HTML  &
-  HTML  &
-  HTML  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Haskell  &
-  Haskell  &
-  Haskell  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-IDL  &
-  IDL  &
-  IDL  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-IDL  &
-  IDL.CORBA  &
-  IDL.CORBA  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Inform  &
-  Inform  &
-  Inform  &  \\    \cline{2-4}
-
-
-\\[-7.85pt]
-Java  &
-  Java  AspectJ  JVMIS  &
-  Java  AspectJ  JVMIS  &  \\    \cline{2-4}
-
-
-\\[-7.85pt]
-LLVM  &
-  LLVM  &
-  LLVM  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Lingo  &
-  Lingo  &
-  Lingo  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Lisp  &
-  elisp  Lisp  Lisp.Auto  &
-  elisp  Lisp  Lisp.Auto  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Logo  &
-  Logo  &
-  Logo  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Lua  &
-  Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  &
-  Lua.5.0  Lua.5.1  Lua.5.2  Lua.5.3  & Lua $\rightarrow$ Lua.5.3 \\    \cline{2-4}
-
-
-\\[-7.85pt]
-ML  &
-  ML  &
-  ML  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Mathematica  &
-  Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  &
-  Mathematica.1.0  Mathematica.11.0  Mathematica.3.0  Mathematica.5.2  & Mathematica $\rightarrow$ Mathematica.11.0 \\   \cline{2-4}
-
-\\[-7.85pt]
-Matlab  &
-  Matlab.5.1  &
-  Matlab.5.1  &  Matlab \\   \cline{2-4}
-
-\\[-7.85pt]
-Mercury  &
-  Mercury  &
-  Mercury  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-MetaPost  &
-  MetaPost  &
-  MetaPost  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Miranda  &
-  Miranda  &
-  Miranda  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Mizar  &
-  Mizar  &
-  Mizar  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Modula-2  &
-  Modula-2  &
-  Modula-2  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-MuPAD  &
-  MuPAD  &
-  MuPAD  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-NASTRAN  &
-  NASTRAN  &
-  NASTRAN  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-OCL  &
-  OCL.OMG  OCL.decorative  &
-  OCL.OMG  OCL.decorative  & OCL $\rightarrow$ OCL.OMG \\    \cline{2-4}
-
-
-\\[-7.85pt]
-OORexx  &
-  OORexx  &
-  OORexx  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Octave  &
-  Octave  &
-  Octave  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Oz  &
-  Oz  &
-  Oz  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-PHP  &
-  PHP  &
-  PHP  &  \\    \cline{2-4}  
-
-\\[-7.85pt]
-PL/I  &
-  PL/I  &
-  PL/I  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-POV  &
-  POV  &
-  POV  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-PSTricks  &
-  PSTricks  &
-  PSTricks  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Pascal  &
-  Pascal.Borland6 Pascal.Standard Pascal.XSC  &
-  Pascal.Borland6 Pascal.Standard Pascal.XSC  & Pascal $\rightarrow$\break Pascal.Standard \\    \cline{2-4}
-
-
-\\[-7.85pt]
-Perl  &
-  Perl  &
-  Perl  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Plasm  &
-  Plasm  &
-  Plasm  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-PostScript  &
-  PostScript  &
-  PostScript  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Prolog  &
-  Prolog  &
-  Prolog  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Promela  &
-  Promela  &
-  Promela  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Python  &
-  Python.2 Python.3  &
-  Python.2 Python.3  & Python $\rightarrow$ Python.3 \\    \cline{2-4}
-
-
-\\[-7.85pt]
-R  &
-  R S S.PLUS  &
-  R S S.PLUS  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-RSL  &
-  RSL  &
-  RSL  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Reduce  &
-  Reduce  &
-  Reduce  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-Rexx  &
-  Rexx Rexx.VM/XA  &
-  Rexx Rexx.VM/XA  &  \\    \cline{2-4}
-
-
-\\[-7.85pt]
-Ruby  &
-  Ruby  &
-  Ruby  &  \\    \cline{2-4}
-
-
-\\[-7.85pt]
-SAS  &
-  SAS  &
-  SAS  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-SHELXL  &
-  SHELXL  &
-  SHELXL  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-SPARQL  &
-  SPARQL  &
-  SPARQL  &  \\    \cline{2-4}
-
+python  &
+  python.2.7   python.3.0  python.3.6  python.3.12 &
+  python.2.7   python.3.0  python.3.6  python.3.12 & python $\rightarrow$ python.3.12  \\ \cline{2-4}
+  
 \\[-7.85pt]
 SQL  &
-  SQL  &
-  SQL  &  \\    \cline{2-4}
+  SQL.92  SQL.23 PL/SQL &
+  SQL.92  SQL.23 SQL.PostgreSQL SQL.MySQL PL/SQL & SQL  $\rightarrow$ SQL.23  \\ \cline{2-4}
 
 \\[-7.85pt]
-Scala  &
-  Scala Scala.3.0  &
-  Scala Scala.3.0  &  \\    \cline{2-4}
+perl  &
+  perl  &
+  perl  & \\ \cline{2-4}
+  
+\\[-7.85pt]
+lua  &
+  lua.5.5  &
+  lua.5.5  & lua  $\rightarrow$ lua.5.5  \\ \cline{2-4}
 
 \\[-7.85pt]
-Scilab  &
-  Scilab  &
-  Scilab  &  \\    \cline{2-4}
+html  &
+  html.5  &
+  html.5  & html  $\rightarrow$ html.5  \\ \cline{2-4}
 
 \\[-7.85pt]
-Simula  &
-  Simula.67 Simula.CII Simula.DEC Simula.IBM  &
-  Simula.67 Simula.CII Simula.DEC Simula.IBM  &  Simula $\rightarrow$\break Simula.IBM \\    \cline{2-4}
-
-
-\\[-7.85pt]
-Swift  &
-  Swift  &
-  Swift  &  \\    \cline{2-4}
-
-
-\\[-7.85pt]
-VBScript  &
-  VBScript  &
-  VBScript  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-VHDL  &
-  VHDL VHDL.AMS  &
-  VHDL VHDL.AMS  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-VRML  &
-  VRML.97  &
-  VRML.97  & VRML \\    \cline{2-4}
-
-\\[-7.85pt]
-Verilog  &
-  Verilog  &
-  Verilog  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-XML  &
-  XML  &
-  XML  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-XSLT  &
-  XSLT  &
-  XSLT  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-bash  &
-  bash  &
-  bash  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-command  &
-  command.com.WinXP  &
-  command.com.WinXP  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-csh  &
-  csh  &
-  csh  &  \\    \cline{2-4}
-
-
-\\[-7.85pt]
-erlang  &
-  erlang  &
-  erlang  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-hansl  &
-  hansl  &
-  hansl  &  \\    \cline{2-4}
-
-%\\[-7.85pt]
-ksh  &
-  ksh  &
-  ksh  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-make  &
-  make make.gnu  &
-  make make.gnu  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-sh  &
-  sh  &
-  sh  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-tcl  &
-  tcl  &
-  tcl  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-tcl  &
-  tcl.tk  &
-  tcl.tk  &  \\    \cline{2-4}
-
-\\[-7.85pt]
-TeX  &
-  TeX &
-  TeX.AlLaTeX TeX.LaTeX TeX.common TeX.plain TeX.primitive  &  from \tsobj[pkg]{listings} \\   \cline{2-4}
+php  &
+  php.8  &
+  php.8  php.mysqli  php.pgsql  php.xml-json  php.date  & php  $\rightarrow$ php.8  \\ \cline{2-4}
 
 \\[-7.85pt]
 TeX  &
@@ -1855,7 +1424,7 @@ First a dedicated store command is created (see \ref{codeverb:auxiliary}) then a
 \hlDisplayV \mymerged
 \end{codestore}
  
- Note that, the above code defines a new environment, \tsobj[env]{DemoStore}, which expects a single parameter: the `sequence name' to be used.
+ Note that, the above code defines a new environment, \tsobj[env]{DemoStore}, which expects a single optional parameter: the `sequence name' to be used.
 Once a few verbatim snips are collected, they can be merged (command \tsobj{\DemoStoreMerge} below, created by the command \tsobj{\codeverb_new_store_cmds:nn} above) and then displayed as a simple peace.
  \tsdemo[codeprefix={},resultprefix={}]{demo02}[2]
  
@@ -1876,8 +1445,11 @@ These are some aspects that are either planned or that deserve some consideratio
 \begin{itemize}
   \item grabbing code from an external file (codeverbatim): defining a 'text marker' (begging/end ... label).
   \item optimize the background color code. It works as is, but, it's slow.
+  \item ``here code'' typical syntax $<<$Label or $<<$'Label'. Possible approach: \_scanT collects the next label and sets \_end\_regex
+  \item handling of tabs (? fixed spacing or column mod num ?)
+  \item 'expanded' identifiers: PL/SQL has some odd keywords starting with \tsfmt{SQL\%}
   \item indexing might be implement in a similar way as it is in \tsobj[pkg]{codedescribe}.
-  \item allow for further customization of line numberging: e.g. one every 5, or starting number, etc.
+  \item allow for further customization of line numbering: e.g. one every 5, or starting number, etc.
   \item simula/algol comments peculiar syntax.
   \item listings \tsobj[key]{procnamekeys} might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
   \item writing code to an external file, albeit fairly simple, isn't planned for the time being.

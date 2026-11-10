@@ -73,7 +73,7 @@
 %%% true  => log the many _register:nn commands
 %%%%%%%
 \bool_new:N \l__codehl_register_bool
-%\bool_set_true:N \l__codehl_register_bool
+\bool_set_true:N \l__codehl_register_bool
 
 
 \msg_new:nnnn { codehl / basefmt } { alias err }
@@ -690,22 +690,22 @@
 %%% pre-defined sets
 %%%%%%%
 
-%\__codehl_lang_register:nn { 00 } { codehl-00.def }
-%\__codehl_lang_register:nn { 01 } { codehl-01.def }
-%\__codehl_lang_register:nn { 02 } { codehl-02.def }
-%\__codehl_lang_register:nn { 03 } { codehl-03.def }
-%\__codehl_lang_register:nn { 04 } { codehl-04.def }
-%\__codehl_lang_register:nn { 05 } { codehl-05.def }
-%\__codehl_lang_register:nn { 06 } { codehl-06.def }
-%\__codehl_lang_register:nn { 07 } { codehl-07.def }
-%\__codehl_lang_register:nn { 08 } { codehl-08.def }
-%\__codehl_lang_register:nn { 09 } { codehl-09.def }
-%\__codehl_lang_register:nn { 0A } { codehl-0A.def }
-%\__codehl_lang_register:nn { 0B } { codehl-0B.def }
-%\__codehl_lang_register:nn { 0C } { codehl-0C.def }
-%\__codehl_lang_register:nn { 0D } { codehl-0D.def }
-%\__codehl_lang_register:nn { 0E } { codehl-0E.def }
-%\__codehl_lang_register:nn { 0F } { codehl-0F.def }
+\__codehl_lang_register:nn { 00 } { codehl-00.def }
+\__codehl_lang_register:nn { 01 } { codehl-01.def }
+\__codehl_lang_register:nn { 02 } { codehl-02.def }
+\__codehl_lang_register:nn { 03 } { codehl-03.def }
+\__codehl_lang_register:nn { 04 } { codehl-04.def }
+\__codehl_lang_register:nn { 05 } { codehl-05.def }
+\__codehl_lang_register:nn { 06 } { codehl-06.def }
+\__codehl_lang_register:nn { 07 } { codehl-07.def }
+\__codehl_lang_register:nn { 08 } { codehl-08.def }
+\__codehl_lang_register:nn { 09 } { codehl-09.def }
+\__codehl_lang_register:nn { 0A } { codehl-0A.def }
+\__codehl_lang_register:nn { 0B } { codehl-0B.def }
+\__codehl_lang_register:nn { 0C } { codehl-0C.def }
+\__codehl_lang_register:nn { 0D } { codehl-0D.def }
+\__codehl_lang_register:nn { 0E } { codehl-0E.def }
+\__codehl_lang_register:nn { 0F } { codehl-0F.def }
 %
 %\__codehl_lang_register:nn { 10 } { codehl-10.def }
 %\__codehl_lang_register:nn { 11 } { codehl-11.def }
@@ -793,359 +793,77 @@
 %\__codehl_lang_register:nn { 5E } { codehl-5E.def }
 %\__codehl_lang_register:nn { 5F } { codehl-5F.def }
 
-\__codehl_lang_register:nn   { TeX } { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.l3 }  { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.l3sign }  { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.primitive }  { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.primitive }  { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.common }  { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.common }  { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.LaTeX }  { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.LaTeX }  { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.plain }  { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.plain }  { codehl-00.def }
-\__codehl_keyset_register:nn { TeX.AlLaTeX }  { codehl-00.def }
-\__codehl_lang_register:nn   { TeX.AlLaTeX }  { codehl-00.def }
-\__codehl_keyset_register:nn { Fortran.77 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.77 }  { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.95 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.95 }  { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.90 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.90 }  { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.03 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.03 }  { codehl-01.def }
-\__codehl_keyset_register:nn { ACSL }  { codehl-01.def }
-\__codehl_lang_register:nn   { ACSL } { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.08 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.08 }  { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran.18 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran.18 }  { codehl-01.def }
-\__codehl_lang_register:nn   { Fortran }  { codehl-01.def }
-\__codehl_keyset_register:nn { Fortran }  { codehl-01.def }
-\__codehl_keyset_register:nn { Cobol.74 }  { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol.74 }  { codehl-02.def }
-\__codehl_keyset_register:nn { Cobol.85 }  { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol.85 }  { codehl-02.def }
-\__codehl_keyset_register:nn { Cobol.IBM }  { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol.IBM }  { codehl-02.def }
-\__codehl_lang_register:nn   { Cobol } { codehl-02.def }
-\__codehl_keyset_register:nn { Cobol }  { codehl-02.def }
-\__codehl_keyset_register:nn { PL/I }  { codehl-03.def }
-\__codehl_lang_register:nn   { PL/I } { codehl-03.def }
-\__codehl_keyset_register:nn { Ada.83 }  { codehl-04.def }
-\__codehl_lang_register:nn   { Ada.83 }  { codehl-04.def }
-\__codehl_keyset_register:nn { Ada.95 }  { codehl-04.def }
-\__codehl_lang_register:nn   { Ada.95 }  { codehl-04.def }
-\__codehl_keyset_register:nn { Ada.05 }  { codehl-04.def }
-\__codehl_lang_register:nn   { Ada.05 }  { codehl-04.def }
-\__codehl_lang_register:nn   { Ada } { codehl-04.def }
-\__codehl_keyset_register:nn { Ada }  { codehl-04.def }
-\__codehl_keyset_register:nn { Awk.POSIX }  { codehl-05.def }
-\__codehl_lang_register:nn   { Awk.POSIX }  { codehl-05.def }
-\__codehl_keyset_register:nn { Awk.gnu }  { codehl-05.def }
-\__codehl_lang_register:nn   { Awk.gnu }  { codehl-05.def }
-\__codehl_lang_register:nn   { Awk } { codehl-05.def }
-\__codehl_keyset_register:nn { Awk }  { codehl-05.def }
-\__codehl_keyset_register:nn { Basic.Visual }  { codehl-06.def }
-\__codehl_lang_register:nn   { Basic.Visual }  { codehl-06.def }
-\__codehl_lang_register:nn   { VB } { codehl-06.def }
-\__codehl_keyset_register:nn { VB }  { codehl-06.def }
-\__codehl_keyset_register:nn { C.ANSI }  { codehl-07.def }
-\__codehl_lang_register:nn   { C.ANSI }  { codehl-07.def }
-\__codehl_keyset_register:nn { C.Handel }  { codehl-07.def }
-\__codehl_lang_register:nn   { C.Handel }  { codehl-07.def }
-\__codehl_keyset_register:nn { C.Objective }  { codehl-07.def }
-\__codehl_lang_register:nn   { C.Objective }  { codehl-07.def }
-\__codehl_keyset_register:nn { C++.ISO }  { codehl-07.def }
-\__codehl_lang_register:nn   { C++.ISO }  { codehl-07.def }
-\__codehl_keyset_register:nn { C++.Visual }  { codehl-07.def }
-\__codehl_lang_register:nn   { C++.Visual }  { codehl-07.def }
-\__codehl_keyset_register:nn { C++.GNU }  { codehl-07.def }
-\__codehl_lang_register:nn   { C++.GNU }  { codehl-07.def }
-\__codehl_keyset_register:nn { C++.ANSI }  { codehl-07.def }
-\__codehl_lang_register:nn   { C++.ANSI }  { codehl-07.def }
-\__codehl_keyset_register:nn { C++.11 }  { codehl-07.def }
-\__codehl_lang_register:nn   { C++.11 }  { codehl-07.def }
-\__codehl_keyset_register:nn { C.Sharp }  { codehl-07.def }
-\__codehl_lang_register:nn   { C.Sharp }  { codehl-07.def }
-\__codehl_lang_register:nn   { C } { codehl-07.def }
-\__codehl_keyset_register:nn { C } { codehl-07.def }
-\__codehl_keyset_register:nn { csh }  { codehl-08.def }
-\__codehl_lang_register:nn   { csh } { codehl-08.def }
-\__codehl_keyset_register:nn { sh }  { codehl-08.def }
-\__codehl_lang_register:nn   { sh } { codehl-08.def }
-\__codehl_keyset_register:nn { bash }  { codehl-08.def }
-\__codehl_lang_register:nn   { bash } { codehl-08.def }
-\__codehl_keyset_register:nn { ksh }  { codehl-08.def }
-\__codehl_lang_register:nn   { ksh } { codehl-08.def }
-\__codehl_keyset_register:nn { HTML }  { codehl-09.def }
-\__codehl_lang_register:nn   { HTML } { codehl-09.def }
-\__codehl_keyset_register:nn { XML }  { codehl-0A.def }
-\__codehl_lang_register:nn   { XML } { codehl-0A.def }
-\__codehl_keyset_register:nn { XSLT }  { codehl-0A.def }
-\__codehl_lang_register:nn   { XSLT } { codehl-0A.def }
-\__codehl_keyset_register:nn { Ant }  { codehl-0A.def }
-\__codehl_lang_register:nn   { Ant } { codehl-0A.def }
-\__codehl_keyset_register:nn { PHP }  { codehl-0B.def }
-\__codehl_lang_register:nn   { PHP } { codehl-0B.def }
-\__codehl_keyset_register:nn { Java }  { codehl-0C.def }
-\__codehl_lang_register:nn   { Java } { codehl-0C.def }
-\__codehl_keyset_register:nn { AspectJ }  { codehl-0C.def }
-\__codehl_lang_register:nn   { AspectJ }  { codehl-0C.def }
-\__codehl_keyset_register:nn { JVMIS }  { codehl-0C.def }
-\__codehl_lang_register:nn   { JVMIS } { codehl-0C.def }
-\__codehl_keyset_register:nn { Matlab }  { codehl-0D.def }
-\__codehl_lang_register:nn   { Matlab }  { codehl-0D.def }
-\__codehl_keyset_register:nn { Matlab.5.1 }  { codehl-0D.def }
-\__codehl_lang_register:nn   { Matlab.5.1 }  { codehl-0D.def }
-\__codehl_keyset_register:nn { Octave }  { codehl-0E.def }
-\__codehl_lang_register:nn   { Octave }  { codehl-0E.def }
-\__codehl_keyset_register:nn { Mathematica.1.0 }  { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.1.0 }  { codehl-0F.def }
-\__codehl_keyset_register:nn { Mathematica.3.0 }  { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.3.0 }  { codehl-0F.def }
-\__codehl_keyset_register:nn { Mathematica.5.2 }  { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.5.2 }  { codehl-0F.def }
-\__codehl_keyset_register:nn { Mathematica.11.0 } { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica.11.0 }  { codehl-0F.def }
-\__codehl_lang_register:nn   { Mathematica }  { codehl-0F.def }
-\__codehl_keyset_register:nn { Mathematica }  { codehl-0F.def }
-\__codehl_keyset_register:nn { Algol.68 }  { codehl-10.def }
-\__codehl_lang_register:nn   { Algol.68 }  { codehl-10.def }
-\__codehl_keyset_register:nn { Algol.60 }  { codehl-10.def }
-\__codehl_lang_register:nn   { Algol.60 }  { codehl-10.def }
-\__codehl_lang_register:nn   { Algol } { codehl-10.def }
-\__codehl_keyset_register:nn { Algol }  { codehl-10.def }
-\__codehl_keyset_register:nn { Pascal.Standard }  { codehl-11.def }
-\__codehl_lang_register:nn   { Pascal.Standard }  { codehl-11.def }
-\__codehl_keyset_register:nn { Pascal.XSC }  { codehl-11.def }
-\__codehl_lang_register:nn   { Pascal.XSC }  { codehl-11.def }
-\__codehl_keyset_register:nn { Pascal.Borland6 }  { codehl-11.def }
-\__codehl_lang_register:nn   { Pascal.Borland6 }  { codehl-11.def }
-\__codehl_keyset_register:nn { Modula-2 }  { codehl-12.def }
-\__codehl_lang_register:nn   { Modula-2 }  { codehl-12.def }
-\__codehl_keyset_register:nn { Eiffel }  { codehl-13.def }
-\__codehl_lang_register:nn   { Eiffel }  { codehl-13.def }
-\__codehl_keyset_register:nn { Delphi }  { codehl-14.def }
-\__codehl_lang_register:nn   { Delphi }  { codehl-14.def }
-\__codehl_keyset_register:nn { Perl }  { codehl-15.def }
-\__codehl_lang_register:nn   { Perl } { codehl-15.def }
-\__codehl_keyset_register:nn { POV }  { codehl-16.def }
-\__codehl_lang_register:nn   { POV } { codehl-16.def }
-\__codehl_keyset_register:nn { Python.2 }  { codehl-17.def }
-\__codehl_lang_register:nn   { Python.2 }  { codehl-17.def }
-\__codehl_keyset_register:nn { Python.3 }  { codehl-17.def }
-\__codehl_lang_register:nn   { Python.3 }  { codehl-17.def }
-\__codehl_lang_register:nn   { Python }  { codehl-17.def }
-\__codehl_keyset_register:nn { Python }  { codehl-17.def }
-\__codehl_keyset_register:nn { Scilab }  { codehl-18.def }
-\__codehl_lang_register:nn   { Scilab }  { codehl-18.def }
-\__codehl_keyset_register:nn { SQL }  { codehl-19.def }
-\__codehl_lang_register:nn   { SQL } { codehl-19.def }
-\__codehl_keyset_register:nn { VHDL }  { codehl-1A.def }
-\__codehl_lang_register:nn   { VHDL } { codehl-1A.def }
-\__codehl_keyset_register:nn { VHDL.AMS }  { codehl-1A.def }
-\__codehl_lang_register:nn   { VHDL.AMS }  { codehl-1A.def }
-\__codehl_keyset_register:nn { Verilog }  { codehl-1B.def }
-\__codehl_lang_register:nn   { Verilog }  { codehl-1B.def }
-\__codehl_keyset_register:nn { ABAP.R/2-5.0 }  { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/2-5.0 }  { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/3-3.1 }  { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/3-3.1 }  { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/3-4.6C }  { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/3-4.6C }  { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/3-6.10 }  { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/3-6.10 }  { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP.R/2-4.3 }  { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP.R/2-4.3 }  { codehl-1C.def }
-\__codehl_lang_register:nn   { ABAP } { codehl-1C.def }
-\__codehl_keyset_register:nn { ABAP }  { codehl-1C.def }
-\__codehl_keyset_register:nn { ACM }  { codehl-1D.def }
-\__codehl_lang_register:nn   { ACM } { codehl-1D.def }
-\__codehl_keyset_register:nn { VBScript }  { codehl-1E.def }
-\__codehl_lang_register:nn   { VBScript }  { codehl-1E.def }
-\__codehl_keyset_register:nn { ACMscript }  { codehl-1E.def }
-\__codehl_lang_register:nn   { ACMscript }  { codehl-1E.def }
-\__codehl_keyset_register:nn { IDL.CORBA }  { codehl-1F.def }
-\__codehl_lang_register:nn   { IDL.CORBA }  { codehl-1F.def }
-\__codehl_keyset_register:nn { Caml.light }  { codehl-20.def }
-\__codehl_lang_register:nn   { Caml.light }  { codehl-20.def }
-\__codehl_keyset_register:nn { Caml.Objective }  { codehl-20.def }
-\__codehl_lang_register:nn   { Caml.Objective }  { codehl-20.def }
-\__codehl_lang_register:nn   { Caml } { codehl-20.def }
-\__codehl_keyset_register:nn { Caml }  { codehl-20.def }
-\__codehl_keyset_register:nn { CMake }  { codehl-21.def }
-\__codehl_lang_register:nn   { CMake } { codehl-21.def }
-\__codehl_keyset_register:nn { make.gnu }  { codehl-22.def }
-\__codehl_lang_register:nn   { make.gnu }  { codehl-22.def }
-\__codehl_keyset_register:nn { make }  { codehl-22.def }
-\__codehl_lang_register:nn   { make } { codehl-22.def }
-\__codehl_keyset_register:nn { Euphoria }  { codehl-23.def }
-\__codehl_lang_register:nn   { Euphoria }  { codehl-23.def }
-\__codehl_keyset_register:nn { GAP }  { codehl-24.def }
-\__codehl_lang_register:nn   { GAP } { codehl-24.def }
-\__codehl_keyset_register:nn { GCL }  { codehl-25.def }
-\__codehl_lang_register:nn   { GCL } { codehl-25.def }
-\__codehl_keyset_register:nn { Gnuplot }  { codehl-26.def }
-\__codehl_lang_register:nn   { Gnuplot }  { codehl-26.def }
-\__codehl_keyset_register:nn { hansl }  { codehl-27.def }
-\__codehl_lang_register:nn   { hansl } { codehl-27.def }
-\__codehl_keyset_register:nn { Haskell }  { codehl-28.def }
-\__codehl_lang_register:nn   { Haskell }  { codehl-28.def }
-\__codehl_keyset_register:nn { IDL }  { codehl-29.def }
-\__codehl_lang_register:nn   { IDL } { codehl-29.def }
-\__codehl_keyset_register:nn { Inform }  { codehl-2A.def }
-\__codehl_lang_register:nn   { Inform }  { codehl-2A.def }
-\__codehl_keyset_register:nn { Lisp }  { codehl-2B.def }
-\__codehl_lang_register:nn   { Lisp } { codehl-2B.def }
-\__codehl_keyset_register:nn { elisp }  { codehl-2B.def }
-\__codehl_lang_register:nn   { elisp } { codehl-2B.def }
-\__codehl_keyset_register:nn { Lisp.Auto }  { codehl-2C.def }
-\__codehl_lang_register:nn   { Lisp.Auto }  { codehl-2C.def }
-\__codehl_keyset_register:nn { Lua.5.0 }  { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.0 }  { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua.5.1 }  { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.1 }  { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua.5.2 }  { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.2 }  { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua.5.3 }  { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua.5.3 }  { codehl-2D.def }
-\__codehl_lang_register:nn   { Lua } { codehl-2D.def }
-\__codehl_keyset_register:nn { Lua }  { codehl-2D.def }
-\__codehl_keyset_register:nn { Mercury }  { codehl-2E.def }
-\__codehl_lang_register:nn   { Mercury }  { codehl-2E.def }
-\__codehl_keyset_register:nn { Miranda }  { codehl-2F.def }
-\__codehl_lang_register:nn   { Miranda }  { codehl-2F.def }
-\__codehl_keyset_register:nn { ML }  { codehl-30.def }
-\__codehl_lang_register:nn   { ML } { codehl-30.def }
-\__codehl_keyset_register:nn { Oz }  { codehl-31.def }
-\__codehl_lang_register:nn   { Oz } { codehl-31.def }
-\__codehl_keyset_register:nn { Prolog }  { codehl-32.def }
-\__codehl_lang_register:nn   { Prolog }  { codehl-32.def }
-\__codehl_keyset_register:nn { Rexx }  { codehl-33.def }
-\__codehl_lang_register:nn   { Rexx } { codehl-33.def }
-\__codehl_keyset_register:nn { Rexx.VM/XA }  { codehl-33.def }
-\__codehl_lang_register:nn   { Rexx.VM/XA }  { codehl-33.def }
-\__codehl_keyset_register:nn { OORexx }  { codehl-33.def }
-\__codehl_lang_register:nn   { OORexx }  { codehl-33.def }
-\__codehl_keyset_register:nn { Ruby }  { codehl-34.def }
-\__codehl_lang_register:nn   { Ruby } { codehl-34.def }
-\__codehl_keyset_register:nn { SHELXL }  { codehl-35.def }
-\__codehl_lang_register:nn   { SHELXL }  { codehl-35.def }
-\__codehl_keyset_register:nn { tcl }  { codehl-36.def }
-\__codehl_lang_register:nn   { tcl } { codehl-36.def }
-\__codehl_keyset_register:nn { tcl.tk }  { codehl-36.def }
-\__codehl_lang_register:nn   { tcl.tk }  { codehl-36.def }
-\__codehl_keyset_register:nn { VRML.97 }  { codehl-37.def }
-\__codehl_lang_register:nn   { VRML.97 }  { codehl-37.def }
-\__codehl_keyset_register:nn { asm.Motorola68k }  { codehl-38.def }
-\__codehl_lang_register:nn   { asm.Motorola68k }  { codehl-38.def }
-\__codehl_lang_register:nn   { Motorola68k }  { codehl-38.def }
-\__codehl_keyset_register:nn { Motorola68k }  { codehl-38.def }
-\__codehl_keyset_register:nn { asm.x86 }  { codehl-39.def }
-\__codehl_lang_register:nn   { asm.x86 }  { codehl-39.def }
-\__codehl_lang_register:nn   { x86 } { codehl-39.def }
-\__codehl_keyset_register:nn { x86 }  { codehl-39.def }
-\__codehl_keyset_register:nn { asm.riscv }  { codehl-3A.def }
-\__codehl_lang_register:nn   { asm.riscv }  { codehl-3A.def }
-\__codehl_lang_register:nn   { riscv } { codehl-3A.def }
-\__codehl_keyset_register:nn { riscv }  { codehl-3A.def }
-\__codehl_keyset_register:nn { Clean }  { codehl-3B.def }
-\__codehl_lang_register:nn   { Clean } { codehl-3B.def }
-\__codehl_keyset_register:nn { CIL }  { codehl-3C.def }
-\__codehl_lang_register:nn   { CIL } { codehl-3C.def }
-\__codehl_keyset_register:nn { Comal.80 }  { codehl-3D.def }
-\__codehl_lang_register:nn   { Comal.80 }  { codehl-3D.def }
-\__codehl_lang_register:nn   { Comal } { codehl-3D.def }
-\__codehl_keyset_register:nn { Comal }  { codehl-3D.def }
-\__codehl_keyset_register:nn { command.com.WinXP } { codehl-3E.def }
-\__codehl_lang_register:nn   { command.com.WinXP }  { codehl-3E.def }
-\__codehl_keyset_register:nn { Comsol }  { codehl-3F.def }
-\__codehl_lang_register:nn   { Comsol }  { codehl-3F.def }
-\__codehl_keyset_register:nn { Elan }  { codehl-40.def }
-\__codehl_lang_register:nn   { Elan } { codehl-40.def }
-\__codehl_keyset_register:nn { erlang }  { codehl-41.def }
-\__codehl_lang_register:nn   { erlang }  { codehl-41.def }
-\__codehl_keyset_register:nn { Go }  { codehl-42.def }
-\__codehl_lang_register:nn   { Go } { codehl-42.def }
-\__codehl_keyset_register:nn { Scala }  { codehl-43.def }
-\__codehl_lang_register:nn   { Scala } { codehl-43.def }
-\__codehl_keyset_register:nn { Scala.3.0 }  { codehl-43.def }
-\__codehl_lang_register:nn   { Scala.3.0 }  { codehl-43.def }
-\__codehl_keyset_register:nn { Lingo }  { codehl-44.def }
-\__codehl_lang_register:nn   { Lingo } { codehl-44.def }
-\__codehl_keyset_register:nn { LLVM }  { codehl-45.def }
-\__codehl_lang_register:nn   { LLVM } { codehl-45.def }
-\__codehl_keyset_register:nn { Logo }  { codehl-46.def }
-\__codehl_lang_register:nn   { Logo } { codehl-46.def }
-\__codehl_keyset_register:nn { MetaPost }  { codehl-47.def }
-\__codehl_lang_register:nn   { MetaPost }  { codehl-47.def }
-\__codehl_keyset_register:nn { PostScript }  { codehl-48.def }
-\__codehl_lang_register:nn   { PostScript }  { codehl-48.def }
-\__codehl_keyset_register:nn { PSTricks }  { codehl-49.def }
-\__codehl_lang_register:nn   { PSTricks }  { codehl-49.def }
-\__codehl_keyset_register:nn { Mizar }  { codehl-4A.def }
-\__codehl_lang_register:nn   { Mizar } { codehl-4A.def }
-\__codehl_keyset_register:nn { MuPAD }  { codehl-4B.def }
-\__codehl_lang_register:nn   { MuPAD } { codehl-4B.def }
-\__codehl_keyset_register:nn { NASTRAN }  { codehl-4C.def }
-\__codehl_lang_register:nn   { NASTRAN }  { codehl-4C.def }
-\__codehl_keyset_register:nn { Oberon-2 }  { codehl-4D.def }
-\__codehl_lang_register:nn   { Oberon-2 }  { codehl-4D.def }
-\__codehl_keyset_register:nn { OCL.OMG }  { codehl-4E.def }
-\__codehl_lang_register:nn   { OCL.OMG }  { codehl-4E.def }
-\__codehl_keyset_register:nn { OCL.decorative }  { codehl-4E.def }
-\__codehl_lang_register:nn   { OCL.decorative }  { codehl-4E.def }
-\__codehl_lang_register:nn   { OCL } { codehl-4E.def }
-\__codehl_keyset_register:nn { OCL }  { codehl-4E.def }
-\__codehl_keyset_register:nn { Plasm }  { codehl-4F.def }
-\__codehl_lang_register:nn   { Plasm } { codehl-4F.def }
-\__codehl_keyset_register:nn { Promela }  { codehl-50.def }
-\__codehl_lang_register:nn   { Promela }  { codehl-50.def }
-\__codehl_keyset_register:nn { Reduce }  { codehl-51.def }
-\__codehl_lang_register:nn   { Reduce }  { codehl-51.def }
-\__codehl_keyset_register:nn { RSL }  { codehl-52.def }
-\__codehl_lang_register:nn   { RSL } { codehl-52.def }
-\__codehl_keyset_register:nn { Simula.67 }  { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.67 }  { codehl-53.def }
-\__codehl_keyset_register:nn { Simula.DEC }  { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.DEC }  { codehl-53.def }
-\__codehl_keyset_register:nn { Simula.CII }  { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.CII }  { codehl-53.def }
-\__codehl_keyset_register:nn { Simula.IBM }  { codehl-53.def }
-\__codehl_lang_register:nn   { Simula.IBM }  { codehl-53.def }
-\__codehl_lang_register:nn   { Simula }  { codehl-53.def }
-\__codehl_keyset_register:nn { Simula }  { codehl-53.def }
-\__codehl_keyset_register:nn { SPARQL }  { codehl-54.def }
-\__codehl_lang_register:nn   { SPARQL }  { codehl-54.def }
-\__codehl_keyset_register:nn { Swift }  { codehl-55.def }
-\__codehl_lang_register:nn   { Swift } { codehl-55.def }
-\__codehl_keyset_register:nn { R } { codehl-56.def }
-\__codehl_lang_register:nn   { R } { codehl-56.def }
-\__codehl_keyset_register:nn { S } { codehl-56.def }
-\__codehl_lang_register:nn   { S } { codehl-56.def }
-\__codehl_keyset_register:nn { S.PLUS }  { codehl-56.def }
-\__codehl_lang_register:nn   { S.PLUS }  { codehl-56.def }
-\__codehl_keyset_register:nn { SAS }  { codehl-57.def }
-\__codehl_lang_register:nn   { SAS } { codehl-57.def }
-\__codehl_keyset_register:nn { TeX.l3kernel }  { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3kernelsign } { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3exp }  { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3expsign }  { codehl-58.def }
-\__codehl_keyset_register:nn { TeX.l3ams }  { codehl-59.def }
-\__codehl_keyset_register:nn { TeX.l3amssign }  { codehl-59.def }
-\__codehl_keyset_register:nn { TeX.l3pgf }  { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.l3pgfsign }  { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.l3bibtex }  { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.l3bibtexsign } { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.babel }  { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.hyperref }  { codehl-5A.def }
-\__codehl_keyset_register:nn { TeX.kernel }  { codehl-5B.def }
-\__codehl_keyset_register:nn { TeX.xpacks }  { codehl-5B.def }
-\__codehl_keyset_register:nn { TeX.ams }  { codehl-5C.def }
-\__codehl_keyset_register:nn { TeX.bibtex }  { codehl-5C.def }
-\__codehl_keyset_register:nn { TeX.pgf }  { codehl-5D.def }
-\__codehl_keyset_register:nn { TeX.pgfplots }  { codehl-5D.def }
+\__codehl_lang_register:nn   { C.89 } { codehl-00.def }
+\__codehl_lang_register:nn   { C.99 } { codehl-00.def }
+\__codehl_lang_register:nn   { C.11 } { codehl-00.def }
+\__codehl_lang_register:nn   { C.17 } { codehl-00.def }
+\__codehl_lang_register:nn   { C.23 } { codehl-00.def }
+\__codehl_keyset_register:nn { C.89 } { codehl-00.def }
+\__codehl_keyset_register:nn { C.99 } { codehl-00.def }
+\__codehl_keyset_register:nn { C.11 } { codehl-00.def }
+\__codehl_keyset_register:nn { C.17 } { codehl-00.def }
+\__codehl_keyset_register:nn { C.23 } { codehl-00.def }
+\__codehl_lang_register:nn   { C++.98 } { codehl-00.def }
+\__codehl_lang_register:nn   { C++.11 } { codehl-00.def }
+\__codehl_lang_register:nn   { C++.20 } { codehl-00.def }
+\__codehl_lang_register:nn   { C++.23 } { codehl-00.def }
+\__codehl_keyset_register:nn { C++.98 } { codehl-00.def }
+\__codehl_keyset_register:nn { C++.11 } { codehl-00.def }
+\__codehl_keyset_register:nn { C++.20 } { codehl-00.def }
+\__codehl_keyset_register:nn { C++.23 } { codehl-00.def }
+\__codehl_lang_register:nn   { C } { codehl-00.def }
+\__codehl_keyset_register:nn { C } { codehl-00.def }
+\__codehl_lang_register:nn   { C++ } { codehl-00.def }
+\__codehl_keyset_register:nn { C++ } { codehl-00.def }
+\__codehl_lang_register:nn   { Csharp.1 } { codehl-01.def }
+\__codehl_lang_register:nn   { Csharp.6 } { codehl-01.def }
+\__codehl_lang_register:nn   { Csharp.11 } { codehl-01.def }
+\__codehl_lang_register:nn   { Csharp.13 } { codehl-01.def }
+\__codehl_keyset_register:nn { Csharp.1 } { codehl-01.def }
+\__codehl_keyset_register:nn { Csharp.6 } { codehl-01.def }
+\__codehl_keyset_register:nn { Csharp.13 } { codehl-01.def }
+\__codehl_lang_register:nn   { Csharp } { codehl-01.def }
+\__codehl_keyset_register:nn { Csharp } { codehl-01.def }
+\__codehl_lang_register:nn   { java.SE25 } { codehl-02.def }
+\__codehl_keyset_register:nn { java.SE25 } { codehl-02.def }
+\__codehl_lang_register:nn   { java } { codehl-02.def }
+\__codehl_keyset_register:nn { java } { codehl-02.def }
+\__codehl_lang_register:nn   { python.2.7 } { codehl-03.def }
+\__codehl_lang_register:nn   { python.3.0 } { codehl-03.def }
+\__codehl_lang_register:nn   { python.3.6 } { codehl-03.def }
+\__codehl_lang_register:nn   { python.3.12 } { codehl-03.def }
+\__codehl_keyset_register:nn { python.2.7 } { codehl-03.def }
+\__codehl_keyset_register:nn { python.3.0 } { codehl-03.def }
+\__codehl_keyset_register:nn { python.3.6 } { codehl-03.def }
+\__codehl_keyset_register:nn { python.3.12 } { codehl-03.def }
+\__codehl_lang_register:nn   { SQL.92 } { codehl-04.def }
+\__codehl_lang_register:nn   { SQL.23 } { codehl-04.def }
+\__codehl_keyset_register:nn { SQL.92 } { codehl-04.def }
+\__codehl_keyset_register:nn { SQL.23 } { codehl-04.def }
+\__codehl_keyset_register:nn { SQL.PostgreSQL } { codehl-04.def }
+\__codehl_keyset_register:nn { SQL.MySQL } { codehl-04.def }
+\__codehl_lang_register:nn   { PL/SQL } { codehl-04.def }
+\__codehl_keyset_register:nn { PL/SQL } { codehl-04.def }
+\__codehl_lang_register:nn   { SQL } { codehl-04.def }
+\__codehl_keyset_register:nn { SQL } { codehl-04.def }
+\__codehl_lang_register:nn   { perl } { codehl-05.def }
+\__codehl_keyset_register:nn { perl } { codehl-05.def }
+\__codehl_lang_register:nn   { lua.5.5 } { codehl-06.def }
+\__codehl_keyset_register:nn { lua.5.5 } { codehl-06.def }
+\__codehl_lang_register:nn   { lua } { codehl-06.def }
+\__codehl_keyset_register:nn { lua } { codehl-06.def }
+\__codehl_lang_register:nn   { html.5 } { codehl-07.def }
+\__codehl_keyset_register:nn { html.5 } { codehl-07.def }
+\__codehl_lang_register:nn   { html } { codehl-07.def }
+\__codehl_keyset_register:nn { html } { codehl-07.def }
+\__codehl_lang_register:nn   { php.8 } { codehl-08.def }
+\__codehl_keyset_register:nn { php.8 } { codehl-08.def }
+\__codehl_keyset_register:nn { php.mysqli } { codehl-08.def }
+\__codehl_keyset_register:nn { php.pgsql } { codehl-08.def }
+\__codehl_keyset_register:nn { php.xml-json } { codehl-08.def }
+\__codehl_keyset_register:nn { php.date } { codehl-08.def }
+\__codehl_lang_register:nn   { php } { codehl-08.def }
+\__codehl_keyset_register:nn { php } { codehl-08.def }
 
 
 %%%%%%%
@@ -4590,7 +4308,7 @@
 %%%%%%%
 \cs_new_protected:Npn \__codehl_lang_string_new:nnnnwn #1#2#3#4 #5 \q_stop #6
   {
-%  \tl_show:n { <<dlim_new>>{ #1 } { #2 } { #3 } { #4 } }
+%  \tl_show:n { <<string>>{ #1 } { #2 } { #3 } { #4 } { #5 } { #6 } }
     \quark_if_nil:nTF { #5 }
       {
         \tl_if_blank:nTF { #2 }
@@ -4603,6 +4321,7 @@
           }
           {
             \__codehl_lang_options:n { #4 }
+
 
             \__codehl_lang_get_dlimit:nNNN
               { #2 }
@@ -4742,44 +4461,71 @@
                   \l__codehl_tmpcd_tl
                   \l__codehl_tmpc_tl \l__codehl_tmpd_tl
 
-                \__codehl_lang_get_dlimit:nNTF
-                  { #4 }
-                  \l__codehl_tmpe_tl
-                  { %ok...
-                    \__codehl_lang_pattern_add:oee
-                      \l__codehl_def_lang_tl
-                      {
-                        \exp_not:o \l__codehl_tmpab_tl
-                      }
-                      {
-                          { \exp_not:N \__codehl_class_remap:n { \exp_not:n { #1 } } } %% 'class'
+                \tl_if_empty:nTF { #4 }
+                {
+                      \__codehl_lang_pattern_add:oee
+                        \l__codehl_def_lang_tl
+                        {
+                          \exp_not:o \l__codehl_tmpab_tl
+                        }
+                        {
+                            { \exp_not:N \__codehl_class_remap:n { \exp_not:n { #1 } } } %% 'class'
+                            {
+                              %%%   <nestable><tag case>      . <instr:1><col at:0> . <case:4>
+                              { \l__codehl_lang_opt_nestkey_tl
+                                \l__codehl_lang_opt_tagkey_tl . 10                  . 4 }
+                              { \exp_not:o \l__codehl_tmpa_tl }   %% 1st char (mark start)
                           {
-                            %%%   <nestable><tag case>      . <instr:1><col at:0> . <case:4>
-                            { \l__codehl_lang_opt_nestkey_tl
-                              \l__codehl_lang_opt_tagkey_tl . 10                  . 4 }
-                            { \exp_not:o \l__codehl_tmpa_tl }   %% 1st char (mark start)
+                            { \exp_not:o \l__codehl_tmpb_tl }
+                            { \exp_not:o \l__codehl_tmpab_tl }
+                          }   %% { regex } { start patt }
+                              { \exp_not:o \l__codehl_tmpc_tl }   %% 1st char (mark end)
+                          {
+                            { \exp_not:o \l__codehl_tmpd_tl }
+                            { \exp_not:o \l__codehl_tmpcd_tl }
+                          }   %% { regex } { end patt }
+                              {  }   %%% "escape char"
+                            }
+                        }
+                }
+                {
+                  \__codehl_lang_get_dlimit:nNTF
+                    { #4 }
+                    \l__codehl_tmpe_tl
+                    { %ok...
+                      \__codehl_lang_pattern_add:oee
+                        \l__codehl_def_lang_tl
                         {
-                          { \exp_not:o \l__codehl_tmpb_tl }
-                          { \exp_not:o \l__codehl_tmpab_tl }
-                        }   %% { regex } { start patt }
-                            { \exp_not:o \l__codehl_tmpc_tl }   %% 1st char (mark end)
+                          \exp_not:o \l__codehl_tmpab_tl
+                        }
                         {
-                          { \exp_not:o \l__codehl_tmpd_tl }
-                          { \exp_not:o \l__codehl_tmpcd_tl }
-                        }   %% { regex } { end patt }
-                            { \exp_not:o \l__codehl_tmpe_tl }   %%% "escape char"
-                          }
-                      }
-
-
-                  }
-                  { %err, more than one char
-                    \msg_error:nnneee { codehl / lang } { syntax err }
-                      { lang64ic }
-                      \l__codehl_alias_lang_tl
-                      { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #7 } }
-                      { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
-                  }
+                            { \exp_not:N \__codehl_class_remap:n { \exp_not:n { #1 } } } %% 'class'
+                            {
+                              %%%   <nestable><tag case>      . <instr:1><col at:0> . <case:4>
+                              { \l__codehl_lang_opt_nestkey_tl
+                                \l__codehl_lang_opt_tagkey_tl . 10                  . 4 }
+                              { \exp_not:o \l__codehl_tmpa_tl }   %% 1st char (mark start)
+                          {
+                            { \exp_not:o \l__codehl_tmpb_tl }
+                            { \exp_not:o \l__codehl_tmpab_tl }
+                          }   %% { regex } { start patt }
+                              { \exp_not:o \l__codehl_tmpc_tl }   %% 1st char (mark end)
+                          {
+                            { \exp_not:o \l__codehl_tmpd_tl }
+                            { \exp_not:o \l__codehl_tmpcd_tl }
+                          }   %% { regex } { end patt }
+                              { \exp_not:o \l__codehl_tmpe_tl }   %%% "escape char"
+                            }
+                        }
+                    }
+                    { %err, more than one char
+                      \msg_error:nnneee { codehl / lang } { syntax err }
+                        { lang64ic }
+                        \l__codehl_alias_lang_tl
+                        { \l__codehl_lang_opt_key_tl ~=~ \exp_not:n { #7 } }
+                        { \l__codehl_lang_opt_key_tl ~=~ { <class> } { <start-pattern> } { <end-pattern> } { <escape-char> }  }
+                    }
+                }
               }
           }
       }
@@ -5099,12 +4845,14 @@
     \tl_remove_all:Nn #2 { ~ }
     \regex_replace_all:NnN
       \c__codehl_escape_regex {\1} #2
+%\tl_show:e {<<get_dlimit>>{\exp_not:n {#1}}{\exp_not:N #2~::~\exp_not:o #2}}
     \exp_last_unbraced:No \__codehl_lang_get_dlimit:wNN #2 \q_stop
   }
 
 
 \cs_new_protected:Npn \__codehl_lang_get_dlimit:wNN #1#2 \q_stop #3#4
   {
+%  \tl_show:n {<<dlimit>>(#1)(#2)(#3)(#4)}
     \tl_set:Nn #3 { #1 }
     \tl_if_blank:nTF { #2 }
       { \tl_clear:N #4 }
@@ -5112,6 +4860,7 @@
         \tl_set:Nn #4 { #2 }
         \__codehl_regex_sanitize:N #4
       }
+%    \tl_show:e {<<dlimit-san>>\exp_not:N #4 ~::~ {\exp_not:o #4}}
   }
 
 \prg_new_protected_conditional:Npnn \__codehl_lang_get_dlimit:nN #1#2 { TF }
@@ -5693,6 +5442,7 @@
             }
       }
 
+%%\tl_show:n {<<string-escape>>{#3}}
     %%% #3 -> escape char
     \tl_if_blank:nTF { #3 }
       {
@@ -5860,6 +5610,10 @@
             { \exp_not:N \__codehl_tok_discard_line:w } % single line discard
       }
   }
+
+%%%
+%%% TODO adjust it, so that, instead of a single char, one can have a full 'string' as identifier
+%%% reason: PL/SQL :(
 
 %%%%%%%
 %%% case 7 => "named formating"
@@ -7126,26 +6880,60 @@
               { \__codehl_tok_keyfmt_less:Ncoo }
           }
       }
+
+          \cs_set_eq:NN
+            \__codehl_tok_other_scan:
+            \__codehl_tok_inbase:
+          \cs_set_eq:NN
+            \__codehl_tok_cmt_scan:
+            \__codehl_tok_inbasecmt:
+          \cs_set_eq:NN
+            \__codehl_tok_str_scan:
+            \__codehl_tok_inbasestr:
+          \cs_set_eq:NN
+            \__codehl_tok_tr_scan:
+            \__codehl_tok_intr:
+
   }
 
 
 \cs_new_protected:Npn \__codehl_basefmt_set_style:
   {
-            \prop_map_inline:cn { l__codehl_basefmt_ \l__codehl_tok_activ_basefmt_tl _build_keys_prop }
-              {
-                \tl_set:cn { l__codehl_tok_style_ ##1 _tl } { ##2 }
-              }
-            \prop_map_inline:cn { l__codehl_basefmt_ \l__codehl_tok_activ_basefmt_tl _build_bool_keys_prop }
-              {
-                \bool_set_eq:cN { l__codehl_tok_style_ ##1 _bool } ##2
-              }
+    \prop_map_inline:cn { l__codehl_basefmt_ \l__codehl_tok_activ_basefmt_tl _build_keys_prop }
+      {
+        \tl_set:cn { l__codehl_tok_style_ ##1 _tl } { ##2 }
+      }
+    \prop_map_inline:cn { l__codehl_basefmt_ \l__codehl_tok_activ_basefmt_tl _build_bool_keys_prop }
+      {
+        \bool_set_eq:cN { l__codehl_tok_style_ ##1 _bool } ##2
+      }
 
-            %%% this will cicle throughout all of them
-            %%%
-            \prop_map_inline:Nn \l__codehl_basefmt_cmds_prop
-              { ##2 }
+    %%% this will cicle throughout all of them
+    %%%
+    \prop_map_inline:Nn \l__codehl_basefmt_cmds_prop
+      { ##2 }
   }
 
+%%%%%%%
+%%% for long codes... this is meaningless,
+%%% might be relevant for lots of small inline code (short verbatim)
+%%%%%%%
+\cs_new_protected:Npn \__codehl_tok_starts_invariants:
+  {
+          \cs_set:Npn \__codehl_tok_disp_line:
+            { \__codehl_tok_set_line: }
+          \cs_set:Npn \__codehl_tok_col_count:
+            { \__codehl_tok_col_counting: }
+
+          \cs_set:Npn \__codehl_tok_start:N
+            { \__codehl_tok_other:N  } %% it will (shall) handle just one token (byte) a time
+          \cs_set:Npn \__codehl_tok_nesting_keywd:N
+              { \__codehl_tok_keywd_other:N }
+          \tl_set:Nn \l__codehl_tok_curr_tag_tl
+            { keywd }
+  }
+
+\__codehl_tok_starts_invariants:
 
 \cs_new_protected:Npn \codehl_display:nn #1#2
   {
@@ -7200,17 +6988,9 @@
               \cs_set_eq:NN \__codehl_tok_next_line:w   \__codehl_tok_coffin_line_proc:w
             }
 
-
-          \cs_set:Npn \__codehl_tok_disp_line:
-            { \__codehl_tok_set_line: }
-          \cs_set_eq:NN \__codehl_tok_col_count:    \__codehl_tok_col_counting:
-
           \int_zero:N \l__codehl_tok_line_int
 
-          \cs_set:Npn \__codehl_tok_start:N
-            { \__codehl_tok_other:N  } %% it will (shall) handle just one token (byte) a time
-          \cs_set:Npn \__codehl_tok_nesting_keywd:N
-              { \__codehl_tok_keywd_other:N }
+
 
           \cs_set_eq:NN
             \__codehl_tok_proc:N
@@ -7220,21 +7000,6 @@
             \__codehl_tok_keyfmt_base:Ncoo
 
 
-          \cs_set_eq:NN
-            \__codehl_tok_other_scan:
-            \__codehl_tok_inbase:
-          \cs_set_eq:NN
-            \__codehl_tok_cmt_scan:
-            \__codehl_tok_inbasecmt:
-          \cs_set_eq:NN
-            \__codehl_tok_str_scan:
-            \__codehl_tok_inbasestr:
-          \cs_set_eq:NN
-            \__codehl_tok_tr_scan:
-            \__codehl_tok_intr:
-
-          \tl_set:Nn \l__codehl_tok_curr_tag_tl
-            { keywd }
 
           \l__codehl_tok_style_basefmt_tl
 

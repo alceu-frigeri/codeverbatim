@@ -1,0 +1,348 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-00}
+  {
+     name        = {codehl-00} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~00}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { C.89 }
+  {
+    info / note  =
+     {
+       C.89 ~ base ~ Language. Some ~ references~\iow_newline:
+       https://en.cppreference.com/w/c/keyword~\iow_newline:
+       https://en.cppreference.com/w/c/preprocessor
+     }  ,
+    identifier               =      { pragma } { \# } { }  ,
+    comment                  =      {1} { /* } { */ } { }  ,
+    string                   =      {1} { "  } { \\ } { }  ,
+    delimited ~ string       =      {1} { L" } { " } { \\ } { }  ,
+    oletter                  =      { \_ }  ,
+    alphanumeric             =      true  ,
+  }
+
+\codehl_lang_def:nn { C.99 }
+  {
+    info / note  =
+     {
+       C.99 ~ based ~ on ~ C.89
+     }  ,
+    based ~ on               =      { C.89 }  ,
+    comment ~ line           =      {1} { // } { }  ,
+  }
+
+
+\codehl_lang_def:nn { C.11 }
+  {
+    info / note  =
+     {
+       C.11 ~ based ~ on ~ C.99
+     }  ,
+    based ~ on               =      { C.99 }  ,
+    delimited ~ string       =      {1} { u8" } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { u"  } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { U"  } { " } { \\ } { }  ,
+  }
+
+
+\codehl_lang_def:nn { C.17 }
+  {
+    info / note  =
+     {
+       C.17 ~ based ~ on ~ C.11
+     }  ,
+    based ~ on               =      { C.11 }  ,
+  }
+
+\codehl_lang_def:nn { C.23 }
+  {
+    info / note  =
+     {
+       C.23 ~ based ~ on ~ C.17
+     }  ,
+    based ~ on               =      { C.11 }  ,
+  }
+
+
+\codehl_keyset_def:nn { C.89 }
+  {
+    info / note  =
+     {
+       C.89 ~ base ~ Language. Some ~ references~\iow_newline:
+       https://en.cppreference.com/w/c/keyword~\iow_newline:
+       https://en.cppreference.com/w/c/preprocessor
+     }  ,
+    keywd                    =      {1}
+      {
+        auto, break,  case, char, const, continue, default, do,
+        double, else, enum, extern, float, for, goto, if, int,
+        long, register, return, short, signed, sizeof, static,
+        struct, switch, typedef, union, unsigned, void,
+        volatile, while
+      }  ,
+    pragma                   =      {1}
+      {
+        include, define, undef, if, ifdef, ifndef,
+        else, endif, line, error, pragma
+      }  ,
+  }
+
+\codehl_keyset_def:nn { C.99 }
+  {
+    info / note  =
+     {
+       C.99 ~ based ~ on ~ C.89
+     }  ,
+    based ~ on               =      { C.89 }  ,
+    keywd                    =      {1}
+      {
+        inline, restrict, _Bool, _Complex, _Imaginary, _Pragma
+      }  ,
+  }
+
+
+\codehl_keyset_def:nn { C.11 }
+  {
+    info / note  =
+     {
+       C.11 ~ based ~ on ~ C.99
+     }  ,
+    based ~ on               =      { C.99 }  ,
+    keywd                    =      {1}
+      {
+        _Alignas, _Alignof, _Atomic, _Generic, _Noreturn,
+        _Static_assert, _Thread_local
+      }  ,
+  }
+
+\codehl_keyset_def:nn { C.17 }
+  {
+    info / note  =
+     {
+       C.17 ~ based ~ on ~ C.11
+     }  ,
+    based ~ on               =      { C.11 }  ,
+  }
+
+\codehl_keyset_def:nn { C.23 }
+  {
+    info / note  =
+     {
+       C.11 ~ based ~ on ~ C.99
+     }  ,
+    based ~ on               =      { C.99 }  ,
+    keywd                    =      {1}
+      {
+        alignas, alignof, bool, constexpr, false, nullptr,
+        static_assert, thread_local, true, typeof,
+        typeof_unqual, _BitInt, _Decimal32, _Decimal64, _Decimal128
+      }  ,
+    keywd                    =      {1}
+      {
+        asm, fortran
+      }  ,
+    pragma                   =      {1}
+      {
+        elifdef, elifndef, warning, embed, pragma
+      }  ,
+
+  }
+
+
+\codehl_lang_def:nn { C++.98 }
+  {
+    info / note  =
+     {
+       C++.98 ~ base ~ Language. Some ~ references~\iow_newline:
+       https://en.cppreference.com/w/cpp/keyword \iow_newline:
+       https://en.cppreference.com/w/cpp/preprocessor
+     }  ,
+    identifier               =      { pragma } { \# } { }  ,
+    comment                  =      {1} { /* } { */ } { }  ,
+    comment ~ line           =      {1} { // } { }  ,
+    string                   =      {1} { "  } { \\ } { }  ,
+    delimited ~ string       =      {1} { L" } { " } { \\ } { }  ,
+    oletter                  =      { \_ }  ,
+    alphanumeric             =      true  ,
+  }
+
+\codehl_lang_def:nn { C++.11 }
+  {
+    info / note  =
+     {
+       C++.11 ~ based ~ on ~ C++.98
+     }  ,
+    based ~ on               =      { C++.98 }  ,
+    delimited ~ string       =      {1} { u8" } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { u"  } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { U"  } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { R"  } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { LR"  } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { u8R" } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { uR"  } { " } { \\ } { }  ,
+    delimited ~ string       =      {1} { UR"  } { " } { \\ } { }  ,
+  }
+
+\codehl_lang_def:nn { C++.20 }
+  {
+    info / note  =
+     {
+       C++.20 ~ based ~ on ~ C++.11
+     }  ,
+    based ~ on               =      { C++.11 }  ,
+  }
+
+\codehl_lang_def:nn { C++.23 }
+  {
+    info / note  =
+     {
+       C++.23 ~ based ~ on ~ C++.20
+     }  ,
+    based ~ on               =      { C++.20 }  ,
+  }
+
+\codehl_keyset_def:nn { C++.98 }
+  {
+    info / note  =
+     {
+       C++.98 ~ base ~ Language. Some ~ references~\iow_newline:
+       https://en.cppreference.com/w/cpp/keyword \iow_newline:
+       https://en.cppreference.com/w/cpp/preprocessor
+     }  ,
+    keywd                    =      {1}
+      {
+        and, and_eq, asm, auto, bitand, bitor, bool, break,
+        case, catch, char, class, compl, const, const_cast,
+        continue, default, delete, do, double, dynamic_cast,
+        else, enum, explicit, export, extern, false, float,
+        for, friend, goto, if, inline, int, long, mutable,
+        namespace, new, not, not_eq, operator, or, or_eq,
+        private, protected, public, register, reinterpret_cast,
+        return, short, signed, sizeof, static, static_cast,
+        struct, switch, template, this, throw, true, try,
+        typedef, typeid, typename, union, unsigned, using,
+        virtual, void, volatile, wchar_t, while, xor, xor_eq
+      }  ,
+    pragma                   =      {1}
+      {
+        include, define, undef, if, ifdef, ifndef,
+        else, elif, endif, line, error, pragma
+      }  ,
+  }
+
+\codehl_keyset_def:nn { C++.11 }
+  {
+    info / note  =
+     {
+       C++.11 ~ based ~ on ~ C++.98
+     }  ,
+    based ~ on               =      { C++.98 }  ,
+    keywd                    =      {1}
+      {
+        alignas, alignof, char16_t, char32_t, constexpr,
+        decltype, noexcept, nullptr, static_assert, thread_local,
+        final, override
+      }  ,
+    pragma                   =      {1}
+      {
+
+      }  ,
+  }
+
+\codehl_keyset_def:nn { C++.20 }
+  {
+    info / note  =
+     {
+       C++.20 ~ based ~ on ~ C++.11
+     }  ,
+    based ~ on               =      { C++.11 }  ,
+    keywd                    =      {1}
+      {
+        char8_t, concept, consteval, constinit,
+        co_await, co_return, co_yield, requires,
+        import, module
+      }  ,
+    pragma                   =      {1}
+      {
+
+      }  ,
+  }
+
+\codehl_keyset_def:nn { C++.23 }
+  {
+    info / note  =
+     {
+       C++.23 ~ based ~ on ~ C++.20
+     }  ,
+    based ~ on               =      { C++.20 }  ,
+    pragma                   =      {1}
+      {
+        elifdef, elifndef, warning
+      }  ,
+  }
+
+%%
+%% Aliases
+%%
+
+\codehl_lang_alias:nn   { C } { C.23 }
+\codehl_keyset_alias:nn { C } { C.23 }
+
+\codehl_lang_alias:nn   { C++ } { C++.23 }
+\codehl_keyset_alias:nn { C++ } { C++.23 }
+
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

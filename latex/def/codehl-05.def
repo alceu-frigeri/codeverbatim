@@ -1,0 +1,159 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-05}
+  {
+     name        = {codehl-05} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~05}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { perl }
+  {
+    info / note  =
+     {
+       perl ~ 5 ~ base ~ Language. Some ~ references~\iow_newline:
+        https://perldoc.perl.org/~\iow_newline:
+        https://metacpan.org/pod/B::Keywords~\iow_newline:
+        https://learn.perl.org/docs/keywords.html~\iow_newline:
+        Heredoc~ not ~ implemented
+     }  ,
+    comment                  =      {1} { =pod } { =cut } { }  ,
+    comment ~ line           =      {1} { \#   } { }  ,
+    string                   =      {1} { '    } { \\ } { }  ,
+    string                   =      {1} { "    } { \\ } { }  ,
+    string                   =      {2} { \`   } {  } { }  ,
+    delimited ~ string       =      {1} { q/   } { /  } {  } { }  ,
+    delimited ~ string       =      {1} { qq/  } { /  } {  } { }  ,
+    delimited ~ string       =      {2} { qx/  } { /  } {  } { }  ,
+    delimited ~ string       =      {3} { qw/  } { /  } {  } { }  ,
+    delimited ~ string       =      {3} { qr/  } { /  } {  } { }  ,
+    delimited ~ string       =      {3} { m/   } { /  } {  } { }  ,
+    delimited ~ string       =      {3} { s/   } { /  } {  } { }  ,
+    delimited ~ string       =      {3} { tr/  } { /  } {  } { }  ,
+    oletter                  =      { \_ }  ,
+    digits                   =      { :  }  ,
+    alphanumeric             =      true  ,
+  }
+%%% TODO:
+%%% heredoc <<'something'
+%%% hint: $, @, %, & * => letter ??  
+
+
+\codehl_keyset_def:nn { perl }
+  {
+    info / note  =
+     {
+       perl ~ 5 ~ base ~ Language. Some ~ references~\iow_newline:
+        https://perldoc.perl.org/~\iow_newline:
+        https://metacpan.org/pod/B::Keywords~\iow_newline:
+        https://learn.perl.org/docs/keywords.html~\iow_newline:
+        Heredoc~ not ~ implemented
+     }  ,
+    keywd                    =      {1}
+      {
+        CLASS, DATA, END, FILE, LINE, PACKAGE, SUB, AUTOLOAD, BEGIN, 
+        CHECK, DESTROY, END, INIT, UNITCHECK, abs, accept, alarm, 
+        and, atan2, bind, binmode, bless, break, caller, chdir, chmod, 
+        chomp, chop, chown, chr, chroot, close, closedir, cmp, connect, 
+        continue, cos, crypt, dbmclose, dbmopen, default, defined, delete, 
+        die, do, dump, each, else, elsif, endgrent, endhostent, endnetent, 
+        endprotoent, endpwent, endservent, eof, eq, eval, evalbytes, exec, 
+        exists, exit, exp, fc, fcntl, fileno, flock, for, foreach, fork, 
+        format, formline, ge, getc, getgrent, getgrgid, getgrnam, 
+        gethostbyaddr, gethostbyname, gethostent, getlogin, getnetbyaddr, 
+        getnetbyname, getnetent, getpeername, getpgrp, getppid, getpriority, 
+        getprotobyname, getprotobynumber, getprotoent, getpwent, getpwnam, 
+        getpwuid, getservbyname, getservbyport, getservent, getsockname, 
+        getsockopt, given, glob, gmtime, goto, grep, gt, hex, if, index, 
+        int, ioctl, join, keys, kill, last, lc, lcfirst, le, length, link, 
+        listen, local, localtime, lock, log, lstat, lt, m, map, mkdir, 
+        msgctl, msgget, msgrcv, msgsnd, my, ne, next, no, not, oct, open, 
+        opendir, or, ord, our, pack, package, pipe, pop, pos, print, printf, 
+        prototype, push, q, qq, qr, quotemeta, qw, qx, rand, read, readdir, 
+        readline, readlink, readpipe, recv, redo, ref, rename, require, 
+        reset, return, reverse, rewinddir, rindex, rmdir, s, say, scalar, 
+        seek, seekdir, select, semctl, semget, semop, send, setgrent, 
+        sethostent, setnetent, setpgrp, setpriority, setprotoent, setpwent, 
+        setservent, setsockopt, shift, shmctl, shmget, shmread, shmwrite, 
+        shutdown, sin, sleep, socket, socketpair, sort, splice, split, 
+        sprintf, sqrt, srand, stat, state, study, sub, substr, symlink, 
+        syscall, sysopen, sysread, sysseek, system, syswrite, tell, 
+        telldir, tie, tied, time, times, tr, truncate, uc, ucfirst, 
+        umask, undef, unless, unlink, unpack, unshift, untie, until, 
+        use, utime, values, vec, wait, waitpid, wantarray, warn, when, 
+        while, write, x, xor, y,
+        say, state, given, when, break, default,
+        SUB, fc, isa, try, catch, finally,
+        defer, builtin, functions, true, false, blessed,
+        class, field, method, ADJUST, CLASS, any, all
+      }  ,
+    keywd                    =      {1}
+      {
+        attributes, autodie, autouse, base, bigint, bignum, bigrat, blib, bytes, 
+        charnames, constant, diagnostics, encoding, feature, fields, filetest, 
+        if, integer, less, lib, locale, mro, ok, open, ops, overload, overloading, 
+        parent, re, sigtrap, sort, strict, subs, threads, threads::shared, utf8, 
+        vars, version, vmsish, warnings, warnings::register,
+        say, state, switch, unicode_strings, current_sub, unicode_eval, evalbytes, 
+        fc, postderef_qq, bitwise, isa, signatures, module_true, try, defer, class
+      }
+      
+  }
+
+%%
+%% Aliases
+%%
+
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

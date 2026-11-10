@@ -1,0 +1,361 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-04}
+  {
+     name        = {codehl-04} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~04}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { SQL.92 }
+  {
+    info / note  =
+     {
+       SQL ~ 92 ~ base ~ Language. Some ~ references~\iow_newline:
+        https://modern-sql.com/standard/2023/reserved-words
+        https://developer.mimer.com~\iow_newline:
+        https://www.postgresql.org/docs/current/sql-keywords-appendix.html 
+     }  ,
+    comment ~ line           =      {1} { -- } { }  ,
+    comment                  =      {1} { /* } { */ } { }  ,
+    string                   =      {1} { '  } {  } { }  ,
+    delimited ~ string       =      {2} { N'    } { '   } {  } { }  ,
+    delimited ~ string       =      {2} { n'    } { '   } {  } { }  ,
+    delimited ~ string       =      {2} { X'    } { '   } {  } { }  ,
+    delimited ~ string       =      {2} { x'    } { '   } {  } { }  ,
+    oletter                  =      { \_ }  ,
+    alphanumeric             =      true  ,
+    case ~ sensitive         =      false ,
+  }
+
+\codehl_lang_def:nn { SQL.23 }
+  {
+    info / note  =
+     {
+       SQL ~ 23 ~ based ~ on ~ SQL ~ 92
+     }  ,
+    based ~ on               =      { SQL.92 }  ,
+  }
+  
+
+
+\codehl_keyset_def:nn { SQL.92 }
+  {
+    info / note  =
+     {
+       SQL ~ 92 ~ base ~ Language. Some ~ references~\iow_newline:
+        https://modern-sql.com/standard/2023/reserved-words
+        https://developer.mimer.com~\iow_newline:
+        https://www.postgresql.org/docs/current/sql-keywords-appendix.html 
+     }  ,
+    keywd*                    =      {1}
+      {
+        ABSOLUTE, ACTION, ADD, ALL, ALLOCATE, ALTER, AND, ANY, ARE, 
+        AS, ASC, ASSERTION, AT, AUTHORIZATION, AVG, BEGIN, BETWEEN, 
+        BIT, BIT_LENGTH, BOTH, BY, CASCADE, CASCADED, CASE, CAST, 
+        CATALOG, CHAR, CHAR_LENGTH, CHARACTER, CHARACTER_LENGTH, CHECK, 
+        CLOSE, COALESCE, COLLATE, COLLATION, COLUMN, COMMIT, CONNECT, 
+        CONNECTION, CONSTRAINT, CONSTRAINTS, CONTINUE, CONVERT, CORRESPONDING, 
+        COUNT, CREATE, CROSS, CURRENT, CURRENT_DATE, CURRENT_TIME, CURRENT_TIMESTAMP, 
+        CURRENT_USER, CURSOR, DATE, DAY, DEALLOCATE, DEC, DECIMAL, DECLARE, DEFAULT, 
+        DEFERRABLE, DEFERRED, DELETE, DESC, DESCRIBE, DESCRIPTOR, DIAGNOSTICS, 
+        DISCONNECT, DISTINCT, DOMAIN, DOUBLE, DROP, ELSE, END, END-EXEC, ESCAPE, 
+        EXCEPT, EXCEPTION, EXEC, EXECUTE, EXISTS, EXTERNAL, EXTRACT, FALSE, 
+        FETCH, FIRST, FLOAT, FOR, FOREIGN, FOUND, FROM, FULL, GET, GLOBAL, GO, 
+        GOTO, GRANT, GROUP, HAVING, HOUR, IDENTITY, IMMEDIATE, IN, INDICATOR, 
+        INITIALLY, INNER, INPUT, INSENSITIVE, INSERT, INT, INTEGER, INTERSECT, 
+        INTERVAL, INTO, IS, ISOLATION, JOIN, KEY, LANGUAGE, LAST, LEADING, LEFT, 
+        LEVEL, LIKE, LOCAL, LOWER, MATCH, MAX, MIN, MINUTE, MODULE, MONTH, 
+        NAMES, NATIONAL, NATURAL, NCHAR, NEXT, NO, NOT, NULL, NULLIF, 
+        NUMERIC, OCTET_LENGTH, OF, ON, ONLY, OPEN, OPTION, OR, ORDER, 
+        OUTER, OUTPUT, OVERLAPS, PAD, PARTIAL, POSITION, PRECISION, PREPARE, 
+        PRESERVE, PRIMARY, PRIOR, PRIVILEGES, PROCEDURE, PUBLIC, READ, 
+        REAL, REFERENCES, RELATIVE, RESTRICT, REVOKE, RIGHT, ROLLBACK, 
+        ROWS, SCHEMA, SCROLL, SECOND, SECTION, SELECT, SESSION, SESSION_USER, 
+        SET, SIZE, SMALLINT, SOME, SPACE, SQL, SQLCODE, SQLERROR, SQLSTATE, 
+        SUBSTRING, SUM, SYSTEM_USER, TABLE, TEMPORARY, THEN, TIME, TIMESTAMP, 
+        TIMEZONE_HOUR, TIMEZONE_MINUTE, TO, TRAILING, TRANSACTION, TRANSLATE, 
+        TRANSLATION, TRIM, TRUE, UNION, UNIQUE, UNKNOWN, UPDATE, UPPER, 
+        USAGE, USER, USING, VALUE, VALUES, VARCHAR, VARYING, VIEW, WHEN, 
+        WHENEVER, WHERE, WITH, WORK, WRITE, YEAR, ZONE
+      }  ,
+  }
+
+\codehl_keyset_def:nn { SQL.23 }
+  {
+    info / note  =
+     {
+       SQL ~ 23 ~ based ~ on ~ SQL ~ 92
+     }  ,
+    based ~ on               =      { SQL.92 }  ,
+    suppress ~ keywd*        =      {1}
+      {
+        ABSOLUTE, ACTION, ADD, ASC, ASSERTION, BIT, BIT_LENGTH, 
+        CASCADE, CATALOG, CHAR_LENGTH, CHARACTER_LENGTH, COLLATION, 
+        CONNECTION, CONSTRAINTS, CONVERT, DATE, DAY, DESC, DOMAIN, 
+        END-EXEC, EXCEPTION, FIRST, FOUND, GET, GLOBAL, GO, GOTO, HOUR, 
+        IMMEDIATE, INITIALLY, INPUT, INSENSITIVE, ISOLATION, KEY, 
+        LANGUAGE, LAST, LEVEL, LOWER, MATCH, MINUTE, MODULE, MONTH, 
+        NAMES, NATIONAL, NEXT, NO, NULLIF, OPTION, OUTPUT, PAD, PARTIAL, 
+        POSITION, PRECISION, PRESERVE, PRIOR, PRIVILEGES, PUBLIC, READ, 
+        RELATIVE, RESTRICT, SCHEMA, SCROLL, SECOND, SECTION, SESSION, 
+        SIZE, SMALLINT, SPACE, SQLCODE, SQLERROR, TEMPORARY, TIME, 
+        TIMESTAMP, TIMEZONE_HOUR, TIMEZONE_MINUTE, TRAILING, TRANSACTION, 
+        TRANSLATE, TRANSLATION, TRIM, UNKNOWN, UPPER, USAGE, VALUE, 
+        VARCHAR, VARYING, VIEW, WHENEVER, WORK, WRITE, YEAR, ZONE
+      }  ,
+    keywd*                   =      {1}
+      {
+        ABS, ABSENT, ACOS, ANY_VALUE, ARRAY, ARRAY_AGG, ARRAY_MAX_CARDINALITY, 
+        ASENSITIVE, ASIN, ASYMMETRIC, ATAN, ATOMIC, BEGIN_FRAME, 
+        BEGIN_PARTITION, BIGINT, BINARY, BLOB, BOOLEAN, BTRIM, 
+        CALLED, CARDINALITY, CEIL, CEILING, CLASSIFIER, CLOB, 
+        COLLECT, CONTAINS, COPY, CORR, COS, COSH, COVAR_POP, 
+        COVAR_SAMP, CUBE, CUME_DIST, CURRENT_CATALOG, 
+        CURRENT_DEFAULT_TRANSFORM_GROUP, CURRENT_PATH, CURRENT_ROLE, 
+        CURRENT_ROW, CURRENT_SCHEMA, CURRENT_TRANSFORM_GROUP_FOR_TYPE, 
+        CYCLE, DECFLOAT, DEFINE, DENSE_RANK, DEREF, DETERMINISTIC, 
+        ELEMENT, EVERY, EXP, FILTER, FIRST_VALUE, FLOOR, FREE, FUSION, 
+        GROUPING, HOLD, JSON, JSON_ARRAY, JSON_ARRAYAGG, JSON_EXISTS, 
+        JSON_OBJECT, JSON_OBJECTAGG, JSON_QUERY, JSON_SCALAR, JSON_SERIALIZE, 
+        JSON_TABLE, JSON_TABLE_PRIMITIVE, JSON_VALUE, LAG, LAST_VALUE, 
+        LATERAL, LEAD, LN, LOCALTIME, LOCALTIMESTAMP, LOG, LOG10, 
+        MAX_CARDINALITY, MEMBER, MERGE, METHOD, MOD, MODIFIES, 
+        MULTISET, NEW, NORMALIZE, NTH_VALUE, NTILE, OCCURRENCES_REGEX, 
+        OCTET_LENGTH, OFFSET, OLD, OMIT, ONE, OVER, OVERLAY, 
+        PARAMETER, PARTITION, PERCENT, PERCENT_RANK, PERCENTILE_CONT, 
+        PERCENTILE_DISC, PERIOD, PORTION, POSITION_REGEX, POWER, RANK, 
+        READS, RECURSIVE, REF, REFERENCING, REGR_AVGX, REGR_AVGY, 
+        REGR_COUNT, REGR_INTERCEPT, REGR_R2, REGR_SLOPE, REGR_SXX, 
+        REGR_SXY, REGR_SYY, RELEASE, RESULT, RETURN, RETURNS, ROLLUP, 
+        ROW, ROW_NUMBER, RUNNING, SAVEPOINT, SCOPE, SEARCH, SENSITIVE, 
+        SIMILAR, SIN, SINH, SPECIFIC, SPECIFICTYPE, SQLEXCEPTION, 
+        SQLWARNING, SQRT, START, STATIC, STDDEV_POP, STDDEV_SAMP, 
+        SUBMULTISET, SUBSTRING_REGEX, SYMMETRIC, SYSTEM, SYSTEM_TIME, 
+        SYSTEM_USER (reinforced), TABLESAMPLE, TAN, TANH, TREAT, TRIGGER, 
+        TRIM_ARRAY, UESCAPE, UNNEST, VAR_POP, VAR_SAMP, VERSIONING, 
+        WIDTH_BUCKET, WINDOW, WITHIN
+      }  ,    
+  }
+
+
+
+\codehl_keyset_def:nn { SQL.PostgreSQL }
+  {
+    info / note  =
+     {
+       PostgreSQL ~ based ~ on ~ SQL ~ 23. \iow_newline:
+       https://www.postgresql.org/docs/current/sql-keywords-appendix.html
+     }  ,
+    based ~ on               =      { SQL.23 }  ,
+    suppress ~ keywd*        =      {1}
+      {
+        ABS, ABSENT, ACOS, ANY_VALUE, ARRAY_AGG, ARRAY_MAX_CARDINALITY, 
+        ASIN, ATAN, BEGIN_FRAME, BEGIN_PARTITION, BTRIM, CARDINALITY, 
+        CEIL, CEILING, CLASSIFIER, COLLECT, COPY, CORR, COS, COSH, 
+        COVAR_POP, COVAR_SAMP, CUME_DIST, DECFLOAT, DEFINE, DENSE_RANK, 
+        FILTER, FIRST_VALUE, FLOOR, JSON, JSON_ARRAY, JSON_ARRAYAGG, 
+        JSON_EXISTS, JSON_OBJECT, JSON_OBJECTAGG, JSON_QUERY, JSON_SCALAR, 
+        JSON_SERIALIZE, JSON_TABLE, JSON_VALUE, LAG, LAST_VALUE, LEAD, 
+        LN, LOG, LOG10, MAX_CARDINALITY, NTH_VALUE, NTILE, PERCENT_RANK, 
+        PERCENTILE_CONT, PERCENTILE_DISC, RANK, REGR_AVGX, REGR_AVGY, 
+        REGR_COUNT, REGR_INTERCEPT, REGR_R2, REGR_SLOPE, REGR_SXX, 
+        REGR_SXY, REGR_SYY, ROW_NUMBER, SIN, SINH, SQRT, STDDEV_POP, 
+        STDDEV_SAMP, TAN, TANH, TRIM_ARRAY, VAR_POP, VAR_SAMP, WIDTH_BUCKET
+      }  ,
+    keywd*                   =      {1}
+      {
+        ANALYSE, ANALYZE, ASC, CONCURRENTLY, FREEZE, ILIKE, 
+        ISNULL, LIMIT, NOTNULL, PLACING, RETURNING, VERBOSE
+      }
+  }
+
+
+\codehl_keyset_def:nn { SQL.MySQL }
+  {
+    info / note  =
+     {
+       MySQL ~ based ~ on ~ SQL ~ 23
+     }  ,
+    based ~ on               =      { SQL.23 }  ,
+    suppress ~ keywd*        =      {1}
+      {
+        ABS, ABSENT, ACOS, ANY_VALUE, ARRAY_AGG, ARRAY_MAX_CARDINALITY, 
+        ASIN, ATAN, BEGIN_FRAME, BEGIN_PARTITION, BTRIM, CARDINALITY, 
+        CEIL, CEILING, CLASSIFIER, COLLECT, COPY, CORR, COS, COSH, 
+        COVAR_POP, COVAR_SAMP, CUME_DIST, DECFLOAT, DEFINE, FILTER, 
+        FIRST_VALUE, FLOOR, JSON_ARRAY, JSON_ARRAYAGG, JSON_EXISTS, 
+        JSON_OBJECT, JSON_OBJECTAGG, JSON_QUERY, JSON_SCALAR, JSON_SERIALIZE, 
+        JSON_TABLE_PRIMITIVE, LAG, LAST_VALUE, LEAD, LN, LOG, LOG10, 
+        MAX_CARDINALITY, NTH_VALUE, NTILE, PERCENT_RANK, PERCENTILE_CONT, 
+        PERCENTILE_DISC, RANK, REGR_AVGX, REGR_AVGY, REGR_COUNT, 
+        REGR_INTERCEPT, REGR_R2, REGR_SLOPE, REGR_SXX, REGR_SXY, 
+        REGR_SYY, ROW_NUMBER, SIN, SINH, SQRT, STDDEV_POP, STDDEV_SAMP, 
+        TAN, TANH, TRIM_ARRAY, VAR_POP, VAR_SAMP, WIDTH_BUCKET
+      }  ,
+    keywd*                   =      {1}
+      {
+        ACCESSIBLE, ANALYZE, ASC, ASENSITIVE, BEFORE, BIGINT, 
+        BINARY, BLOB, BOTH, CALL, CHANGE, CHAR, CHARACTER, 
+        CONDITION, CONTINUE, CONVERT, CUBE, DATABASE, DATABASES, 
+        DAY_HOUR, DAY_MICROSECOND, DAY_MINUTE, DAY_SECOND, DEC, 
+        DECIMAL, DELAYED, DESC, DESCRIBE, DETERMINISTIC, 
+        DISTINCTROW, DIV, DOUBLE, DUAL, EACH, ELSEIF, EMPTY, 
+        ENCLOSED, ESCAPED, EXIT, EXPLAIN, FALSE, FLOAT, FLOAT4, 
+        FLOAT8, FORCE, FULLTEXT, GENERATED, GET, HIGH_PRIORITY, 
+        HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF, IGNORE, 
+        INDEX, INFILE, INOUT, INSENSITIVE, INT, INT1, INT2, INT3, 
+        INT4, INT8, INTEGER, INTERVAL, IO_AFTER_GTIDS, IO_BEFORE_GTIDS, 
+        ITERATE, JSON_TABLE, KEYS, KILL, LEADING, LEAVE, LIMIT, 
+        LINEAR, LINES, LOAD, LOCK, LONG, LONGBLOB, LONGTEXT, 
+        LOOP, LOW_PRIORITY, MASTER_BIND, MASTER_SSL_VERIFY_SERVER_CERT, 
+        MATCH, MAXVALUE, MEDIUMBLOB, MEDIUMINT, MEDIUMTEXT, MIDDLEINT, 
+        MINUTE_MICROSECOND, MINUTE_SECOND, MOD, MODIFIES, NATURAL, 
+        NO_WRITE_TO_BINLOG, OPTIMIZE, OPTIMIZER_COSTS, OPTION, 
+        OPTIONALLY, OUTFILE, PARTITION, PRECISION, PROCEDURE, 
+        PURGE, QUALIFY, RANGE, READ, READS, READ_WRITE, REAL, 
+        REGEXP, RENAME, REPEAT, REPLACE, REQUIRE, RESIGNAL, RESTRICT, 
+        RETURN, RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SEPARATOR, 
+        SHOW, SIGNAL, SPATIAL, SPECIFIC, SQL_BIG_RESULT, 
+        SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT, SSL, STARTING, 
+        STORED, STRAIGHT_JOIN, TABLESAMPLE, TERMINATED, TINYBLOB, 
+        TINYINT, TINYTEXT, TRAILING, TRIGGER, TRUE, UNDO, UNLOCK, 
+        UNSIGNED, USAGE, USE, UTC_DATE, UTC_TIME, UTC_TIMESTAMP, 
+        VARBINARY, VARCHARACTER, VARYING, VIRTUAL, WHILE, WRITE, XOR, 
+        YEAR_MONTH, ZEROFILL, LIBRARY, EXTERNAL
+      }
+  }
+
+
+\codehl_lang_def:nn { PL/SQL }
+  {
+    info / note  =
+     {
+       PL/SQL from Oracle ~ based ~ on ~ SQL ~ 92.  Some ~ references~\iow_newline:
+       https://docs.oracle.com/en/database/oracle/oracle-database/
+     }  ,
+    based ~ on               =      { SQL.92 }  ,
+    
+    delimited ~ string       =      {2} { q'\[    } { \]'   } {  } { }  ,
+    delimited ~ string       =      {2} { q'\!    } { \!'   } {  } { }  ,
+    delimited ~ string       =      {2} { q'\{    } { \}'   } {  } { }  ,
+    delimited ~ string       =      {2} { q'\(    } { \)'   } {  } { }  ,
+    delimited ~ string       =      {2} { q'\<    } { \>'   } {  } { }  ,
+    
+    delimited ~ string       =      {2} { nq'\[    } { \]'   } {  } { }  ,
+    delimited ~ string       =      {2} { nq'\!    } { \!'   } {  } { }  ,
+    delimited ~ string       =      {2} { nq'\{    } { \}'   } {  } { }  ,
+    delimited ~ string       =      {2} { nq'\(    } { \)'   } {  } { }  ,
+    delimited ~ string       =      {2} { nq'\<    } { \>'   } {  } { }  ,
+    
+    delimited ~ string       =      {2} { Nq'\[    } { \]'   } {  } { }  ,
+    delimited ~ string       =      {2} { Nq'\!    } { \!'   } {  } { }  ,
+    delimited ~ string       =      {2} { Nq'\{    } { \}'   } {  } { }  ,
+    delimited ~ string       =      {2} { Nq'\(    } { \)'   } {  } { }  ,
+    delimited ~ string       =      {2} { Nq'\<    } { \>'   } {  } { }  ,
+%%    identifier               =      { attribute } { SQL\% } { }  ,   %%% TODO syntax relax: identifier might have more than one char...
+    identifier               =      { directive } { \$ } { }  ,
+  }
+
+\codehl_keyset_def:nn { PL/SQL }
+  {
+    info / note  =
+     {
+       PL/SQL from Oracle ~ based ~ on ~ SQL ~ 92.  Some ~ references~\iow_newline:
+       https://docs.oracle.com/en/database/oracle/oracle-database/
+     }  ,
+    based ~ on               =      { SQL.92 }  ,
+    keywd*                   =      {1}
+      {
+        BEGIN, END, EXCEPTION, DECLARE, LOOP, WHILE, FORALL, GOTO, IF, ELSIF, 
+        THEN, ELSE, CASE, WHEN, EXIT, CONTINUE, RETURN, RAISE, PRAGMA, 
+        AUTHID, BODY, PACKAGE, PROCEDURE, FUNCTION, TYPE, SUBTYPE, 
+        RECORD, VARRAY, TABLE, INDEX BY, BULK, COLLECT, FORALL, SAVE,
+        EXCEPTIONS, EXECUTE IMMEDIATE, OPEN, CLOSE, FETCH, CURSOR, REF, 
+        CURSOR, SYS_REFCURSOR, BOOLEAN, BINARY_INTEGER, PLS_INTEGER, NATURAL, 
+        POSITIVE, SIGNTYPE, CONSTANT, DEFAULT, NOT NULL, OUT, IN OUT, 
+        NOCOPY, DETERMINISTIC, PARALLEL_ENABLE, PIPELINED, RESULT_CACHE, 
+        AUTONOMOUS_TRANSACTION, EXCEPTION_INIT, SERIALLY_REUSABLE, INLINE, 
+        UDF, RESETTABLE, TRUE, FALSE, NULL, OTHERS, 
+        SQLCODE, SQLERRM, 
+      }  ,
+%    keywd*                   =      {1}
+%      {
+%       SQL\%FOUND, SQL\%NOTFOUND, SQL\%ROWCOUNT, SQL\%ISOPEN, SQL\%BULK_EXCEPTIONS, SQL\%BULK_ROWCOUNT
+%      }  ,
+%    attribute*               =      {1}
+%      {   %%% 'marker' SQL%
+%       FOUND, NOTFOUND, ROWCOUNT, ISOPEN, BULK_EXCEPTIONS, BULK_ROWCOUNT
+%      }  ,
+    keywd*                   =      {1}
+      {  %%% pragmas
+        AUTONOMOUS_TRANSACTION, EXCEPTION_INIT, SERIALLY_REUSABLE, INLINE, 
+        UDF, DEPRECATE, COVERAGE, RESTRICT_REFERENCES, INTERFACE,
+        SUPPLEMENTAL_LOG_DATA, TIMESTAMP,
+      }  ,
+    directive*               =      {1}
+      {
+        IF, THEN, ELSE, ELSIF, END, ERROR, 
+        inquiry_directive, identifier
+      }  ,
+  }
+
+%%
+%% Aliases
+%%
+
+\codehl_lang_alias:nn   { SQL } { SQL.23 }
+\codehl_keyset_alias:nn { SQL } { SQL.23 }
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

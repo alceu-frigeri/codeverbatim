@@ -144,13 +144,14 @@
 
 \cs_new:Npn \__codeverb_set_other:N #1
   {
-    \seq_map_inline:Nn #1
+    %%% yeah, bending the rules... #1 might be a list of _seq variables.
+    \seq_map_inline:Nn { #1 }
       { \char_set_catcode_other:n { ` ##1 } }
   }
 
 \cs_new:Npn \__codeverb_set_letter:N #1
   {
-    \seq_map_inline:Nn #1
+    \seq_map_inline:Nn { #1 }
       { \char_set_catcode_letter:n { ` ##1 } }
   }
 
@@ -403,14 +404,15 @@
 
 \cs_new_protected:Npn \__codeverb_ccset_new:n #1
   {
-    \tl_if_empty:NTF \l__codeverb_opt_cctab_tl
-      { \tl_clear:N \l__codeverb_tmpa_tl }
-      {
-        \tl_set:Ne  \l__codeverb_tmpa_tl
-          {
-            \exp_not:N \cctab_select:N \exp_not:c { \l__codeverb_opt_cctab_tl }
-          }
-      }
+    \tl_clear:N \l__codeverb_tmpa_tl
+%    \tl_if_empty:NTF \l__codeverb_opt_cctab_tl
+%      { \tl_clear:N \l__codeverb_tmpa_tl }
+%      {
+%        \tl_set:Ne  \l__codeverb_tmpa_tl
+%          {
+%            \exp_not:N \cctab_select:N \exp_not:c { \l__codeverb_opt_cctab_tl }
+%          }
+%      }
     \seq_if_empty:NF \l__codeverb_opt_other_seq
       {
         \seq_set_eq:cN { __codeverb_ #1 _other_seq }
@@ -539,7 +541,30 @@
 \cs_set_eq:NN \cvSVerbUndefAll \codeverb_sverb_undef_all:n
 
 
-\cs_set_eq:NN \__codeverb_sverb_self_ccset: \relax
+\seq_if_exist:NTF \l__codedesc_scut_self_activ_seq
+  {
+    \cs_set:Npn \__codeverb_sverb_self_ccset:
+      {
+        \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
+        \__codeverb_set_other:N \l__codedesc_scut_self_activ_seq
+      }
+  }
+  {
+    \cs_set:Npn \__codeverb_sverb_self_ccset:
+      {
+        \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
+      }
+  }
+
+\cs_new_protected:Npn \__codeverb_self_hack:
+  {
+    \cs_set:Npn \__codeverb_sverb_self_ccset:
+      {
+        \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
+        \__codeverb_set_other:N \l__codedesc_scut_self_activ_seq
+      }
+  }
+
 
 \cs_new_protected:Npn \codeverb_sverb_on:
   {
@@ -557,7 +582,7 @@
             \seq_remove_duplicates:N \l__codeverb_sverb_seq
             \prop_clear:N \l__codeverb_sverb_patt_prop
             \prop_clear:N \l__codeverb_sverb_scan_prop
-            \seq_clear:N \l__codeverb_sverb_self_activ_seq
+%            \seq_clear:N \l__codeverb_sverb_self_activ_seq
             \int_zero:N \l__codeverb_sverb_patt_cnt_int
             \seq_map_inline:Nn \l__codeverb_sverb_seq
               {
@@ -594,21 +619,6 @@
             \bool_set_true:N \l__codeverb_sverb_build_bool
           }
 
-        \seq_if_exist:NTF \l__codedesc_scut_self_activ_seq
-          {
-            \cs_set:Npn \__codeverb_sverb_self_ccset:
-              {
-                \__codeverb_set_other:N \l__codedesc_sverb_self_activ_seq
-                \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
-              }
-          }
-          {
-            \cs_set:Npn \__codeverb_sverb_self_ccset:
-              {
-                \__codeverb_set_other:N \l__codeverb_sverb_self_activ_seq
-              }
-          }
-
         \prop_map_inline:Nn \l__codeverb_sverb_scan_prop
           { \__codeverb_sverb_set_on:NNNNN ##2 }
         \bool_set_true:N \l__codeverb_sverb_on_bool
@@ -632,7 +642,7 @@
         \prop_map_inline:Nn \l__codeverb_sverb_scan_prop
           { \__codeverb_sverb_set_off:NNNNN ##2 }
         \bool_set_false:N \l__codeverb_sverb_on_bool
-        \cs_set_eq:NN \__codeverb_sverb_self_ccset: \relax
+        \seq_clear:N \l__codeverb_sverb_self_activ_seq
       }
       {
         \msg_warning:nnn { codeverbatim } { sverb already off }

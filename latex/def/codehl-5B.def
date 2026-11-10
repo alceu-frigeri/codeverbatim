@@ -1,0 +1,573 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-5B}
+  {
+     name        = {codehl-5B} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~5B}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+\codehl_keyset_def:nn { TeX.kernel }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[kernel]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+ , A , AA , AE , ALPHABET , AM , AND , AW , ActivateGenericHook , ActiveUnderscore , AddGenerationDate , AddToHook
+, AddToHookNext , AddToHookNextWithArguments , AddToHookWithArguments , AddToNoCaseChangeList , AfterEndDocument ,
+AfterEndEnvironment , AfterEndPreamble , AfterIncludeFile , AfterIncludes , AfterLastShipout , AfterPreamble , Alph ,
+AlsoImplementation , AltMacroFont , AmS , AmSLaTeX , AmSTeX , And , Apricot , Aquamarine , Arg , ArgumentSpecification ,
+Arrows , ArticleClassFoundInCurrentDirectory , Ask , AskQuestions , AssignSocketPlug , AssignTaggingSocketPlug ,
+AssignTemplateKeys , AtBeginDocument , AtBeginDvi , AtBeginEnvironment , AtBeginOfClassFile , AtBeginOfClasses ,
+AtBeginOfEveryFile , AtBeginOfFile , AtBeginOfIncludeFile , AtBeginOfIncludes , AtBeginOfPackageFile , AtBeginOfPackages ,
+AtBeginShipout , AtBeginShipoutAddToBox , AtBeginShipoutAddToBoxForeground , AtBeginShipoutBox , AtBeginShipoutDiscard ,
+AtBeginShipoutFirst , AtBeginShipoutInit , AtBeginShipoutNext , AtBeginShipoutOriginalShipout , AtBeginShipoutUpperLeft ,
+AtBeginShipoutUpperLeftForeground , AtEndAfterFileList , AtEndDocument , AtEndDvi , AtEndEnvironment , AtEndOfClass ,
+AtEndOfClassFile , AtEndOfClasses , AtEndOfEveryFile , AtEndOfFile , AtEndOfIncludeFile , AtEndOfIncludes , AtEndOfPackage
+, AtEndOfPackageFile , AtEndOfPackages , AtEndPreamble , AtVeryEndDocument , AtVeryVeryEnd , BCPdata , BL , BS ,
+BabelCaseHack , BaseDirectory , BeforeBeginEnvironment , BeforeClearDocument , BibTeX , Big , Biggl , Biggm , Bigm , Bigr ,
+Bittersweet , Black , Blue , BlueGreen , BlueViolet , BooleanFalse , BooleanTrue , BreakableUnderscore , BrickRed , Brown ,
+Bscr , BurntOrange , CYRA , CYRABHCH , CYRABHCHDSC , CYRABHHA , CYRC , CYRCH , CYRCHVCRS , CYREREV ,
+CYRERY , CYRGHCRS , CYRISHRT , CYRJE , CYRKHCRS , CYRKVCRS , CYRL , CYRLDSC , CYRN , CYRNJE , CYRQ
+, CYRR , CYRRDSC , CYRRHK , CYRRTICK , CYRS , CYRSACRS , CYRSCHWA , CYRSEMISFTSN , CYRSHHA , CYRT ,
+CYRTSHE , CYRU , CYRV , CYRYHCRS , CYRYI , CYRYU , CadetBlue , CarnationPink , CaseSwitch , Cerulean ,
+CharTableChanges , CharacterTable , CheckCommand , CheckEncodingSubset , CheckFileNames , CheckModules , CheckSum ,
+ClassError , ClassInfo , ClassNote , ClassNoteNoLine , ClassWarning , ClassWarningNoLine , ClearHookNext , ClearHookRule ,
+CodeMacroIndex , CodedocExplain , CodedocExplainEXP , CodedocExplainREXP , CodedocExplainTF , CodelineIndex ,
+CodelineNumbered , ConTeXt , Continuefalse , Continuetrue , Cork , CornflowerBlue , CountZero , CurrentFilePath ,
+CurrentFilePathUsed , CurrentFileUsed , CurrentOption , Cyan , D , DH , Dandelion , DarkOrchid , DebugHooksOff ,
+DebugHooksOn , DebugMarksOff , DebugMarksOn , DebugShipoutsOff , DebugShipoutsOn , DebugSocketsOff , DebugSocketsOn ,
+DebugTablesOff , DebugTablesOn , DeclareCaseChangeEquivalent , DeclareCollectionInstance , DeclareCommandCopy ,
+DeclareCurrentRelease , DeclareDefaultHookRule , DeclareDir , DeclareDirX , DeclareDocumentCommand ,
+DeclareDocumentEnvironment , DeclareEmphSequence , DeclareEncodingSubset , DeclareEnvironmentCopy , DeclareErrorFont ,
+DeclareExpandableDocumentCommand , DeclareFixedFont , DeclareFontEncoding , DeclareFontEncodingDefaults , DeclareFontFamily
+, DeclareFontFamilySubstitution , DeclareFontSeriesChangeRule , DeclareFontSeriesDefault , DeclareFontShape ,
+DeclareFontShapeChangeRule , DeclareFontSubstitution , DeclareHookRule , DeclareInputMath , DeclareInputText , DeclareInstance ,
+DeclareInstanceCopy , DeclareKeys , DeclareListParser , DeclareLowercaseMapping , DeclareMathAccent , DeclareMathAlphabet ,
+DeclareMathDelimiter , DeclareMathRadical , DeclareMathSizes , DeclareMathSymbol , DeclareMathVersion , DeclareObjectType ,
+DeclareOldFontCommand , DeclareOption , DeclarePreloadSizes , DeclareRelease , DeclareRestrictedTemplate ,
+DeclareRobustCommand , DeclareSizeFunction , DeclareSymbolFont , DeclareSymbolFontAlphabet , DeclareTemplateCode ,
+DeclareTemplateCopy , DeclareTemplateInterface , DeclareTextAccent , DeclareTextAccentDefault , DeclareTextCommand ,
+DeclareTextCommandDefault , DeclareTextComposite , DeclareTextCompositeCommand , DeclareTextFontCommand ,
+DeclareTextSymbol , DeclareTextSymbolDefault , DeclareTitlecaseMapping , DeclareUnicodeCharacter , DeclareUnknownKeyHandler ,
+DeclareUppercaseMapping , DefaultbatchFile , Defaultfalse , Defaulttrue , DeleteShortVerb , DescribeEnv , DescribeMacro , Details
+, Diamond , DisableCrossrefs , DisableDocumentation , DisableGenericHook , DisableHook , DisableImplementation ,
+DiscardShipoutBox , DoNotIndex , DocInclude , DocInput , DocInputAgain , DocstyleParms , DocumentMetadata ,
+DontCheckModules , DoubleperCent , Downarrow , E , ERROR , ERRORmissingcells , ERRORnewtaggingsocket ,
+ERRORusetaggingsocket , ETC , EdefEscapeHex , EdefEscapeName , EdefEscapeString , EdefSanitize , EdefUnescapeHex ,
+EdefUnescapeName , EdefUnescapeString , EditCollectionInstance , EditInstance , EditTemplateDefaults , Emerald , EnableCrossrefs
+, EnableDocumentation , EnableImplementation , EndIncludeInRelease , EndIncludeRelease , EndModuleRelease , Escr , Evaluate ,
+ExecuteOptions , ExpandArgs , ExplFileDate , ExplFileDescription , ExplFileExtension , ExplFileName , ExplFileVersion ,
+ExplLoaderFileDate , ExplSyntaxOff , ExplSyntaxOn , Expr , Expression , ExpressionX , ExpressionXX , F , Finale ,
+FirstAidNeededT , FirstElt , FontFamilyToCheck , ForestGreen , Forlistfalse , Forlisttrue , Fscr , Fuchsia , G , Gamma ,
+Generatefalse , Generatetrue , GenericError , GenericInfo , GenericWarning , GetDocumentCommandArgSpec ,
+GetDocumentEnvironmentArgSpec , GetFileInfo , GetIdInfo , GlossaryMin , GlossaryParms , GlossaryPrologue , Goldenrod , Gray ,
+Green , GreenYellow , H , HA , Hint , I , IJ , IeC , IfBlankF , IfBlankT , IfBlankTF , IfBoolean , IfBooleanF , IfBooleanT ,
+IfBooleanTF , IfClassAtLeastF , IfClassAtLeastT , IfClassAtLeastTF , IfClassLoadedF , IfClassLoadedT , IfClassLoadedTF ,
+IfClassLoadedWithOptionsF , IfClassLoadedWithOptionsT , IfClassLoadedWithOptionsTF , IfDocumentMetadataF ,
+IfDocumentMetadataT , IfDocumentMetadataTF , IfExplAtLeastF , IfExplAtLeastT , IfExplAtLeastTF , IfFileAtLeastF ,
+IfFileAtLeastT , IfFileAtLeastTF , IfFileExists , IfFileLoadedF , IfFileLoadedT , IfFileLoadedTF , IfFontSeriesContextF ,
+IfFontSeriesContextT , IfFontSeriesContextTF , IfFormatAtLeastF , IfFormatAtLeastT , IfFormatAtLeastTF , IfHookEmptyF ,
+IfHookEmptyT , IfHookEmptyTF , IfHookExistsTF , IfInstanceExistF , IfInstanceExistT , IfInstanceExistTF , IfInstanceExistsF ,
+IfInstanceExistsT , IfInstanceExistsTF , IfLabelExistsF , IfLabelExistsT , IfLabelExistsTF , IfMarksEqualF , IfMarksEqualT ,
+IfMarksEqualTF , IfNoValueF , IfNoValueT , IfNoValueTF , IfPDFManagementActiveF , IfPDFManagementActiveT ,
+IfPDFManagementActiveTF , IfPackageAtLeastF , IfPackageAtLeastT , IfPackageAtLeastTF , IfPackageLoadedF , IfPackageLoadedT
+, IfPackageLoadedTF , IfPackageLoadedWithOptionsF , IfPackageLoadedWithOptionsT , IfPackageLoadedWithOptionsTF ,
+IfPropertyExistsF , IfPropertyExistsT , IfPropertyExistsTF , IfPropertyRecordedF , IfPropertyRecordedT , IfPropertyRecordedTF ,
+IfSocketExistsF , IfSocketExistsT , IfSocketExistsTF , IfSocketPlugAssignedF , IfSocketPlugAssignedT , IfSocketPlugAssignedTF ,
+IfSocketPlugExistsF , IfSocketPlugExistsT , IfSocketPlugExistsTF , IfTargetDateBefore , IfValueF , IfValueT , IfValueTF , Im ,
+IncludeInRelease , IndentBox , IndexInput , IndexMin , IndexParms , IndexPrologue , IniTeX , InputIfFileExists , InsertMark ,
+InstanceKey , InstanceSemantics , InternalDetectionOff , InternalDetectionOn , J , JanaChlebikova , Join , JungleGreen , K ,
+KeyValue , L , LPPL , LPPLdocfile , LPPLfile , LPPLicense , LPPLparagraph , LPPLsection , LPPLsubsection ,
+LPPLsubsubsection , LaTeX , LaTeXFirstAidDate , LaTeXFirstAidVersion , LaTeXGcomp , LaTeXNews , LaTeXReleaseInfo ,
+LaTeXWcomp , LaTeXbook , LaTeXcomp , LaTeXe , Large , LastDeclaredEncoding , LastMark , Lavender , Lcheck ,
+LeftBraceIndex , Leftarrow , Leftrightarrow , LimeGreen , LineBreak , LinkTargetOff , LinkTargetOn , ListCondition , LoadClass ,
+LoadClassWithOptions , LoadFontDefinitionFile , LogHook , LogSocket , LongText , Longleftarrow , LorR , Lua , LuaTeX , M ,
+MF , MP , MacroFont , MacroIndent , MacroLongFont , MacroTopsep , MacrocodeTopsep , Magenta , Mahogany , MainFileName
+, MaintainedBy , MaintainedByLaTeXTeam , MakeLinkTarget , MakePercentComment , MakePercentIgnore , MakePrivateLetters ,
+MakeRobust , MakeShortVerb , MakeUppercase , Maroon , MathCollectFalse , MathCollectTrue , MaybeStop , Mean , Melon ,
+MessageBreak , MetaPrefix , MidnightBlue , Module , MoreFilesfalse , MoreFilestrue , Msg , Mulberry , NB , NEWdescription ,
+NEWfeature , NFSS , NOT , NPrimary , Name , NavyBlue , NeedsETeX , NeedsTeXFormat , NewCommandCopy ,
+NewDocElement , NewDocumentCommand , NewDocumentEnvironment , NewEnvironmentCopy , NewExpandableDocumentCommand
+, NewHook , NewHookWithArguments , NewMarkClass , NewMirroredHookPair , NewMirroredHookPairWithArguments ,
+NewModuleRelease , NewProperty , NewReversedHook , NewReversedHookWithArguments , NewSocket , NewSocketPlug ,
+NewTaggingSocket , NewTaggingSocketPlug , NewTemplateType , NextLinkTarget , NoCaseChange , NumberOfFiles , O , OE ,
+OT , OldMakeindex , OldTeX , OliveGreen , Omega , OmitIndent , OnlyDescription , OpMode , OptionNotUsed , Options ,
+Orange , OrangeRed , Orb , Orchid , OriginalAsk , OtherElts , P , PExpression , PSNFSS , PackageError , PackageInfo ,
+PackageNote , PackageNoteNoLine , PackageWarning , PackageWarningNoLine , PageIndex , PassOptionToClass ,
+PassOptionsToClass , PassOptionsToPackage , PavelSevecek , Peach , PercentIndex , Periwinkle , Phi , Pi , PineGreen , PlainTeX
+, Plum , PopDefaultHookLabel , Pr , PreviousTotalPages , Primary , Print , PrintChanges , PrintDescribe , PrintDescribeEnv ,
+PrintDescribeMacro , PrintEnvName , PrintIndex , PrintMacroName , ProcessBlue , ProcessKeyOptions , ProcessKeysOptions ,
+ProcessKeysPackageOptions , ProcessList , ProcessOptions , ProcessedArgument , ProvideDocElement , ProvideDocumentCommand ,
+ProvideDocumentEnvironment , ProvideExpandableDocumentCommand , ProvideHook , ProvideMirroredHookPair ,
+
+ProvideReversedHook , ProvideTextCommand , ProvideTextCommandDefault , ProvidesClass , ProvidesExplClass , ProvidesExplFile ,
+ProvidesExplFileAux , ProvidesExplPackage , ProvidesFile , ProvidesPackage , Pscr , Psi , Purple , PushDefaultHookLabel ,
+RawIndent , RawNoindent , RawParEnd , RawShipout , RawSienna , Rcheck , Re , ReadonlyShipoutCounter , RecordChanges ,
+RecordIndexType , RecordIndexTypeAux , RecordProperties , Red , RedOrange , RedViolet , RefProperty , RefUndefinedWarn ,
+ReferenceLines , Relbar , RemoveFromHook , RenewCommandCopy , RenewDocElement , RenewDocumentCommand ,
+RenewDocumentEnvironment , RenewEnvironmentCopy , RenewExpandableDocumentCommand , ReportTotals , Require ,
+RequireAlephTeX , RequireHINT , RequireLuaHBTeX , RequireLuaMetaTeX , RequireLuaTeX , RequirePDFTeX , RequirePackage ,
+RequirePackageWithOptions , RequireProte , RequireTUTeX , RequireTexpadTeX , RequireVTeX , RequireXeTeX , RequireeTeX ,
+RequirepTeX , RequirepTeXng , RequireupTeX , ResumeTagging , ReverseBoolean , Rfalse , Rguess , Rhodamine , RightBraceIndex
+, Roman , RoyalBlue , RoyalPurple , Rtrue , RubineRed , S , SH , Salmon , SeaGreen , Secondary , SecondaryX , SecondaryXX
+, Sepia , SetDefaultHookLabel , SetFileNames , SetKeys , SetKnownTemplateKeys , SetMathAlphabet , SetProperty ,
+SetSymbolFont , SetTemplateKeys , SetupDoc , ShipoutBox , ShipoutBoxDepth , ShipoutBoxHeight , ShipoutBoxWidth , ShortText
+, ShowCollectionInstanceValues , ShowCommand , ShowDocumentCommandArgSpec , ShowDocumentEnvironmentArgSpec ,
+ShowEnvironment , ShowFloat , ShowHook , ShowIndexingState , ShowInstanceValues , ShowMarksAt , ShowSocket ,
+ShowTemplateCode , ShowTemplateDefaults , ShowTemplateInterface , ShowTemplateKeytypes , ShowTemplateVariables , SkyBlue ,
+SliTeX , SortIndex , SpecialEnvIndex , SpecialEscapechar , SpecialIndex , SpecialMacroIndex , SpecialMainEnvIndex ,
+SpecialMainIndex , SpecialMainMacroIndex , SpecialShortIndex , SpecialUsageIndex , SplitArgument , SplitList , SpringGreen , Sq ,
+Sqbox , Sscr , StopEventually , StopParse , StreamClose , StreamOpen , StreamPut , SuspendTagging , T , TH , TI , Tan ,
+TeX , TeXXeTstate , TealBlue , TemplateArgument , TemplateKey , TemplateSemantics , Terminal , TerminalX , TestFiles ,
+TestMissing , TexpadTeXMode , TextOrMath , TextSymbolUnavailable , Theta , Thistle , Thorn , Tosspage , TotalcodeLinesPassed
+, TotalcommentsPassed , TotalcommentsRemoved , TotalprocessedLines , TrimSpaces , Turquoise , Uchar , Ucharcat , Udelcode ,
+Udelcodenum , Udelimiter , Udelimiterover , Udelimiterunder , Uhextensible , Uleft , Umathaccent , Umathaxis ,
+Umathbinbinspacing , Umathbinclosespacing , Umathbininnerspacing , Umathbinopenspacing , Umathbinopspacing ,
+Umathbinordspacing , Umathbinpunctspacing , Umathbinrelspacing , Umathchar , Umathcharclass , Umathchardef , Umathcharfam ,
+Umathcharnum , Umathcharnumdef , Umathcharslot , Umathclosebinspacing , Umathcloseclosespacing , Umathcloseinnerspacing ,
+Umathcloseopenspacing , Umathcloseopspacing , Umathcloseordspacing , Umathclosepunctspacing , Umathcloserelspacing , Umathcode
+, Umathcodenum , Umathconnectoroverlapmin , Umathfractiondelsize , Umathfractiondenomdown , Umathfractiondenomvgap ,
+Umathfractionnumup , Umathfractionnumvgap , Umathfractionrule , Umathinnerbinspacing , Umathinnerclosespacing ,
+Umathinnerinnerspacing , Umathinneropenspacing , Umathinneropspacing , Umathinnerordspacing , Umathinnerpunctspacing ,
+Umathinnerrelspacing , Umathlimitabovebgap , Umathlimitabovekern , Umathlimitabovevgap , Umathlimitbelowbgap ,
+Umathlimitbelowkern , Umathlimitbelowvgap , Umathnolimitsubfactor , Umathnolimitsupfactor , Umathopbinspacing ,
+Umathopclosespacing , Umathopenbinspacing , Umathopenclosespacing , Umathopeninnerspacing , Umathopenopenspacing ,
+Umathopenopspacing , Umathopenordspacing , Umathopenpunctspacing , Umathopenrelspacing , Umathoperatorsize ,
+Umathopinnerspacing , Umathopopenspacing , Umathopopspacing , Umathopordspacing , Umathoppunctspacing , Umathoprelspacing
+, Umathordbinspacing , Umathordclosespacing , Umathordinnerspacing , Umathordopenspacing , Umathordopspacing ,
+Umathordordspacing , Umathordpunctspacing , Umathordrelspacing , Umathoverbarkern , Umathoverbarrule , Umathoverbarvgap ,
+Umathoverdelimiterbgap , Umathoverdelimitervgap , Umathpunctbinspacing , Umathpunctclosespacing , Umathpunctinnerspacing ,
+Umathpunctopenspacing , Umathpunctopspacing , Umathpunctordspacing , Umathpunctpunctspacing , Umathpunctrelspacing ,
+Umathquad , Umathradicaldegreeafter , Umathradicaldegreebefore , Umathradicaldegreeraise , Umathradicalkern , Umathradicalrule ,
+Umathradicalvgap , Umathrelbinspacing , Umathrelclosespacing , Umathrelinnerspacing , Umathrelopenspacing , Umathrelopspacing ,
+Umathrelordspacing , Umathrelpunctspacing , Umathrelrelspacing , Umathskewedfractionhgap , Umathskewedfractionvgap ,
+Umathspaceafterscript , Umathstackdenomdown , Umathstacknumup , Umathstackvgap , Umathsubshiftdown , Umathsubshiftdrop ,
+Umathsubsupshiftdown , Umathsubsupvgap , Umathsubtopmax , Umathsupbottommin , Umathsupshiftdrop , Umathsupshiftup ,
+Umathsupsubbottommax , Umathunderbarkern , Umathunderbarrule , Umathunderbarvgap , Umathunderdelimiterbgap ,
+Umathunderdelimitervgap , Umiddle , UndeclareTextCommand , UnicodeEncodingName , UnicodeFontFile , UnitTested ,
+Unosubscript , Unosuperscript , UnusedTemplateKeys , Uoverdelimiter , Uparrow , Updownarrow , Upsilon , Uradical , Uright ,
+Uroot , UseCollection , UseExpandableTaggingSocket , UseHook , UseHookWithArguments , UseInstance , UseLegacyTextSymbols ,
+UseName , UseOneTimeHook , UseOneTimeHookWithArguments , UseRawInputEncoding , UseSocket , UseTDS , UseTaggingSocket
+, UseTemplate , UseTextAccent , UseTextSymbol , Uskewed , Uskewedwithdelims , Ustack , Ustartdisplaymath , Ustartmath ,
+Ustopdisplaymath , Ustopmath , Usubscript , Usuperscript , Uunderdelimiter , Uvextensible , V , Var , Vert , Violet , VioletRed
+, W , Web , White , WildStrawberry , WritePostamble , WritePreamble , WriteToDir , XeTeX , XeTeXOTcountfeatures ,
+XeTeXOTcountlanguages , XeTeXOTcountscripts , XeTeXOTfeaturetag , XeTeXOTlanguagetag , XeTeXOTscripttag , XeTeXcharclass
+, XeTeXcharclassCL , XeTeXcharclassCM , XeTeXcharclassEX , XeTeXcharclassID , XeTeXcharclassIS , XeTeXcharclassNS ,
+XeTeXcharclassOP , XeTeXcharglyph , XeTeXcountfeatures , XeTeXcountglyphs , XeTeXcountselectors , XeTeXcountvariations ,
+XeTeXdashbreakstate , XeTeXdefaultencoding , XeTeXfeaturecode , XeTeXfeaturename , XeTeXfindfeaturebyname ,
+XeTeXfindselectorbyname , XeTeXfindvariationbyname , XeTeXfirstfontchar , XeTeXfonttype , XeTeXgenerateactualtext ,
+XeTeXglyph , XeTeXglyphbounds , XeTeXglyphindex , XeTeXglyphname , XeTeXhyphenatablelength , XeTeXinputencoding ,
+XeTeXinputnormalization , XeTeXintercharclasses , XeTeXinterchartokenstate , XeTeXinterchartoks , XeTeXinterwordspaceshaping ,
+XeTeXisdefaultselector , XeTeXisexclusivefeature , XeTeXlastfontchar , XeTeXlinebreaklocale , XeTeXlinebreakpenalty ,
+XeTeXlinebreakskip , XeTeXmathcode , XeTeXpdffile , XeTeXpdfpagecount , XeTeXpicfile , XeTeXprotrudechars , XeTeXrevision ,
+XeTeXselectorcode , XeTeXselectorname , XeTeXtracingfonts , XeTeXupwardsmode , XeTeXuseglyphmetrics , XeTeXvariation ,
+XeTeXvariationdefault , XeTeXvariationmax , XeTeXvariationmin , XeTeXvariationname , XeTeXversion , Xi , Yellow ,
+YellowGreen , YellowOrange , Z , a , aa , aalph , above , abovecaptionskip , abovedisplayshortskip , abovedisplayskip ,
+abovewithdelims , abstractname , accent , accentscommands , acsetup , action , active , activefiles , actualchar , acute ,
+addbslash , addcontentsline , addpenalty , address , addressee , addtime , addtocontents , addtocounter , addtolength ,
+addtoversion , addtox , addtoy , addvspace , adj , adjdemerits , adjustspacing , advance , advancepageno , ae , afterassignment ,
+afterfi , aftergroup , aleph , alignmark , aligntab , allocationnumber , allowbreak , alpha , alphalph , alsoname , alternation ,
+altpattern , amalg , angle , annotations , ans , ansno , answer , appendix , appendixname , appgrf , approx , appto , apptocmd
+, arabic , arccos , arcsin , arctan , arg , array , arraycolsep , arrayrulecolor , arrayrulewidth , arraystretch , arrowvert ,
+asciispace , askforoverwritefalse , askforoverwritetrue , askonceonly , ast , asymp , atop , atopwithdelims , attribute , attributedef ,
+attributezero , author , automaticdiscretionary , automatichyphenmode , automatichyphenpenalty , autospacing , autoxspacing , b ,
+babel , babelshorthand , background , backmatter , backslash , backup , badness , bar , basedir , baselineskip , baselinestretch ,
+baseutfencoding , batchfile , batchinput , batchmode , begin , beginL , beginR , beginchapter , begincsname , begindisplay ,
+beginexercises , begingroup , beginlinemode , beginparmode , beginpicture , beginsection , beginxref , beginxrefswitch , begmac ,
+belowcaptionskip , belowdisplayshortskip , belowdisplayskip , benchmark , beta , between , bex , bezier , bf , bfdefault , bffam ,
+bfseries , bgroup , bi , bibcite , bibdata , bibindent , bibitem , bibliography , bibliographystyle , bibname , bibstyle , bifam ,
+bigbreak , bigcap , bigcirc , bigcup , bigg , biggl , biggr , biggstrut , biggstrutbox , bigi , bigl , bigm , bigmemoto , bigodot ,
+bigoplus , bigotimes , bigr , bigskip , bigskipamount , bigsqcup , bigstrut , bigstrutbox , bigtest , bigtriangledown , bigtriangleup
+, biguplus , bigvee , bigwedge , binoppenalty , blockHead , blockLevel , bmod , bnx , body , bodydir , bodydirection , boldmath
+, boolean , boolfalse , booltrue , bordermatrix , bot , botfigrule , botmark , botmarks , bottomfraction , bottomrule , boundary ,
+bowtie , box , boxdef , boxdir , boxdirection , boxmaxdepth , brace , braceld , bracelu , bracerd , braceru , bracevert , brack ,
+break , breakafterdirmode , breve , brokenpenalty , bslash , buildrel , bullet , bye , c , cC , cL , cal , cap , capitalacute ,
+capitalbreve , capitalcaron , capitalcedilla , capitalcircumflex , capitaldieresis , capitaldotaccent , capitalgrave , capitalhungarumlaut
+, capitalmacron , capitalnewtie , capitalogonek , capitalring , capitaltie , capitaltilde , caption , cases , catcode , catcodes ,
+catcodetable , cc , ccname , cdot , cdotp , cdots , cdt , center , centering , centerlargechars , centerline , cfgguide , changecount
+, changes , chapfont , chapno , chapter , chaptermark , chaptername , chaptitle , chaptopspace , char , chardef , charsubdef ,
+chartline , chartstrut , charzero , check , checkOption , checkeoln , checkfile , checkfilelimit , checkfont , checkorder , checkorderX
+, checkorderXX , chi , choose , chyph , circ , circle , circlefont , citation , cite , clap , class , cleaders , cleardoublepage ,
+clearmarks , clearpage , cleartabs , cline , closein , closeout , closeoutput , closequotes , closing , clq , clqq , cls , clsguide ,
+clubpenalties , clubpenalty , clubsuit , cmaccents , cmaccentsmessage , cmd , cmrFont , cmssLaTeX , cmssTeX , cmykApricot ,
+cmykAquamarine , cmykBittersweet , cmykBlack , cmykBlue , cmykBlueGreen , cmykBlueViolet , cmykBrickRed , cmykBrown ,
+
+cmykBurntOrange , cmykCadetBlue , cmykCarnationPink , cmykCerulean , cmykCornflowerBlue , cmykCyan , cmykDandelion ,
+cmykDarkOrchid , cmykEmerald , cmykForestGreen , cmykFuchsia , cmykGoldenrod , cmykGray , cmykGreen , cmykGreenYellow ,
+cmykJungleGreen , cmykLavender , cmykLimeGreen , cmykMagenta , cmykMahogany , cmykMaroon , cmykMelon ,
+cmykMidnightBlue , cmykMulberry , cmykNavyBlue , cmykOliveGreen , cmykOrange , cmykOrangeRed , cmykOrchid , cmykPeach ,
+cmykPeriwinkle , cmykPineGreen , cmykPlum , cmykProcessBlue , cmykPurple , cmykRawSienna , cmykRed , cmykRedOrange ,
+cmykRedViolet , cmykRhodamine , cmykRoyalBlue , cmykRoyalPurple , cmykRubineRed , cmykSalmon , cmykSeaGreen ,
+cmykSepia , cmykSkyBlue , cmykSpringGreen , cmykTan , cmykTealBlue , cmykThistle , cmykTurquoise , cmykViolet ,
+cmykVioletRed , cmykWhite , cmykWildStrawberry , cmykYellow , cmykYellowGreen , cmykYellowOrange , cn , code ,
+codeLinesPassed , colon , color , columns , columnsep , columnseprule , columnwidth , comment , commentline , commentsPassed
+, commentsRemoved , compdigs , complower , compupper , cong , contentsline , contentsname , contextversion , contribcol ,
+convsep , coprod , copy , copyans , copyfont , copyright , copyrightspace , copyrite , copytoblankline , coremissesfalse ,
+coremissestrue , corkencoded , cos , cosh , cot , coth , count , countdef , counterwithin , counterwithout , cpic , cr ,
+crampeddisplaystyle , crampedscriptscriptstyle , crampedscriptstyle , crampedtextstyle , crcr , creationdate , crossref , crq , crqq ,
+cs , csaccents , csaccentsmessage , csappto , csc , csdef , csdimdef , csdimgdef , csdreturn , cseappto , csedef , csepreto ,
+csexpandonce , csgappto , csgdef , csgluedef , csgluegdef , csgpreto , csgundef , cslet , csletcs , csmeaning , csmudef , csmugdef ,
+csname , csnumdef , csnumgdef , cspreto , csshow , csstring , csundef , csuse , csxappto , csxdef , csxpreto , ctan , ctanhttp ,
+cup , curin , curinfiles , curinnames , curout , curref , currency , currentLaTeXdate , currentcjktoken , currentfile ,
+currentgrouplevel , currentgrouptype , currentifbranch , currentiflevel , currentiftype , currentpostamble , currentpreamble ,
+currentspacingmode , currentxspacingmode , currfontname , currsize , currsubencoding , cyrabhdze , cyrae , cyrb , cyrbyus ,
+cyrchldsc , cyrchrdsc , cyrd , cyrdelta , cyrdje , cyrdze , cyrdzhe , cyre , cyreps , cyrf , cyrfita , cyrg , cyrgdsc , cyrgdschcrs ,
+cyrghk , cyrguide , cyrgup , cyrh , cyrhdsc , cyrhhcrs , cyrhhk , cyrhrdsn , cyri , cyrie , cyrii , cyrishrtdsc , cyrizh , cyrk ,
+cyrkbeak , cyrkdsc , cyrkhk , cyrlhk , cyrlje , cyrm , cyrmdsc , cyrmhk , cyrndsc , cyrng , cyrnhk , cyrnlhk , cyro , cyrotld ,
+cyrp , cyrphk , cyrsdsc , cyrsftsn , cyrsh , cyrshch , cyrtdsc , cyrtetse , cyrushrt , cyrw , cyry , cyrya , cyryat , cyryo , cyrz ,
+cyrzdsc , cyrzh , cyrzhdsc , czCork , czUnicode , czech , d , dag , dagger , dash , dashbox , dashv , date , day , dbend ,
+dblfigrule , dblfloatpagefraction , dblfloatsep , dbltextfloatsep , dbltopfraction , dcrseventeen , ddag , ddagger , ddot , ddots ,
+deadcycles , decast , declarepostamble , declarepostambleX , declarepreamble , declarepreambleX , def , default , defaulthyphenchar
+, defaultpostamble , defaultpreamble , defaultscriptratio , defaultscriptscriptratio , defaultskewchar , defcount , defcounter , deferred
+, deflength , deg , deklet , delcode , delimiter , delimiterfactor , delimitershortfall , delta , depth , description , descriptionlabel ,
+destFileName , destdir , det , detokenize , dh , diamond , diamondsuit , digits , dim , dimdef , dimen , dimendef , dimenzero ,
+dimeval , dimexpr , dimgdef , ding , directlua , dirsep , disablecjktoken , discretionary , discretionaryligaturemode , disinhibitglue
+, disk , displayindent , displaylimits , displaylines , displaymath , displaystyle , displaythick , displaywidowpenalties ,
+displaywidowpenalty , displaywidth , div , divide , divides , dj , do , doOption , docdate , docincludeaux , docomprehensive ,
+docsvlist , document , documentclass , documentstyle , doesglyphexist , doit , dolistcsloop , dolistloop , domix , dopunct , dordef
+, doseries , dospecials , dosupereject , dot , doteq , dotfil , dotfill , dotminus , dots , double , doublehyphendemerits ,
+doublerulesep , doublesided , downarrow , downbracefill , dp , draftmode , dtou , dts , dump , dviextension , dvifeedback ,
+dvivariable , eTeX , eTeXglueshrinkorder , eTeXgluestretchorder , eTeXrevision , eTeXversion , eappto , ecrm , edef , edivides ,
+efcode , efill , eg , egroup , eject , elapsedtime , ell , ellipsis , elq , elqq , else , eltEnd , eltStart , em , email ,
+emergencystretch , emforce , eminnershape , emph , empty , emptyLines , emptyset , emreset , enablecjktoken , enc , encapchar ,
+encl , enclname , encoding , encodingdefault , end , endL , endLPPLicense , endLine , endR , endarray , endbatchfile , endcenter
+, endchart , endcomment , endcpic , endcsname , enddescription , enddisplay , enddisplaymath , enddocument , endenumerate ,
+endenvironment , endeqnarray , endequation , endfilecontents , endflushleft , endflushright , endgraf , endgroup , ending , endinput
+, endinsert , enditemize , endletter , endline , endlinechar , endlist , endlocalcontrol , endlrbox , endmacro , endmacrocode ,
+endmath , endminipage , endmode , endmubyte , endpicture , endpostamble , endpreamble , endquotation , endsloppypar ,
+endtabbing , endtabular , endtheglossary , endtheindex , endtitlepage , endtrivlist , endverbatim , enlargethispage , enquote ,
+enskip , enspace , ensuremath , enumerate , env , environment , eoffont , eol , epTeX , epTeXinputencoding , epTeXversion ,
+epreto , epsilon , eq , eqalign , eqalignno , eqcount , eqfam , eqnarray , eqno , eqref , equ , equal , equation , equiv , erq ,
+erqq , errhelp , errmessage , error , errorcontextlines , errorstopmode , escapechar , eta , etatcatcode , eth , etoksapp , etokspre ,
+euc , euexfam , euler , eulerbf , eupTeX , euro , evenline , evensidemargin , everycr , everydisplay , everyeof , everyhbox ,
+everyjob , everymath , everypar , everyvbox , ex , exceptionpenalty , exclamdown , excludecomment , excount , exhyphenchar ,
+exhyphenpenalty , exists , exitem , exp , expandableinput , expandafer , expandafter , expanded , expandglyphsinfont ,
+expandonce , explicitdiscretionary , explicithyphenpenalty , exref , extracolsep , extrafloats , extrahyphenchar , extrahyphens , f ,
+fam , family , familydefault , farfalse , fartrue , fbox , fboxrule , fboxsep , fi , figurename , filbreak , file , filecontents , filedate
+, filedump , fileinfo , filekey , filelist , filemoddate , filename , filenamefont , filereport , filesep , filesize , filestogenerate ,
+fileversion , fill , finalhyphendemerits , finsetchar , firstmark , firstmarks , firstvalidlanguage , fivebf , fivei , fiverm , fivesy ,
+fixltxe , flat , floatingpenalty , floatpagefraction , floatsep , flq , flqq , flushbottom , flushleft , flushright , fmtname , fmtversion ,
+fnsymbol , fntguide , folio , foliofont , folioht , font , fontchardp , fontcharht , fontcharic , fontcharwd , fontdimen , fontencoding
+, fontfamily , fontid , fontname , fontselector , fontseries , fontseriesforce , fontshape , fontshapeforce , fontsize , fontsubfuzz , foo
+, foobar , foofalse , footins , footline , footnote , footnotemark , footnoterule , footnotesep , footnotesize , footnotetext , footref ,
+footrue , footskip , footstrut , forall , forcecjktoken , forcsvlist , forlist , forlistcsloop , forlistloop , formatname , fpeval , frac ,
+frak , frame , framebox , frenchspacing , frfam , from , fromaddress , fromlocation , fromname , fromsig , frontmatter , frown ,
+frq , frqq , fussy , futurelet , fvset , g , gappto , garbage , gbbl , gcd , gdef , ge , generalname , generate , generateFile , geq
+, germanTeX , getaddress , getclosing , getnxtpg , gets , gexmode , gg , given , gkpmac , gleaders , glet , global , globaldefs ,
+glossary , glossaryentry , gluedef , glueexpr , gluegdef , glueshrink , glueshrinkorder , gluestretch , gluestretchorder , gluetomu ,
+glyphdimensionsmode , glyphmissingdetails , gmatheuex , gmathext , gmathfr , gmathlet , gmathscr , gmathsubext , gmathsubfr ,
+gmathsublet , gmathsubscr , gmathsubsubext , gmathsubsubfr , gmathsubsublet , gmathsubsubscr , gmathsubsubsym ,
+gmathsubsubtext , gmathsubsym , gmathsubtext , gmathsym , gmathtext , gobbleone , goldstyle , goodbreak , gpreto , grabfile ,
+grafctr , graffiti , graphpaper , grave , grfempty , grffalse , grfi , grfitest , grfmem , grfo , grftrue , gtext , gtfont , gtoksapp ,
+gtokspre , guardStack , gundef , h , half , halign , hang , hangafter , hangindent , hat , hbadness , hbar , hbox , hdclindex ,
+hdpindex , headheight , headline , headlinefont , headsep , headtoname , heartsuit , height , help , hex , hexcode , hfi , hfil ,
+hfill , hfilneg , hfuzz , hglue , hideoutput , hideskip , hidewidth , hjcode , hline , hoffset , holdinginserts , hologo , hom ,
+hookleftarrow , hookrightarrow , hours , hpack , hphantom , hrule , hrulefill , hsize , hskip , hspace , hss , hsss , hsssglue , ht ,
+htdp , huge , hyp , hyper , hyperlink , hyperref , hypertarget , hyphenation , hyphenationbounds , hyphenationmin , hyphenchar
+, hyphenpenalty , hyphenpenaltymode , hypstrut , i , ialign , icbox , iden , idxentry , ie , if , ifContinue , ifDefault , ifForlist ,
+ifGenerate , ifMoreFiles , ifR , ifToplevel , ifabsdim , ifabsnum , ifalephtex , ifaskforoverwrite , ifblank , ifbool , ifboolexpe ,
+ifboolexpr , ifcase , ifcat , ifcondition , ifcoremisses , ifcscounter , ifcsdef , ifcsdimen , ifcsempty , ifcsequal , ifcslength ,
+ifcsltxprotect , ifcsmacro , ifcsname , ifcsparam , ifcsprefix , ifcsprotected , ifcsstrequal , ifcsstring , ifcsundef , ifcsvoid , ifdbox ,
+ifddir , ifdef , ifdefcounter , ifdefdimen , ifdefempty , ifdefequal , ifdefined , ifdeflength , ifdefltxprotect , ifdefmacro , ifdefparam ,
+ifdefprefix , ifdefprotected , ifdefstrequal , ifdefstring , ifdefvoid , ifdim , ifdimcomp , ifdimequal , ifdimgreater , ifdimless , ifeof ,
+ifetex , iff , iffalse , iffar , iffontchar , iffoo , ifgrf , ifhbox , ifhint , ifhmode , ifincsname , ifinlist , ifinlistcs , ifinner ,
+ifinxmode , ifjfont , ifltxcounter , ifluahbtex , ifluatex , ifmbox , ifmdir , ifmmode , ifneg , ifnum , ifnumcomp , ifnumequal ,
+ifnumgreater , ifnumless , ifnumodd , ifodd , ifortyonept , ifourteenpt , ifovalbl , ifovalbr , ifovaltl , ifovaltr , ifpatchable , ifpdf ,
+ifpdfabsdim , ifpdfabsnum , ifpdfprimitive , ifpdftex , ifpreprint , ifprimitive , ifprote , ifptex , ifptexng , ifright , ifrmnum ,
+ifsafesubencodingfound , ifshowmisses , ifsilent , ifskipping , ifstrempty , ifstrequal , iftbox , iftdir , iftest , iftexpadtex , iftfont ,
+ifthenelse , iftitle , iftoggle , iftopbatchfile , iftrue , iftutex , ifundef , ifuptex , ifvbox , ifvmode , ifvoid , ifvtex , ifx , ifxetex ,
+ifybox , ifydir , ifzzz , ignoreligaturesinfont , ignoreload , ignoreprimitiveerror , ignorespaces , ignorespacesafterend , ii , imath ,
+immediate , immediateassigned , immediateassignment , implies , in , inFile , inFileName , inLine , include , includeonly , indent
+, indentedwidth , index , indexbox , indexentry , indexname , indexspace , indicia , inf , infileext , infty , inhibitglue ,
+inhibitxspcode , init , initcatcodetable , input , inputcheck , inputencoding , inputencodingname , inputfiles , inputlineno , inref ,
+inscOunt , insert , insertht , insertpenalties , int , interactionmode , interactive , interdisplaylinepenalty , interfootnotelinepenalty ,
+interlinepenalties , interlinepenalty , inteval , intextsep , intop , inx , inxbox , inxcolumns , inxfootbanner , inxmodetrue ,
+inxstyle , iota , ip , isanitize , iseventeenpt , isodd , issuename , isundefined , it , itdefault , item , itemindent , itemitem ,
+
+itemize , itemsep , iterate , itfam , ithirtyfourpt , itshape , itwentyfourpt , itwentyninept , itwentypt , j , jcharwidowpenalty ,
+jfam , jfont , jis , jj , jmath , jobname , join , joinrel , jot , k , kanjiskip , kansuji , kansujichar , kappa , kcatcode , kchar ,
+kchardef , keepsilent , ker , kern , kerneltmpDoNotUse , kill , knaccode , knbccode , knbscode , kuten , l , label , labelcount ,
+labelenumi , labelenumii , labelenumiii , labelenumiv , labelformat , labelitemfont , labelitemi , labelitemii , labelitemiii ,
+labelitemiv , labelsep , labelwidth , lablstclass , lablstfile , lablstpackages , lambda , land , langle , language , largeheadfont ,
+lastallocatedtoks , lastbox , lastkern , lastlinefit , lastnamedcs , lastnodechar , lastnodefont , lastnodesubtype , lastnodetype ,
+lastpenalty , lastsavedboxresourceindex , lastsavedimageresourceindex , lastsavedimageresourcepages , lastskip , lastxpos , lastypos ,
+latelua , lateluafunction , latexreleaseversion , lbrace , lbrack , lc , lccode , lccodes , lceil , lcm , ldotp , ldots , le , leaders ,
+leadsto , leavemode , leavevmode , left , leftarrowfill , leftbox , leftcorner , lefteqn , leftghost , lefthalf , leftharpoondown ,
+leftharpoonup , leftheadline , lefthyphenmin , leftline , leftmargin , leftmargini , leftmarginii , leftmarginiii , leftmarginiv ,
+leftmarginkern , leftmarginv , leftmarginvi , leftmark , leftrightarrow , leftskip , legacyoldstylenums , lengthtest , leq , leqalignno ,
+leqno , lessfortimes , let , letcharcode , letcs , letfont , letterhead , letterspacefont , levelchar , lfloor , lg , lgroup , lhd , lhook ,
+lim , liminf , limits , limsup , line , linebreak , linedir , linedirection , linefont , linepenalty , lineskip , lineskiplimit , linespread
+, linethickness , linewidth , list , listadd , listbreak , listcsadd , listcseadd , listcsgadd , listcsgremove , listcsremove , listcsxadd ,
+listeadd , listfigurename , listfiles , listgadd , listgremove , listingfont , listoffigures , listoftables , listparindent , listremove ,
+listtablename , listxadd , ll , llap , lmoustache , ln , lnot , localbrokenpenalty , localinterlinepenalty , localleftbox , localrightbox ,
+location , loccount , loctoks , log , loggingall , loggingoutput , logofont , long , longindentation , longleftarrow , longleftrightarrow
+, longmapsto , longrightarrow , loop , looseness , lor , lower , lowercase , lowers , lpcode , lq , lrbox , ltcmddate , ltcmdversion ,
+ltfilehookdate , ltfilehookversion , ltnewssectformat , luabytecode , luabytecodecall , luachunk , luacopyinputnodes , luadef ,
+luaescapestring , luafunction , luafunctioncall , luatexbanner , luatexluafunction , luatexrevision , luatexversion , m , macro ,
+macrocode , macron , mag , magnification , magstep , magstephalf , main , maincolor , mainmatter , makeOther , makeatletter ,
+makeatother , makebox , makeeqno , makefootline , makeglossary , makeheadline , makeindex , makeinxfooter , makelabel ,
+makelabels , makepathname , maketitle , makexref , manual , mapsto , mapstochar , marg , marginpar , marginparpush ,
+marginparsep , marginparwidth , mark , markboth , markright , marks , math , mathaccent , mathalpha , mathbf , mathbin ,
+mathcal , mathchar , mathchardef , mathcharzero , mathchoice , mathclose , mathcode , mathdefaultsmode , mathdelimitersmode ,
+mathdir , mathdirection , mathdisplayskipmode , mathdollar , mathellipsis , mathemptydisplaymode , matheqdirmode ,
+matheqnogapstep , matheuex , mathext , mathflattenmode , mathfr , mathgroup , mathhexbox , mathinner , mathit ,
+mathitalicsmode , mathlet , mathnolimitsmode , mathnormal , mathop , mathopen , mathoption , mathord , mathpalette ,
+mathparagraph , mathpenaltiesmode , mathpunct , mathrel , mathring , mathrm , mathrulesfam , mathsc , mathscr ,
+mathscriptboxmode , mathscriptcharmode , mathscriptsmode , mathsection , mathsf , mathsize , mathsizebox , mathsl ,
+mathsterling , mathstrut , mathstyle , mathsubext , mathsubfr , mathsublet , mathsubscr , mathsubsubext , mathsubsubfr ,
+mathsubsublet , mathsubsubscr , mathsubsubsym , mathsubsubtext , mathsubsym , mathsubtext , mathsurround ,
+mathsurroundmode , mathsurroundskip , mathsy , mathsym , mathtext , mathtrial , mathtt , mathunderscore , mathversion ,
+matrix , max , maxdeadcycles , maxdepth , maxdimen , maxfiles , maxoutfiles , maybeMsg , mbox , mddefault , mdfivesum ,
+mdseries , meaning , medbr , medbreak , mediumseries , medmuskip , medskip , medskipamount , medspace , memoto , message ,
+meta , mftbeginB , mftbeginV , mftbf , mftbtex , mftend , mftverbatimtex , mho , mid , middle , midinsert , midrule , min ,
+minipage , minusOption , miscount , missingfile , mit , mixpattern , mixture , mkern , mlabel , mod , models , modguide ,
+moduleOption , month , morechart , moretext , moveleft , moveright , mp , mptmacisloaded , mscount , mskip , mu , mubyte ,
+mubytein , mubytelog , mubyteout , mudef , muexpr , mugdef , multicolumn , multiply , multiput , multiputxy , multispan ,
+muskip , muskipdef , muskipzero , mutoglue , n , nabla , names , narrower , natural , ndivides , ne , nearrow , needed , neg ,
+negfalse , negmedspace , negthickspace , negthinspace , negtrue , neq , newXeTeXintercharclass , newattribute , newblock ,
+newbool , newboolean , newbox , newcatcodetable , newcite , newcommand , newcount , newcounter , newdimen , newenvironment
+, newfam , newfont , newhelp , newif , newinputfiles , newinsert , newlabel , newlanguage , newlength , newline , newlinechar ,
+newluabytecode , newluachunkname , newluacmd , newluafunction , newmarks , newmathalphabet , newmuskip , newpage ,
+newprotectedluacmd , newread , newrobustcmd , newsavebox , newskip , newtab , newtheorem , newtie , newtoggle , newtoks ,
+newwhatsit , newwrite , next , nextnext , nfssfontfiledate , nfssfontfileversion , ng , ngermanTeX , ni , ninebig , nineeq , ninerm
+, ninesl , noalign , noautospacing , noautoxspacing , noboundary , nobreak , nobreakdashes , nobreakspace , nocite , nocorr ,
+nocorrlist , noexpand , nofiles , nohrule , noindent , noinit , nointerlineskip , nokerns , noligs , nolimits , nolinebreak , nolinkurl
+, nonfrenchspacing , nonscript , nonstopmode , nonumber , nopagebreak , nopagenumbers , nopostamble , nopreamble , noprompt ,
+noprotrusion , normalLine , normalbaselines , normalbaselineskip , normalbottom , normalcolor , normaldeviate , normalend ,
+normaleveryjob , normalexpanded , normalfont , normalhoffset , normalinput , normalitaliccorrection , normallanguage , normalleft ,
+normallineskip , normallineskiplimit , normalmarginpar , normalmathop , normalmedmu , normalmiddle , normalmonth ,
+normalouter , normalover , normalright , normalsfcodes , normalshape , normalshowtokens , normalsize , normalthick ,
+normalunexpanded , normalvcenter , normalvoffset , nospaces , not , notblank , notbool , notdiv , notin , nottoggle , novrule ,
+ntt , nu , null , nulldelimiterspace , nullfont , nullnum , number , numberline , numdef , numexpr , numgdef , nwarrow , nxt ,
+nxtpg , o , oalign , oarg , obeycr , obeyedline , obeyedspace , obeylines , obeyspaces , oct , od , oddline , oddsidemargin ,
+odelcode , odelimiter , odot , oe , of , offinterlineskip , ogonek , oint , ointop , oldc , oldsty , oldstyle , oldstylenums ,
+oldtypeout , omathaccent , omathchar , omathchardef , omathcode , ominus , omit , omitaccents , onecolumn , onepageout ,
+ooalign , openin , opening , openout , openoutput , openup , oplus , or , oradical , orieveryjob , originaldefault , originalfont ,
+oripdfoutput , oslash , other , otimes , ou , outFileName , outer , outfileext , output , outputbox , outputfiles , outputmode ,
+outputpenalty , oval , ovalbltrue , ovalbrtrue , ovaltltrue , ovaltrtrue , over , overbrace , overfullrule , overleftarrow , overline ,
+overrightarrow , overwithdelims , owns , p , pTeX , package , pagebody , pagebottomoffset , pagebreak , pagecontents ,
+pagedepth , pagedir , pagedirection , pagediscards , pagefilllstretch , pagefillstretch , pagefilstretch , pagefistretch , pagegoal ,
+pageheight , pageinsert , pageleftoffset , pagename , pageno , pagenumbering , pageref , pagerightoffset , pages , pageshrink ,
+pagestretch , pagestyle , pagetopoffset , pagetotal , pagewidth , paperheight , papertype , paperwidth , par , paragraph ,
+paragraphmark , parallel , parbox , pardir , pardirection , parfillskip , parg , parindent , parsep , parseunicodedataI ,
+parseunicodedataII , parseunicodedataIII , parseunicodedataIV , parseunicodedataV , parshape , parshapedimen , parshapeindent ,
+parshapelength , parskip , part , partial , partname , partokencontext , partokenname , partopsep , patchcmd , patterns , pause ,
+pausing , pbigi , pcal , pdfTeX , pdfadjustinterwordglue , pdfadjustspacing , pdfannot , pdfappendkern , pdfcatalog , pdfcolorstack
+, pdfcolorstackinit , pdfcompresslevel , pdfcopyfont , pdfcreationdate , pdfdecimaldigits , pdfdest , pdfdestmargin , pdfdraftmode ,
+pdfeachlinedepth , pdfeachlineheight , pdfelapsedtime , pdfendlink , pdfendthread , pdfescapehex , pdfescapename , pdfescapestring
+, pdfextension , pdffakespace , pdffalse , pdffeedback , pdffiledump , pdffilemoddate , pdffilesize , pdffirstlineheight , pdffontattr ,
+pdffontexpand , pdffontname , pdffontobjnum , pdffontsize , pdfgamma , pdfgentounicode , pdfglyphtounicode , pdfhorigin ,
+pdfignoreddimen , pdfimageapplygamma , pdfimagegamma , pdfimagehicolor , pdfimageresolution , pdfincludechars ,
+pdfinclusioncopyfonts , pdfinclusionerrorlevel , pdfinfo , pdfinfoomitdate , pdfinsertht , pdfinterwordspaceoff , pdfinterwordspaceon ,
+pdflastannot , pdflastlinedepth , pdflastlink , pdflastmatch , pdflastobj , pdflastxform , pdflastximage , pdflastximagecolordepth ,
+pdflastximagepages , pdflastxpos , pdflastypos , pdflinkmargin , pdfliteral , pdfmajorversion , pdfmapfile , pdfmapline , pdfmatch ,
+pdfmdfivesum , pdfminorversion , pdfnames , pdfnobuiltintounicode , pdfnoligatures , pdfnormaldeviate , pdfobj ,
+pdfobjcompresslevel , pdfomitcharset , pdfoutline , pdfoutput , pdfpageattr , pdfpagebox , pdfpageheight , pdfpageref ,
+pdfpageresources , pdfpagesattr , pdfpagewidth , pdfpkmode , pdfpkresolution , pdfprependkern , pdfprimitive , pdfprotrudechars ,
+pdfptexuseunderscore , pdfpxdimen , pdfrandomseed , pdfrefobj , pdfrefxform , pdfrefximage , pdfresettimer , pdfrestore , pdfretval
+, pdfrunninglinkoff , pdfrunninglinkon , pdfsave , pdfsavepos , pdfsetcolor , pdfsetmatrix , pdfsetrandomseed , pdfshellescape ,
+pdfstartlink , pdfstartthread , pdfstrcmp , pdfstringdefDisableCommands , pdfstringnewline , pdfsuppressptexinfo ,
+pdfsuppresswarningdupdest , pdfsuppresswarningdupmap , pdfsuppresswarningpagegroup , pdftexbanner , pdftexrevision ,
+pdftexversion , pdfthread , pdfthreadmargin , pdftracingfonts , pdftrailer , pdftrailerid , pdftrue , pdfunescapehex ,
+pdfuniformdeviate , pdfuniqueresname , pdfvariable , pdfvorigin , pdfxform , pdfxformname , pdfximage , pdfximagebbox , penalty
+, perCent , percentchar , period , perp , pesvnoc , pfill , pgfhookintoshipout , phantom , phi , phihat , phihatbox , phvLaTeX ,
+phvTeX , pi , picture , pixel , pkg , plainoutput , plusOption , pm , pmatrix , pmit , pmod , pop , popX , poptabs ,
+postamble , postbreakpenalty , postdisplaypenalty , postexhyphenchar , posthyphenchar , pound , pounds , pplLaTeX , pplTeX ,
+preamble , prebinoppenalty , prebreakpenalty , prec , preceq , predisplaydirection , predisplaygapfactor , predisplaypenalty ,
+predisplaysize , preexhyphenchar , prehyphenchar , preloaded , prepareActiveModule , preprintfalse , preprinttrue , prerelpenalty ,
+
+preto , pretocmd , pretolerance , prevdepth , prevgraf , prime , primitive , processLine , processLineX , processbatchFile ,
+processedLines , processfile , processinputfiles , proclaim , prod , promile , promptthree , propto , protect , protected , protecting
+, protrudechars , protrusionboundary , providebool , provideboolean , providecommand , providerobustcmd , providetoggle , prp ,
+ps , ptexfontname , ptexlineendmode , ptexminorversion , ptexrevision , ptextracingfonts , ptexversion , publicationdate ,
+publicationday , publicationissue , publicationmonth , publicationyear , punct , push , pushX , pushtabs , put , putLaTeX ,
+putMetaComment , putTeX , putxy , pxdimen , q , qMark , qStop , qback , qbezier , qbeziermax , qquad , quad ,
+questiondown , quitvmode , quotation , quotechar , r , radical , raggedbottom , raggedleft , raggedright , raise , raisebox ,
+raisefirstsection , randomseed , rangle , rbrace , rbrack , rceil , read , readline , readpapersizespecial , readsource , ref , refin ,
+reflectbox , refname , refo , refstepcounter , refusedfiles , regfont , regfontdefault , registered , relax , relbar , relpenalty ,
+removeComment , removelastskip , renewcommand , renewenvironment , renewrobustcmd , repeat , replaceAllIn , replaceAllInAuxI ,
+replaceAllInAuxII , replaceAllInAuxIII , replaceModuleInLine , reposition , requestedLaTeXdate , requestedpatchdate , resettimer ,
+resizeall , resizefont , restorecr , restorefont , returnaddress , reverseline , reversemarginpar , rfloor , rfontskipat , rfskipatN ,
+rfskipatX , rgroup , rhd , rho , rhook , right , rightarrow , rightarrowfill , rightbox , rightcorner , rightfalse , rightghost ,
+rightharpoondown , rightharpoonup , rightheadline , righthyphenmin , rightleftharpoons , rightline , rightmargin , rightmarginkern ,
+rightmark , rightskip , righttrue , rising , risingsign , rlap , rm , rmdefault , rmfamily , rmntonum , rmoustache , rmsubstdefault
+, robustify , romannumeral , root , rootbox , row , rp , rpcode , rq , rule , runhead , safesubencodingfoundfalse ,
+safesubencodingfoundtrue , samepage , sample , savebox , saveboxresource , savecatcodetable , saveimageresource , savepos ,
+savinghyphcodes , savingvdiscards , sb , sbox , sc , scantextokens , scantokens , scdefault , scr , scrfam , scriptbaselineshiftfactor ,
+scriptfont , scriptscriptbaselineshiftfactor , scriptscriptfont , scriptscriptstyle , scriptsize , scriptspace , scriptstyle , scrollmode ,
+scrphihatbox , scshape , searrow , sec , secapsot , secdef , section , sectionmark , see , seealso , seename , selectfont ,
+sendingaddress , sequences , series , seriesdefault , setattribute , setbaselineskip , setbool , setboolean , setbox , setchar , setcolor
+, setcounter , setcsucode , setdigs , setfontid , sethelpcounter , setinputchr , setlanguage , setlength , setmathsize , setminus ,
+setrandomseed , setrangecatcode , settabs , settime , settodepth , settoggle , settoheight , settowidth , setucode , setup ,
+setupcopy , setwritetodir , sevenbf , seveni , sevenit , sevenrm , sevensy , sf , sfcode , sfdefault , sffamily , sfsubstdefault ,
+shape , shapedefault , shapemode , sharp , shbscode , shellescape , shipout , shortstack , show , showbox , showboxbreadth ,
+showboxdepth , showdirectory , showgroups , showhyphens , showifs , showlists , showmiss , showmissestrue , showmode ,
+showoutput , showoverfull , showprogress , showstream , showthe , showtokens , shyph , sigma , signature , silentfalse , silenttrue
+, silentxref , sim , simeq , sin , sinh , size , sizespec , sjis , skew , skewchar , skewtrial , skip , skipdef , skipeval ,
+skippingfalse , skippingtrue , skipscaled , skipzero , sl , slash , slashOption , sldefault , slfam , sloppy , sloppypar , slovak ,
+slshape , small , smallbreak , smallheadfont , smallint , smallln , smallskip , smallskipamount , smash , smile , softL , softd ,
+softt , source , sourceFileName , sourceLaTeXdate , sourcecode , sp , space , spacefactor , spaces , spaceskip , spadesuit , span ,
+spec , special , specrule , splitbotmark , splitbotmarks , splitdiscards , splitfirstmark , splitfirstmarks , splitmaxdepth ,
+splittopskip , sqcap , sqcup , sqrt , sqrtsign , sqrtstrutbox , sqsubset , sqsubseteq , sqsupset , sqsupseteq , squine , squinerec ,
+ss , sscdefault , sscshape , stackrel , stanfordreturn , stanfordseal , star , starOption , start , startbreaks , startdisplay , startfont
+, starting , startlabels , startmemo , stbscode , stepcounter , sterling , stockheight , stockwidth , stop , stopbreaks , stopletter ,
+storedpar , strcmp , stretch , string , strip , strut , strutbox , strutsqrt , subencodingresult , subhead , subitem , subject ,
+subparagraph , subparagraphmark , subsection , subsectionmark , subset , subseteq , subsubitem , subsubsection ,
+subsubsectionmark , subsubtitle , subtitle , succ , succeq , sum , sup , supereject , suppressfloats , suppressfontnotfounderror ,
+suppressifcsnameerror , suppresslongerror , suppressmathparerror , suppressoutererror , suppressprimitiveerror , supset , supseteq ,
+surd , swarrow , swdefault , swshape , symbol , symbold , symitalic , symlasy , symletters , symoperators , symsans ,
+symslanted , symsmallcaps , symtypewriter , synctex , syntaxonly , t , tabalign , tabbing , tabbingsep , tabcolsep , table ,
+tablename , tableofcontents , tablepreamble , tabref , tabrefs , tabs , tabsdone , tabskip , tabsyet , tabular , tabularnewline ,
+tagcode , tan , tanh , task , tate , tau , tbaselineshift , telephone , telephonenum , temp , tempa , tempb , tempin , tenbf ,
+tenbi , tencirc , tencircw , teneq , tenex , teni , tenit , tenln , tenlnw , tenlogo , tenrm , tensl , tensy , tentex , tentt , test ,
+testFont , testallgroups , testallkerneldefinedfamilies , testcm , testdc , testfalse , testfile , testgrf , testgroup , testnear ,
+testnextgrf , testrow , testtrue , text , textacutedbl , textascendercompwordmark , textasciiacute , textasciibreve , textasciicaron ,
+textasciicircum , textasciidieresis , textasciigrave , textasciimacron , textasciitilde , textasteriskcentered , textbackslash , textbaht ,
+textbar , textbardbl , textbaselineshiftfactor , textbf , textbigcircle , textblank , textborn , textbraceleft , textbraceright ,
+textbrokenbar , textbullet , textcapitalcompwordmark , textcelsius , textcent , textcentoldstyle , textcircled , textcircledP ,
+textcolonmonetary , textcolor , textcommaabove , textcommabelow , textcompsubstdefault , textcompwordmark , textcopyleft ,
+textcopyright , textcsc , textcurrency , textdagger , textdaggerdbl , textdblhyphen , textdblhyphenchar , textdegree , textdied ,
+textdir , textdirection , textdiscount , textdiv , textdivorced , textdollar , textdollaroldstyle , textdong , textdownarrow ,
+texteightoldstyle , textellipsis , textemdash , textendash , textestimated , texteuro , textexclamdown , textfiveoldstyle , textfloatsep
+, textflorin , textfont , textfouroldstyle , textfraction , textfractionsolidus , textgravedbl , textgreater , textguarani , textheight ,
+textin , textindent , textinterrobang , textinterrobangdown , textit , textlangle , textlbrackdbl , textleaf , textleftarrow ,
+textlegacyasteriskcentered , textlegacybardbl , textlegacybullet , textlegacydagger , textlegacydaggerdbl , textlegacyparagraph ,
+textlegacyperiodcentered , textlegacysection , textless , textlira , textlnot , textlquill , textmarried , textmd , textmho , textminus
+, textmu , textmusicalnote , textnaira , textnineoldstyle , textnormal , textnumero , textohm , textonehalf , textoneoldstyle ,
+textonequarter , textonesuperior , textopenbullet , textordfeminine , textordmasculine , textparagraph , textperiodcentered ,
+textpertenthousand , textperthousand , textpeso , textpilcrow , textpm , textquestiondown , textquotedblleft , textquotedblright ,
+textquoteleft , textquoteright , textquotesingle , textquotestraightbase , textquotestraightdblbase , textrangle , textrbrackdbl ,
+textrecipe , textreferencemark , textregistered , textrightarrow , textrm , textrquill , textsc , textsection , textservicemark ,
+textsevenoldstyle , textsf , textsixoldstyle , textsl , textssc , textsterling , textstyle , textsubscript , textsuperscript , textsurd ,
+textsw , textthreeoldstyle , textthreequarters , textthreequartersemdash , textthreesuperior , texttildelow , texttimes , texttrademark
+, texttt , texttwelveudash , texttwooldstyle , texttwosuperior , textulc , textunderscore , textup , textuparrow , textvisiblespace ,
+textwidth , textwon , textyen , textzerooldstyle , tfont , th , thanks , thatone , the , theCodelineNo , theaddress , thechapter ,
+theenumi , theenumii , theenumiii , theenumiv , theequation , thefigure , thefootnote , theglossary , theindex , thempfn ,
+thempfootnote , thenote , theoverlay , thepage , theparagraph , thepart , thesection , theslide , thesubparagraph , thesubsection ,
+thesubsubsection , thetable , thetotalpages , thicklines , thickmuskip , thickspace , thinlines , thinmuskip , thinspace , thisansno ,
+thiseq , thisone , thispage , thispagestyle , tightplus , tilde , time , times , tiny , title , titlefalse , titlefont , titlepage ,
+titletrue , tmod , tmp , tmspace , tn , to , toaddress , today , togglefalse , toggletrue , tojis , toks , toksapp , toksdef ,
+tokspre , tokszero , tolerance , toname , top , topbatchfilefalse , topbatchfiletrue , topfigrule , topfraction , topglue , topins ,
+topinsert , topmargin , topmark , topmarks , toprule , topsep , topskip , tospaces , totalheight , totheight , toucs , tpack ,
+tracefloats , tracefloatsoff , tracefloatvals , tracingall , tracingassigns , tracingcommands , tracingfonts , tracinggroups , tracingifs ,
+tracinglostchars , tracingmacros , tracingnesting , tracingnone , tracingonline , tracingoutput , tracingpages , tracingparagraphs ,
+tracingpatches , tracingrestores , tracingscantokens , tracingstacklevels , tracingstats , trademark , transformfont , triangle ,
+triangleleft , triangleright , trivlist , tt , ttdefault , ttfam , ttfamily , ttraggedright , ttsubstdefault , ttyin , ttyout , twocolumn ,
+twoconditions , twodigits , twonullnum , tworestrictions , typein , typeout , typeoutdetails , u , uccode , uccodes , uchyph , ucs ,
+ugqLaTeX , ugqTeX , ulcdefault , ulcshape , unboldmath , undef , undefined , undefinedpagestyle , underbar , underbrace ,
+underline , undertext , unexpanded , unhbox , unhcopy , unicoded , unicodedataline , unicoderead , uniformdeviate , unitlength ,
+unitsdigits , univletterhead , unkern , unless , unlessboolexpr , unlhd , unpenalty , unrhd , unsetattribute , unskip , unvbox ,
+unvcopy , up , upTeX , uparrow , upbracefill , updefault , updownarrow , upercase , uplus , uppercase , uppers , upshape ,
+uptexrevision , uptexversion , uptospace , url , usage , use , usebox , useboxresource , usecounter , used , usedef , usedir ,
+usefont , useimageresource , usepackage , usepostamble , usepreamble , usrguide , utfBOM , uv , v , vadjust , valign , value ,
+varbigtriangledown , varbigtriangleup , varepsilon , variablefam , varphi , varpi , varrho , varsigma , vartheta , vbadness , vbox ,
+vcenter , vdash , vdots , vec , vector , vee , verb , verbOption , verbStop , verbatim , verbatimchar , verbvisiblespace , vert ,
+vertical , vfi , vfil , vfill , vfilneg , vfootnote , vfuzz , vglue , visible , vline , voffset , vpack , vphantom , vrule , vsize , vskip
+, vspace , vsplit , vss , vtop , w , wd , wedge , whatsit , whichtfm , whileboolexpr , whiledo , whileswitch , widehat , widetilde
+, widowpenalties , widowpenalty , width , wlog , wordboundary , wp , wr , write , writegrf , writeit , x , xappto , xbox ,
+xchrcode , xdef , xifinlist , xifinlistcs , xkanjiskip , xleaders , xordcode , xpreto , xprncodes , xref , xspaceskip , xspcode ,
+xtoksapp , xtokspre , xtxHanGlue , xtxHanSpace , xxx , y , ybaselineshift , year , yes , yoko , z , zeta
+      }
+  }  %% end of kernel  
+
+
+\codehl_keyset_def:nn { TeX.xpacks }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[xpacks]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+AddCustomColor , CoffinDepth , CoffinHeight , CoffinTotalHeight , CoffinWidth , DeclareOptionX , DefineNamedColor , Depth ,
+DisplayCoffinHandles , ExecuteOptionsX , GDebug , GetGinDriver , GinDriver , Height , IfBeginWith , IfDecimal , IfEndWith ,
+IfEq , IfEqCase , IfInteger , IfStrCase , IfStrEq , IfStrEqCase , IfSubStr , IfSubStrBefore , IfSubStrBehind , JoinCoffins ,
+MarkCoffinHandle , NOM , NewCoffin , PSTXKeyCatcodes , PSTXKeyLoaded , ProcessOptionsX , ResizeCoffin , RotateCoffin ,
+ScaleCoffin , SetHorizontalCoffin , SetHorizontalPole , SetVerticalCoffin , SetVerticalPole , ShowCoffinStructure , StrBefore ,
+StrBehind , StrBetween , StrChar , StrCompare , StrCount , StrCut , StrDel , StrExpand , StrFindGroup , StrGobbleLeft ,
+StrGobbleRight , StrLeft , StrLen , StrMid , StrPosition , StrRemoveBraces , StrRight , StrSplit , StrSubstitute , TotalHeight ,
+TypesetCoffin , Width , XKVcatcodes , XKeyValLoaded , XKeyValUtilsCatcodes , XKeyValUtilsLoaded , adjustUCRBG ,
+afterdecimal , aftergroupdef , aftergroupedef , afterinteger , blendcolors , blendcolorsfalse , blendcolorstrue , boxframe , colorblend ,
+colorbox , colorlet , colormask , colornameprefix , colorseriescycle , columncolor , comparenormal , comparestrict ,
+convertcolorsDfalse , convertcolorsDtrue , convertcolorsUfalse , convertcolorsUtrue , convertcolorspec , decimalpart , definecolor ,
+definecolors , definecolorseries , definecolorset , definecolorsfalse , definecolorstrue , delpresetkeys , delsavekeys , endfirsthead ,
+endfoot , endhead , endlastfoot , expandarg , expandingroups , exploregroups , extractcolorspec , extractcolorspecs , fcolorbox ,
+fullexpandarg , gdelpresetkeys , gdelsavekeys , globalcolorsfalse , gpresetkeys , groupID , gsavekeys , gsavevalue , gunpresetkeys ,
+gunsavekeys , hiderowcolors , ifblendcolors , ifconvertcolorsD , ifconvertcolorsU , ifdefinecolors , ifglobalcolors , ifmaskcolors ,
+integerpart , keyi , keyia , keyii , keyiii , keyiv , keyv , keyvi , keyvii , keyviii , llshift , llshiftnum , llshiftset , lshift ,
+lshiftnum , lshiftset , macroA , macroB , maskcolors , maskcolorsfalse , maskcolorstrue , noexpandarg , noexpandingroups ,
+noexploregroups , nopagecolor , normalexpandarg , pagecolor , paperquality , preparecolor , preparecolorset , presetkeys ,
+providecolor , providecolors , providecolorset , psset , rangeGray , rangeHsb , rangeRGB , rangetHsb , rdivide , resetcolorseries ,
+restorecomparemode , restoreexpandmode , restoreexploremode , restorexstringcatcode , rmultiply , rowcolors , rownum , rrshift ,
+rshift , savecomparemode , saveexpandmode , saveexploremode , savekeys , savevalue , scancs , selectcolormodel , setkeys ,
+setrmkeys , setverbdelim , showrowcolors , sm , substitutecolormodel , testcolor , tm , tokenize , tracingcolors , truc ,
+unpresetkeys , unsavekeys , usevalue , verbtocs , xappindextolistformat , xapptobibdriver , xapptobibmacro , xapptocmd ,
+xapptofieldformat , xapptoindexfieldformat , xapptoindexnameformat , xapptolistformat , xapptonameformat , xdefinecolor , xglobal ,
+xkvview , xpatchbibdriver , xpatchbibmacro , xpatchcmd , xpatchfieldformat , xpatchindexfieldformat , xpatchindexlistformat ,
+xpatchindexnameformat , xpatchlistformat , xpatchnameformat , xpretobibdriver , xpretobibmacro , xpretocmd , xpretofieldformat ,
+xpretoindexfieldformat , xpretoindexlistformat , xpretoindexnameformat , xpretolistformat , xpretonameformat , xshowbibdriver ,
+xshowbibmacro , xshowcmd , xshowfieldformat , xshowindexfieldformat , xshowindexlistformat , xshowindexnameformat ,
+xshowlistformat , xshownameformat , xstringdate , xstringname , xstringversion
+      }
+  }  %% end of xpacks  
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

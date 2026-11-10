@@ -1,0 +1,158 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-07}
+  {
+     name        = {codehl-07} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~07}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { html.5 }
+  {
+    info / note  =
+     {
+       html ~5 ~  base ~ Language. Some ~ references~\iow_newline:
+        https://html.spec.whatwg.org/~\iow_newline:
+        https://www.w3.org/TR/html/~\iow_newline:
+        https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements~\iow_newline:
+        https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes
+     }  ,
+    comment                  =      {1} { <!-- } { --> } { }  ,
+    string                   =      {1} { '    } {  } { tagged }  ,
+    string                   =      {1} { "    } {  } { tagged }  ,
+    delimited ~ string       =      {2} { \&    } { ;  } { } { nestable }  ,  %%% err, this is for 'escaped chars'
+    oletter                  =      { \_ }  ,
+    alphanumeric             =      true  ,
+    case ~ sensitive         =      false  ,
+    tagged ~ area            =      { html }  { < } { > } { non ~ tagged }  ,
+  }
+%%% TODO:
+%%% heredoc <<'something'
+%%% hint: $, @, %, & * => letter ??  
+
+
+\codehl_keyset_def:nn { html.5 }
+  {
+    info / note  =
+     {
+       html ~ 5  ~ base ~ Language. Some ~ references~\iow_newline:
+        https://htmldoc.html.org/~\iow_newline:
+        https://metacpan.org/pod/B::Keywords~\iow_newline:
+        https://learn.html.org/docs/keywords.html~\iow_newline:
+        Heredoc~ not ~ implemented
+     }  ,
+    html*                    =      {1}
+      {  %%% elements
+        a, abbr, address, area, article, aside, audio, b, base, bdi, 
+        bdo, blockquote, body, br, button, canvas, caption, cite, code, 
+        col, colgroup, data, datalist, dd, del, details, dfn, dialog, div, 
+        dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, 
+        h2, h3, h4, h5, h6, head, header, hgroup, hr, html, i, iframe, img, 
+        input, ins, kbd, label, legend, li, link, main, map, mark, menu, 
+        meta, meter, nav, noscript, object, ol, optgroup, option, output, 
+        p, picture, pre, progress, q, rp, rt, ruby, s, samp, script, search, 
+        section, select, selectedcontent, slot, small, source, span, strong, 
+        style, sub, summary, sup, table, tbody, td, template, textarea, tfoot, 
+        th, thead, time, title, tr, track, u, ul, var, video, wbr
+      }  ,
+    html*                    =      {2}
+      {  %%% global attributes
+        accesskey, autocapitalize, autofocus, contenteditable, dir, 
+        draggable, enterkeyhint, hidden, inert, inputmode, is, itemid, 
+        itemprop, itemref, itemscope, itemtype, lang, nonce, popover, 
+        spellcheck, style, tabindex, title, translate, writingsuggestions
+      }  ,
+    html*                    =      {3}
+      {  %%% event handler attributes
+        onabort, onauxclick, onbeforeinput, onbeforematch, onbeforetoggle, 
+        onblur, oncancel, oncanplay, oncanplaythrough, onchange, 
+        onclick, onclose, oncontextlost, oncontextmenu, oncontextrestored, 
+        oncopy, oncuechange, oncut, ondblclick, ondrag, ondragend, 
+        ondragenter, ondragleave, ondragover, ondragstart, ondrop, 
+        ondurationchange, onemptied, onended, onerror, onfocus, onformdata, 
+        oninput, oninvalid, onkeydown, onkeypress, onkeyup, onload, 
+        onloadeddata, onloadedmetadata, onloadstart, onmousedown, 
+        onmouseenter, onmouseleave, onmousemove, onmouseout, onmouseover, 
+        onmouseup, onpaste, onpause, onplay, onplaying, onprogress, 
+        onratechange, onreset, onresize, onscroll, onscrollend, 
+        onsecuritypolicyviolation, onseeked, onseeking, onselect, 
+        onslotchange, onstalled, onsubmit, onsuspend, ontimeupdate, 
+        ontoggle, onvolumechange, onwaiting, onwheel
+      }  ,
+    html*                    =      {4}
+      {  %%% common attributes
+        accept, accept-charset, action, allow, allowfullscreen, 
+        alt, as, async, autocomplete, autoplay, blocking, charset, 
+        checked, cite, class, color, colorspace, cols, colspan, command, 
+        commandfor, content, controls, coords, crossorigin, data, datetime, 
+        decoding, default, defer, dir, dirname, disabled, download, enctype, 
+        fetchpriority, for, form, formaction, formenctype, formmethod, 
+        formnovalidate, formtarget, headers, height, high, href, hreflang, 
+        http-equiv, imagesizes, imagesrcset, integrity, ismap, kind, label, 
+        list, loading, loop, low, max, maxlength, media, method, min, minlength, 
+        multiple, muted, name, nomodule, novalidate, open, optimum, pattern, 
+        ping, placeholder, playsinline, poster, preload, readonly, 
+        referrerpolicy, rel, required, reversed, rows, rowspan, sandbox, 
+        scope, selected, shape, size, sizes, span, src, srcdoc, srcset, 
+        start, step, target, type, usemap, value, width, wrap      
+      }  ,
+  }
+
+%%
+%% Aliases
+%%
+
+\codehl_lang_alias:nn   { html } { html.5 }
+\codehl_keyset_alias:nn { html } { html.5 }
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

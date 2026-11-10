@@ -1,0 +1,219 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-59}
+  {
+     name        = {codehl-59} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~59}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+\codehl_keyset_def:nn { TeX.l3ams }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[l3ams]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+EQ_alignat_optional, EQ_begin_equation, EQ_complete_mathdisplay, EQ_declare_left_delimiter, EQ_declare_right_delimiter,
+EQ_default_raisetag, EQ_disable_linebreak, EQ_displaybreak, EQ_end_equation, EQ_find_displaywidth_i,
+EQ_find_displaywidth_ii, EQ_find_displaywidth_iii, EQ_find_displaywidth_iii_mult, EQ_find_displaywidth_iv,
+EQ_find_displaywidth_iv_mult, EQ_find_displaywidth_v, EQ_find_displaywidth_vi, EQ_find_displaywidth_vii,
+EQ_find_displaywidth_viii, EQ_generic_multline, EQ_getbody, EQ_gobbleoptional, EQ_initialize, EQ_innerbox, EQ_intertext,
+EQ_left_side, EQ_maketag, EQ_marginbox, EQ_mathbody, EQ_measure_align, EQ_measure_gather, EQ_modify_linewidth_i,
+EQ_modify_linewidth_ii, EQ_modify_linewidth_iii, EQ_modify_linewidth_iii_mult, EQ_modify_linewidth_iv,
+EQ_modify_linewidth_iv_mult, EQ_modify_linewidth_v, EQ_modify_linewidth_vi, EQ_modify_linewidth_vii,
+EQ_modify_linewidth_viii, EQ_multline_labelhack, EQ_multline_labelhack_opt, EQ_multline_modify_linewidth_notag,
+EQ_multline_modify_linewidth_tag, EQ_multlined_I, EQ_multlined_II, EQ_multlined_III, EQ_multlined_center,
+EQ_multlined_left, EQ_multlined_right, EQ_new_equationtype, EQ_new_equationtype_arg, EQ_next, EQ_only_endmark,
+EQ_options_name, EQ_outerbox, EQ_overload_ams_begin, EQ_overload_ams_end, EQ_place_display_i, EQ_place_display_ii,
+EQ_place_display_iii, EQ_place_display_iii_mult, EQ_place_display_iv, EQ_place_display_iv_mult, EQ_place_display_v,
+EQ_place_display_vi, EQ_place_display_vii, EQ_place_display_viii, EQ_place_tag, EQ_post_process,
+EQ_postdisplay_adjustment, EQ_predisplay_adjustment, EQ_prevent_vertical_space, EQ_renew_ams_environment,
+EQ_restore_tex_delimiter, EQ_right_side, EQ_saved_Let, EQ_saved_maketag, EQ_set_align_field, EQ_set_gather_field,
+EQ_shadowbox, EQ_tag_plus_endmark, EQ_typeset_display, EQ_typeset_display_hook, EQ_typeset_tags,
+EQ_typeset_tags_hook, EQ_upgrade_error, EQ_use_mathdisplay, EQ_vertical_tag_adjustment, MH_bigtimes_inner,
+MH_bigtimes_scaler, MH_cs_to_str, MH_csym_bigtimes, MH_else, MH_end_cases, MH_fi, MH_group_align_safe_begin,
+MH_group_align_safe_end, MH_if, MH_if_boolean, MH_if_case, MH_if_dim, MH_if_meaning, MH_if_num,
+MH_kernel_xargdef, MH_keyval_alias, MH_keyval_alias_with_addon, MH_let, MH_maybe_nospace_ifnextchar,
+MH_ndownarrow, MH_new_boolean, MH_nospace_ifnextchar, MH_nospace_nextchar, MH_nospace_protected_testopt,
+MH_nospace_testopt, MH_nospace_xargdef, MH_nrotarrow, MH_nuparrow, MH_or, MH_protected, MH_set_boolean_F,
+MH_set_boolean_T, MH_use_choice_i, MH_use_choice_ii, MH_use_choice_iii, MH_use_choice_iv, MT_AmS_tag_in_align,
+MT_Longrightarrow_fill, MT_active_colon_false, MT_active_colon_true, MT_array_parbox_restore, MT_begin_inlinemath,
+MT_cramped_clap_internal, MT_cramped_internal, MT_cramped_llap_internal, MT_cramped_rlap_internal,
+MT_define_tagform, MT_delim_default_inner_wrappers, MT_delim_inner_generator, MT_eqref, MT_etb_ifblank,
+MT_etb_ifdefempty_x, MT_extended_eqref, MT_extended_maketag, MT_extended_refeq, MT_extended_tagform,
+MT_fenced_sm_generator, MT_gathered_env_end, MT_gathered_post, MT_gathered_pre, MT_gobblelabel, MT_hookleft_fill,
+MT_hookright_fill, MT_hphantom, MT_incr_eqnum, MT_internal_phantom, MT_intertext, MT_leftharpoondown_fill,
+MT_leftharpoonup_fill, MT_leftrightarrow_fill, MT_longleftarrow_fill, MT_maketag, MT_mapsto_fill, MT_mathclap,
+MT_mathic_false, MT_mathic_redeffer, MT_mathic_true, MT_mathllap, MT_mathmakebox_I, MT_mathmakebox_II,
+MT_mathmakebox_III, MT_mathmbox, MT_mathrlap, MT_matrix_begin, MT_matrix_end, MT_measure_mult,
+MT_mult_default_pos, MT_mult_firstandlast_mathcr, MT_mult_internal, MT_mult_invisible_line, MT_mult_last_mathcr,
+MT_mult_mathcr_atat, MT_multlined_second_arg, MT_next, MT_nonumber, MT_options_name, MT_orig_intertext,
+MT_orig_intertext_false, MT_orig_intertext_true, MT_orig_shortintertext, MT_orig_shortintertext_false,
+MT_orig_shortintertext_true, MT_overbracket_I, MT_overbracket_II, MT_paired_delimx_arg_test, MT_phantom,
+MT_prescript_arg, MT_prescript_inner, MT_prescript_sub, MT_prescript_sup, MT_prev_tagform, MT_refeq,
+MT_remove_tag_unless_inner, MT_rightharpoondown_fill, MT_rightharpoonup_fill, MT_saved_Let, MT_saved_mathclap,
+MT_shortintertext, MT_shoveleft, MT_shoveright, MT_showonlyrefs_false, MT_showonlyrefs_true, MT_smallmatrix_begin,
+MT_smallmatrix_c_begin, MT_smallmatrix_default_align, MT_smallmatrix_end, MT_smallmatrix_inner_space,
+MT_smallmatrix_l_begin, MT_smallmatrix_r_begin, MT_smop_arg_A, MT_smop_arg_B, MT_smop_arg_C,
+MT_smop_arg_D, MT_smop_arg_E, MT_smop_arg_F, MT_smop_arg_G, MT_smop_final_arg_A, MT_smop_final_arg_B,
+MT_smop_final_arg_C, MT_smop_final_arg_D, MT_smop_final_arg_E, MT_smop_get_args, MT_smop_limits,
+MT_smop_mathop, MT_smop_measure, MT_smop_needed_args, MT_smop_remove_nil_vi, MT_smop_smash_l,
+MT_smop_smash_lr, MT_smop_smash_r, MT_smop_smash_rl, MT_smop_use, MT_start_cases, MT_start_mult,
+MT_svwi_aux, MT_test_for_tcb_other, MT_true_false_error, MT_underbracket_I, MT_underbracket_II, MT_vphantom,
+mathop, siunitx_angle, siunitx_cell_begin, siunitx_cell_end, siunitx_command_create, siunitx_complex_number,
+siunitx_complex_quantity, siunitx_compound_number, siunitx_compound_quantity, siunitx_declare_power, siunitx_declare_prefix,
+siunitx_declare_qualifier, siunitx_declare_unit, siunitx_if_number, siunitx_if_number_token, siunitx_number_adjust_exponent,
+siunitx_number_format, siunitx_number_list, siunitx_number_normalize_symbols, siunitx_number_output, siunitx_number_parse,
+siunitx_number_process, siunitx_number_product, siunitx_number_range, siunitx_print_match, siunitx_print_math,
+siunitx_print_number, siunitx_print_text, siunitx_print_unit, siunitx_quantity, siunitx_quantity_list, siunitx_quantity_print,
+
+siunitx_quantity_product, siunitx_quantity_range, siunitx_unit_format, siunitx_unit_format_combine_exponent,
+siunitx_unit_format_extract_prefixes, siunitx_unit_format_multiply, siunitx_unit_format_multiply_combine_exponent,
+siunitx_unit_format_multiply_extract_prefixes, siunitx_unit_options_apply, siunitx_unit_options_declare,
+siunitx_unit_pdfstring_context, translname
+      }
+  }  %% end of l3ams
+
+  
+
+\codehl_keyset_def:nn { TeX.l3amssign }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[l3amssign]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+EQ_alignat_optional:w , EQ_begin_equation: , EQ_complete_mathdisplay: , EQ_declare_left_delimiter:nnnn ,
+EQ_declare_right_delimiter:nnnn , EQ_default_raisetag: , EQ_disable_linebreak: , EQ_displaybreak: , EQ_end_equation: ,
+EQ_find_displaywidth_i: , EQ_find_displaywidth_ii: , EQ_find_displaywidth_iii: , EQ_find_displaywidth_iii_mult: ,
+EQ_find_displaywidth_iv: , EQ_find_displaywidth_iv_mult: , EQ_find_displaywidth_v: , EQ_find_displaywidth_vi: ,
+EQ_find_displaywidth_vii: , EQ_find_displaywidth_viii: , EQ_generic_multline:nnnnn , EQ_getbody:n , EQ_gobbleoptional:w ,
+EQ_initialize: , EQ_innerbox: , EQ_intertext: , EQ_left_side: , EQ_maketag:Nn , EQ_marginbox:nn , EQ_mathbody: ,
+EQ_measure_align: , EQ_measure_gather: , EQ_modify_linewidth_i: , EQ_modify_linewidth_ii: , EQ_modify_linewidth_iii: ,
+EQ_modify_linewidth_iii_mult: , EQ_modify_linewidth_iv: , EQ_modify_linewidth_iv_mult: , EQ_modify_linewidth_v: ,
+EQ_modify_linewidth_vi: , EQ_modify_linewidth_vii: , EQ_modify_linewidth_viii: , EQ_multline_labelhack:n ,
+EQ_multline_labelhack_opt:nw , EQ_multline_modify_linewidth_notag: , EQ_multline_modify_linewidth_tag: , EQ_multlined_I:w
+, EQ_multlined_II:w , EQ_multlined_III:nn , EQ_multlined_center:n , EQ_multlined_left:n , EQ_multlined_right:n ,
+EQ_new_equationtype:nnn , EQ_new_equationtype_arg:nnn , EQ_next: , EQ_only_endmark: , EQ_options_name: ,
+EQ_outerbox: , EQ_overload_ams_begin:n , EQ_overload_ams_end:n , EQ_place_display_i: , EQ_place_display_ii: ,
+EQ_place_display_iii: , EQ_place_display_iii_mult: , EQ_place_display_iv: , EQ_place_display_iv_mult: , EQ_place_display_v:
+, EQ_place_display_vi: , EQ_place_display_vii: , EQ_place_display_viii: , EQ_place_tag:N , EQ_post_process: ,
+EQ_postdisplay_adjustment: , EQ_predisplay_adjustment: , EQ_prevent_vertical_space: , EQ_renew_ams_environment:n ,
+EQ_restore_tex_delimiter: , EQ_right_side: , EQ_saved_Let: , EQ_saved_maketag: , EQ_saved_maketag:n ,
+EQ_set_align_field: , EQ_set_gather_field: , EQ_shadowbox:n , EQ_tag_plus_endmark: , EQ_typeset_display: ,
+EQ_typeset_display_hook: , EQ_typeset_tags: , EQ_typeset_tags_hook: , EQ_upgrade_error: , EQ_use_mathdisplay: ,
+EQ_vertical_tag_adjustment:n , MH_bigtimes_inner: , MH_bigtimes_scaler:N , MH_cs_to_str:N , MH_csym_bigtimes: ,
+MH_else: , MH_end_cases: , MH_fi: , MH_group_align_safe_begin: , MH_group_align_safe_end: , MH_if:w ,
+MH_if_boolean:nF , MH_if_boolean:nT , MH_if_boolean:nTF , MH_if_case:w , MH_if_dim:w , MH_if_meaning:NN ,
+MH_if_num:w , MH_kernel_xargdef:nwwn , MH_keyval_alias:nnn , MH_keyval_alias_with_addon:nnnn , MH_let:NwN ,
+MH_let:cN , MH_let:cc , MH_maybe_nospace_ifnextchar:Nnn , MH_ndownarrow: , MH_new_boolean:n ,
+MH_nospace_ifnextchar:Nnn , MH_nospace_nextchar: , MH_nospace_protected_testopt:n , MH_nospace_testopt:nn ,
+MH_nospace_xargdef:nwwn , MH_nrotarrow:NN , MH_nuparrow: , MH_or: , MH_protected: , MH_set_boolean_F:n ,
+MH_set_boolean_T:n , MH_use_choice_i:nnnn , MH_use_choice_ii:nnnn , MH_use_choice_iii:nnnn , MH_use_choice_iv:nnnn ,
+MT_AmS_tag_in_align: , MT_Longrightarrow_fill: , MT_active_colon_false: , MT_active_colon_true: ,
+MT_array_parbox_restore: , MT_begin_inlinemath: , MT_cramped_clap_internal:Nn , MT_cramped_internal:Nn ,
+MT_cramped_llap_internal:Nn , MT_cramped_rlap_internal:Nn , MT_define_tagform:nwnn , MT_delim_default_inner_wrappers:n
+, MT_delim_inner_generator:nnnnnnn , MT_eqref:n , MT_etb_ifblank:nnn , MT_etb_ifdefempty_x:nnn , MT_extended_eqref:n ,
+MT_extended_maketag:n , MT_extended_refeq:n , MT_extended_tagform:n , MT_fenced_sm_generator:nnn ,
+MT_gathered_env_end: , MT_gathered_post: , MT_gathered_pre: , MT_gobblelabel:w , MT_hookleft_fill: , MT_hookright_fill:
+, MT_hphantom:Nn , MT_incr_eqnum: , MT_internal_phantom:N , MT_intertext: , MT_leftharpoondown_fill: ,
+MT_leftharpoonup_fill: , MT_leftrightarrow_fill: , MT_longleftarrow_fill: , MT_maketag:n , MT_mapsto_fill: , MT_mathclap:Nn
+, MT_mathic_false: , MT_mathic_redeffer: , MT_mathic_true: , MT_mathllap:Nn , MT_mathmakebox_I:w ,
+MT_mathmakebox_II:w , MT_mathmakebox_III:w , MT_mathmbox:nn , MT_mathrlap:Nn , MT_matrix_begin:N ,
+MT_matrix_end: , MT_measure_mult:n , MT_mult_default_pos: , MT_mult_firstandlast_mathcr:w , MT_mult_internal:n ,
+MT_mult_invisible_line: , MT_mult_last_mathcr:w , MT_mult_mathcr_atat:w , MT_multlined_second_arg:w , MT_next: ,
+MT_nonumber: , MT_options_name: , MT_orig_intertext: , MT_orig_intertext_false: , MT_orig_intertext_true: ,
+MT_orig_shortintertext:n , MT_orig_shortintertext_false: , MT_orig_shortintertext_true: , MT_overbracket_I:w ,
+MT_overbracket_II:w , MT_paired_delimx_arg_test:n , MT_phantom:Nn , MT_prescript_arg: , MT_prescript_inner: ,
+MT_prescript_sub: , MT_prescript_sup: , MT_prev_tagform:n , MT_refeq:n , MT_remove_tag_unless_inner:n ,
+MT_rightharpoondown_fill: , MT_rightharpoonup_fill: , MT_saved_Let: , MT_saved_mathclap:Nn , MT_shortintertext:n ,
+MT_shoveleft:wn , MT_shoveright:wn , MT_showonlyrefs_false: , MT_showonlyrefs_true: , MT_smallmatrix_begin:N ,
+MT_smallmatrix_c_begin: , MT_smallmatrix_default_align: , MT_smallmatrix_end: , MT_smallmatrix_inner_space: ,
+MT_smallmatrix_l_begin: , MT_smallmatrix_r_begin: , MT_smop_arg_A: , MT_smop_arg_B: , MT_smop_arg_C: ,
+MT_smop_arg_D: , MT_smop_arg_E: , MT_smop_arg_F: , MT_smop_arg_G: , MT_smop_final_arg_A: ,
+MT_smop_final_arg_B: , MT_smop_final_arg_C: , MT_smop_final_arg_D: , MT_smop_final_arg_E: ,
+MT_smop_get_args:wwwNnNn , MT_smop_limits: , MT_smop_mathop:n , MT_smop_measure:NNNNN ,
+MT_smop_needed_args:NNNNN , MT_smop_remove_nil_vi:N , MT_smop_smash_l:NNNNN , MT_smop_smash_lr:NNNNN ,
+MT_smop_smash_r:NNNNN , MT_smop_smash_rl:NNNNN , MT_smop_use:NNNNN , MT_start_cases:nnnn , MT_start_mult:N ,
+MT_svwi_aux:nn , MT_test_for_tcb_other:nnnnn , MT_true_false_error: , MT_true_false_error:n , MT_underbracket_I:w ,
+MT_underbracket_II:w , MT_vphantom:Nn , mathop: , siunitx_angle:e , siunitx_angle:eee , siunitx_angle:n , siunitx_angle:nnn ,
+siunitx_cell_begin:w , siunitx_cell_end: , siunitx_command_create: , siunitx_complex_number:e , siunitx_complex_number:n ,
+siunitx_complex_number:nn , siunitx_complex_quantity:en , siunitx_complex_quantity:nn , siunitx_complex_quantity:nnn ,
+siunitx_compound_number:n , siunitx_compound_quantity:nn , siunitx_declare_power:NNn , siunitx_declare_prefix:Nn ,
+siunitx_declare_prefix:Nne , siunitx_declare_prefix:Nnn , siunitx_declare_qualifier:Nn , siunitx_declare_unit:Ne ,
+siunitx_declare_unit:Nen , siunitx_declare_unit:Nn , siunitx_declare_unit:Nnn , siunitx_if_number:n , siunitx_if_number_token:N ,
+siunitx_if_number_token:NTF , siunitx_number_adjust_exponent:Nn , siunitx_number_adjust_exponent:Vn ,
+siunitx_number_format:nN , siunitx_number_list:nn , siunitx_number_normalize_symbols:N , siunitx_number_output:NN ,
+siunitx_number_output:cN , siunitx_number_output:n , siunitx_number_parse:VN , siunitx_number_parse:nN ,
+siunitx_number_process:NN , siunitx_number_process:cc , siunitx_number_product:n , siunitx_number_range:nn ,
+siunitx_print_match:n , siunitx_print_math:n , siunitx_print_number:V , siunitx_print_number:e , siunitx_print_number:n ,
+siunitx_print_text:n , siunitx_print_unit:V , siunitx_print_unit:n , siunitx_print_unit:o , siunitx_quantity:nn ,
+siunitx_quantity_list:nn , siunitx_quantity_print:VV , siunitx_quantity_print:eV , siunitx_quantity_print:nV ,
+siunitx_quantity_print:nn , siunitx_quantity_product:nn , siunitx_quantity_range:nnn , siunitx_unit_format:VN ,
+siunitx_unit_format:nN , siunitx_unit_format_combine_exponent:nnN , siunitx_unit_format_extract_prefixes:nNN ,
+siunitx_unit_format_multiply:nnN , siunitx_unit_format_multiply_combine_exponent:nnnN ,
+siunitx_unit_format_multiply_extract_prefixes:nnNN , siunitx_unit_options_apply:n , siunitx_unit_options_declare:Nn ,
+siunitx_unit_pdfstring_context: , translname:
+      }
+  }  %% end of l3amssign 
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

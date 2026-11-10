@@ -1,0 +1,112 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-02}
+  {
+     name        = {codehl-02} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~02}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { java.SE25 }
+  {
+    info / note  =
+     {
+       java ~ SE ~25 ~ base ~ Language. Some ~ references~\iow_newline:
+         https://docs.oracle.com/javase/specs/~\iow_newline:
+        https://docs.oracle.com/en/java/javase/~\iow_newline:
+        https://en.wikipedia.org/wiki/List_of_Java_keywords
+     }  ,
+    comment                  =      {1} { /* } { / } { }  ,
+    comment                  =      {1} { /* } { */ } { }  ,
+    comment ~ line           =      {1} { // } { }  ,
+    string                   =      {1} { "  } { \\ } { }  ,
+    delimited ~ string       =      {1} { """ } { """ } {  } { }  ,
+    oletter                  =      { \_\$ }  ,
+    alphanumeric             =      true  ,
+  }
+
+
+\codehl_keyset_def:nn { java.SE25 }
+  {
+    info / note  =
+     {
+       java ~ SE ~25 ~ base ~ Language. Some ~ references~\iow_newline:
+         https://docs.oracle.com/javase/specs/~\iow_newline:
+        https://docs.oracle.com/en/java/javase/~\iow_newline:
+        https://en.wikipedia.org/wiki/List_of_Java_keywords
+     }  ,
+    keywd                    =      {1}
+      {
+        abstract, assert, boolean, break, byte, case, catch, char, 
+        class, const, continue, default, do, double, else, enum, 
+        extends, final, finally, float, for, goto, if, implements, 
+        import, instanceof, int, interface, long, native, new, package, 
+        private, protected, public, return, short, static, strictfp, 
+        super, switch, synchronized, this, throw, throws, transient, 
+        try, void, volatile, while, _,
+        module, open, opens, exports, requires, transitive, to, 
+        uses, provides, with, var, yield, record, sealed, non-sealed, 
+        permits, when, 
+        true, false, null
+      }  ,
+  }
+
+%%
+%% Aliases
+%%
+
+\codehl_lang_alias:nn   { java } { java.SE25 }
+\codehl_keyset_alias:nn { java } { java.SE25 }
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

@@ -1,0 +1,231 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-5A}
+  {
+     name        = {codehl-5A} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~5A}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+\codehl_keyset_def:nn { TeX.l3pgf }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[l3pgf]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+Z, closedcycle, def, desirednumticks, endcsname, endgroup, entry, gamma, hour, ifx, min, minute, pgfPTCScombine,
+pgfPTCSwrite, pgfkeys, pgfkeysactivatefamiliesandfilteroptions, pgfkeysappendfilterednamestomacro, pgfkeysdefargs, pgfkeysdefnargs,
+pgfkeysndefargs, pgfmathparse, pgfmathresult, pgfplotsapplistXXglobalnewempty, pgfplotsapplistXXnewempty,
+pgfplotsarrayforeachindex, pgfplotsbinaryencodesignedmaplinearly, pgfplotsifaxislineisforeground, pgfplotspatchclassname,
+pgfplotspatchvertexdepth, pgfplotsplothandlercontourfilled, pgfplotsplothandlersurveyend, pgfplotsplothandlersurveypoint,
+pgfplotsplothandlersurveystart, pgfplotspointmetainputhandler, pgfplotspointonorientedsurfaceabmatchaxisline,
+pgfplotspointorigininternal, pgfplotsretval, pgfplotstablelineno, pgfplotstablerow, pgfplotstempjuliandate, plotnum,
+tikzexternaldepext, tikzexternalimgextension, tikzexternalize
+      }
+  }  %% end of l3pgf  
+
+
+\codehl_keyset_def:nn { TeX.l3pgfsign }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[l3pgfsign]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+Z: , closedcycle: , def: , desirednumticks: , endcsname: , endgroup: , entry: , gamma: , hour: , ifx: , min: , minute: ,
+pgfPTCScombine: , pgfPTCSwrite: , pgfkeys: , pgfkeysactivatefamiliesandfilteroptions: , pgfkeysappendfilterednamestomacro: ,
+pgfkeysdefargs: , pgfkeysdefnargs: , pgfkeysndefargs: , pgfmathparse: , pgfmathresult: , pgfplotsapplistXXglobalnewempty: ,
+pgfplotsapplistXXnewempty: , pgfplotsarrayforeachindex: , pgfplotsbinaryencodesignedmaplinearly: , pgfplotsifaxislineisforeground: ,
+pgfplotspatchclassname: , pgfplotspatchvertexdepth: , pgfplotsplothandlercontourfilled: , pgfplotsplothandlersurveyend: ,
+pgfplotsplothandlersurveypoint: , pgfplotsplothandlersurveystart: , pgfplotspointmetainputhandler: ,
+pgfplotspointonorientedsurfaceabmatchaxisline: , pgfplotspointorigininternal: , pgfplotsretval: , pgfplotstablelineno: , pgfplotstablerow:
+, pgfplotstempjuliandate: , plotnum: , tikzexternaldepext: , tikzexternalimgextension: , tikzexternalize:
+      }
+  }  %% end of l3pgfsign  
+
+
+\codehl_keyset_def:nn { TeX.l3bibtex }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[l3bibtex]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+biblatex_maplang_babel_to_pseudobcp, biblatex_text_bibtex_to_expl, biblatex_text_lowercase, biblatex_text_makecapital,
+biblatex_text_sentencecase, biblatex_text_sentencecase_preprocess, biblatex_text_uppercase,
+biblatex_unmaplang_babel_to_pseudobcp
+      }
+  }  %% end of l3bibtex
+  
+
+\codehl_keyset_def:nn { TeX.l3bibtexsign }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[l3bibtexsign]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+biblatex_maplang_babel_to_pseudobcp:nn , biblatex_text_bibtex_to_expl:n , biblatex_text_lowercase:Vn ,
+biblatex_text_lowercase:n , biblatex_text_lowercase:nn , biblatex_text_makecapital:Vn , biblatex_text_makecapital:n ,
+biblatex_text_makecapital:nn , biblatex_text_sentencecase:Vo , biblatex_text_sentencecase:nn , biblatex_text_sentencecase:xo ,
+biblatex_text_sentencecase_preprocess:n , biblatex_text_uppercase:Vn , biblatex_text_uppercase:n , biblatex_text_uppercase:nn ,
+biblatex_unmaplang_babel_to_pseudobcp:n
+      }
+  }  %% end of l3bibtexsign
+
+
+\codehl_keyset_def:nn { TeX.babel }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[babel]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+AfterBabelCommands , AfterBabelLanguage , BDefFile , BabelBeforeIni , BabelCJKGlue , BabelCJKSpace , BabelContentsFiles ,
+BabelDateDot , BabelDateM , BabelDateMM , BabelDateMMMM , BabelDateSpace , BabelDateU , BabelDated , BabelDatedd ,
+BabelDatey , BabelDateyy , BabelDateyyyy , BabelDefinitionFile , BabelEnsureInfo , BabelFootnote , BabelFrenchColonSpace ,
+BabelFrenchGuillemetSpace , BabelFrenchHighSpace , BabelGreekNumeralMarker , BabelGreekNumeralMarkerEnd ,
+BabelGreekNumeralMyriads , BabelHebrewNumeralMarkerFinal , BabelHebrewNumeralMarkerSingle , BabelIniTag , BabelLanguages ,
+BabelLower , BabelLowerMM , BabelLowerMO , BabelLowercaseMapping , BabelModifiers , BabelNonASCII , BabelNonText ,
+BabelOptions , BabelPatchSection , BabelString , BabelStrings , BabelStringsDefault , BabelText , BabelTitlecaseMapping ,
+BabelUppercaseMapping , BabelWrapText , DigitsDotDashInterCharToks , DisableBabelHook , EnableBabelHook ,
+
+EndBabelCommands , GetDocumentProperties , IfBabelIntercharT , IfBabelLayout , IfBabelSelectorTF , LR , LdfInit ,
+LocaleForEach , PassOptionsToLocale , ProvidesLanguage , RL , RTLfootnotetext , Reported , SS , SetCase , SetHyphenMap ,
+SetString , SetStringLoop , ShowLocaleProperties , StartBabelCommands , UTFencname , adddialect , addlanguage , aliasshorthand
+, asciiencoding , atcatcode , babeladjust , babelcalendar , babelcharclass , babelcharproperty , babelensure , babelfont ,
+babelhyphen , babelhyphenation , babelhyphenmins , babelinterchar , babelnullhyphen , babelpatterns , babelposthyphenation ,
+babelprehyphenation , babelprovide , babelsublr , babeltags , babeltempa , babeltempb , babeltempc , bblstyerror ,
+defineshorthand , endhyphenrules , endotherlanguage , endselectlanguage , ensureascii , eqcatcode , fontspec , foreign ,
+foreignlanguage , germanchaptername , getlocaleproperty , glossaryname , glq , glqq , greeknumeral , grq , grqq , guillemetleft ,
+guillemetright , guillemotleft , guillemotright , guilsinglleft , guilsinglright , hyphenrules , ifbabelshorthand , iflanguage , ij ,
+khmerdigits , langXname , langcounter , langdigits , languageattribute , languageshorthands , languagetext , latinencoding ,
+latintext , loadlocalcfg , locale , localecounter , localedate , localeid , localeinfo , localename , localenumeral , localfootnote ,
+mainfootnote , mainlocalename , originalTeX , otherlanguage , prefacename , providehyphenmins , quotedblbase , quotesinglbase ,
+selectlocale , setLR , setRL , setlocale , setlocalecaption , shorthandoff , shorthandon , substitutefontfamily , texorpdfstring ,
+textlanguage , textlatin , textlocale , textormath , tmpe , tmpf , tmpx , tmpy , tmpz , umlautelow , umlauthigh , umlautlow ,
+uselanguage , uselocale , useshorthands , vrefpagenum , xstring
+      }
+  }  %% end of babel  
+
+
+\codehl_keyset_def:nn { TeX.hyperref }
+  {
+    info / note  =
+     {
+       Adapted ~ from ~ package ~ codedescribe. ~
+       Original ~ command: ~ lstdefinelanguage[hyperref]{TeX}[LaTeX]{TeX} ~
+       (original ~ file: ~ codelstlang.sty)
+     }  ,
+    texcs                    =      {1}
+      {
+AMSautorefname , Acrobatmenu , AddToDocumentProperties , AfterBeginDocument , BeforeTeXIVht , CJKdigits , CJKkern ,
+CJKnumber , CheckBox , ChoiceBox , ChoiceMenu , Cube , DeclareBoolOption , DeclareComplementaryOption ,
+DeclareLocalOptions , DeclareVoidOption , DefaultHeightofCheckBox , DefaultHeightofChoiceMenu , DefaultHeightofReset ,
+DefaultHeightofSubmit , DefaultHeightofText , DefaultHeightofTextMultiline , DefaultOptionsofCheckBox , DefaultOptionsofComboBox
+, DefaultOptionsofListBox , DefaultOptionsofPopdownBox , DefaultOptionsofPushButton , DefaultOptionsofRadio ,
+DefaultOptionsofReset , DefaultOptionsofSubmit , DefaultOptionsofText , DefaultWidthofCheckBox , DefaultWidthofChoiceMenu ,
+DefaultWidthofReset , DefaultWidthofSubmit , DefaultWidthofText , END , FancyVerbLineautorefname , Form , Gauge ,
+GetTitleString , GetTitleStringResult , Hfootnoteautorefname , Huge , Hurl , HyperDestLabelReplace , HyperDestNameFilter ,
+HyperDestRename , HyperFirstAtBeginDocument , HyperGlobalCurrentHref , HyperLocalCurrentHref , HyperRaiseLinkDefault ,
+HyperRaiseLinkHook , HyperRaiseLinkLength , IfHyperBoolean , IfHyperBooleanExists , IntCalcAdd , IntCalcDec , IntCalcDiv ,
+IntCalcMod , IntCalcSub , LayoutCheckField , LayoutChoiceField , LayoutPushButtonField , LayoutTextField , MakeButtonField ,
+MakeCheckField , MakeChoiceField , MakeLowercaseUnsupportedInPdfStrings , MakeRadioField , MakeTextField ,
+MakeUppercaseUnsupportedInPdfStrings , MaybeStopEarly , NoHyper , PrerenderUnicode , ProcessKeyvalOptions , PushButton ,
+ReadBookmarks , RerunFileCheck , Reset , Sectionformat , SetLinkTargetFilter , SpecialDvipdfmxOutlineOpen ,
+StringEncodingConvertTest , Submit , Unicode , WriteBookmarks , XeTeXLinkBox , XeTeXLinkMargin , acctonos , acircumflex ,
+appendixautorefname , autopageref , autoref , backcite , backref , backrefafrikaans , backrefalt , backrefbrazil , backrefenglish ,
+backrefentrycount , backreffrench , backrefgerman , backrefitalian , backreflastsep , backrefpagesname , backrefparscanfalse ,
+backrefparscantrue , backrefprint , backrefsectionsname , backrefsep , backrefsetup , backrefspanish , backreftwosep , backrefxxx ,
+backrefxxxdupe , bitsetGetDec , bitsetGetHex , bitsetGetSetBitList , bitsetIsEmpty , bitsetReset , bitsetSetValue ,
+chapterautorefname , citeN , citeauthoryear , codeof , cyr , cyra , cyrch , cyrery , cyrl , cyrr , cyrs , cyrt , cyrv , endForm ,
+endNoHyper , endsubeqnarray , equationautorefname , externalcitedocument , externaldocument , extrasvietnam , extrasvietnamese ,
+figureautorefname , footnoteautorefname , getrefbykeydefault , harvardcite , harvarditem , hyperbaseurl , hypercalcbp ,
+hypercalcbpdef , hyperdef , hyperget , hypergetpageref , hypergetref , hyperimage , hyperindexformat , hyperlinkfileprefix ,
+hyperpage , hyperrefundefinedlink , hypersetup , hyperxindexformat , ifbackrefparscan , ifpdfstringunicode , intcalcNum ,
+itemautorefname , kvsetkeys , nameref , newlabelxx , newname , noexpandQ , nofrenchguillemets , nohyperpage , note , ohorn ,
+oldb , oldd , oldnewlabel , overlay , pageautorefname , paragraphautorefname , partautorefname , pdfbookmark , pdfstringdef ,
+pdfstringdefPostHook , pdfstringdefPreHook , pdfstringdefWarn , realfootnote , sectionautorefname , setpdflinkmargin , shortciteN ,
+slabel , slide , subeqnarray , subparagraphautorefname , subsectionautorefname , subsubsectionautorefname , tableautorefname ,
+textEncodingNoboundary , textEpsilon , textTheta , textalpha , textampersand , textchi , textclubsuitblack , textdelta ,
+textdiamondsuitblack , texteta , textflq , textflqq , textfrq , textfrqq , textgamma , textglq , textglqq , textgrq , textgrqq ,
+textheartsuitblack , textiota , textkappa , textlambda , textleftrightarrow , textnu , textnumbersign , textomega , textomicron ,
+textparenleft , textpercent , textphi , textpi , textrho , textsigma , textspadesuitblack , texttau , textupdownarrow , textupsilon ,
+textvarsigma , textxi , theH , theHHfootnote , theHHmpfootnote , theHItem , theHchapter , theHenumi , theHenumii ,
+theHenumiii , theHenumiv , theHequation , theHfigure , theHfootnote , theHlisting , theHlstlisting , theHmpfootnote , theHpage ,
+theHparagraph , theHparentequation , theHpart , theHsubequation , theHsubparagraph , theHsubsection , theHsubsubsection ,
+theHtable , theHtheorem , theHthm , thelisting , thelstlisting , theoremautorefname , thesubequation , thispdfpagelabel , uhorn ,
+unichar , vnameref , vpageref , xspaceaddexceptions
+      }
+  }  %% end of hyperref  
+  
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut

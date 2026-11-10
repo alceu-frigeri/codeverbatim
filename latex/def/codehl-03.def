@@ -1,0 +1,241 @@
+%%%==============================================================================
+%% Copyright 2025-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/01}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%
+%% Nota Bene:
+%% Some languages 'got' an specific identifier
+%%                  like ==> identifier = { pragma } { \# } { }
+%%                    or ==> identifier = { texcs }  { \\ } { }
+%%      this is a flexible way to declare keywords/pragmas instead
+%%      of changing the catcode of some chars to letter
+%%          main implication: some keyword/pragma's lists got split.
+%%%==============================================================================
+
+%%%%%%%
+%%%  This save the current 'expl syntax' state
+%%%%%%%
+\hlExplFileTest
+%%%%%%%
+%%%
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn {<pkg-name>} { props} sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage {<pkg-name>} { props} sets package info
+%%%     and calls \ProvidesExplPackage
+%%%
+%%%%%%%
+\RequirePackage{pkginfograb}
+\pkginfograbProvidesExplFile {codehl-03}
+  {
+     name        = {codehl-03} ,
+     prefix      = {codehl} ,
+     date        = {2026/11/01} ,
+     version     = {1.0} ,
+     description = {codehighlight ~language ~definitions ~03}
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+\codehl_lang_def:nn { python.2.7 }
+  {
+    info / note  =
+     {
+       python ~ 2.7 ~ base ~ Language. Some ~ references~\iow_newline:
+        https://docs.python.org/3/reference/lexical_analysis.html~\iow_newline:
+        https://docs.python.org/3/library/keyword.html~\iow_newline:
+        https://github.com/python/cpython/blob/main/Lib/keyword.py
+     }  ,
+    comment ~ line           =      {1} { \\\# } { }  ,
+    string                   =      {1} { "     } { \\ } { }  ,
+    string                   =      {2} { '     } { \\ } { }  ,
+    string                   =      {1} { """   } { \\ } { }  ,
+    string                   =      {2} { '''   } { \\ } { }  ,
+    delimited ~ string       =      {3} { r"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { r"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { r'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { r'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { R"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { R"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { R'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { R'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { b"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { b"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { b'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { b'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { B"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { B"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { B'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { B'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { rb"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { rb""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { rb'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { rb''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { RB"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { RB""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { RB'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { RB''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { br"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { br""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { br'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { br''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { BR"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { BR""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { BR'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { BR''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { u"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { u"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { u'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { u'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { U"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { U"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { U'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { U'''  } { ''' } { \\ } { }  ,
+    oletter                  =      { \_ }  ,
+    alphanumeric             =      true  ,
+  }
+
+\codehl_lang_def:nn { python.3.0 }
+  {
+    info / note  =
+     {
+       python ~ 3.0 ~ based ~ on ~ python ~ 2.7
+     }  ,
+    based ~ on               =      { python.2.7 }  ,
+  }
+  
+
+\codehl_lang_def:nn { python.3.6 }
+  {
+    info / note  =
+     {
+       python ~ 3.6 ~ based ~ on ~ python ~ 3.0
+     }  ,
+    based ~ on               =      { python.3.0 }  ,
+    delimited ~ string       =      {3} { f"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { f"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { f'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { f'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { F"    } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { F"""  } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { F'    } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { F'''  } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { fr"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { fr""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { fr'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { fr''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { FR"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { FR""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { FR'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { FR''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { rf"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { rf""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { rf'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { rf''' } { ''' } { \\ } { }  ,
+    delimited ~ string       =      {3} { RF"   } { "   } { \\ } { }  ,
+    delimited ~ string       =      {3} { RF""" } { """ } { \\ } { }  ,
+    delimited ~ string       =      {3} { RF'   } { '   } { \\ } { }  ,
+    delimited ~ string       =      {3} { RF''' } { ''' } { \\ } { }  ,
+  }
+
+
+\codehl_lang_def:nn { python.3.12 }
+  {
+    info / note  =
+     {
+       python ~ 3.12 ~ based ~ on ~ python ~ 3.6
+     }  ,
+    based ~ on               =      { python.3.6 }  ,
+  }
+
+
+\codehl_keyset_def:nn { python.2.7 }
+  {
+    info / note  =
+     {
+       python ~ 2.7 ~ base ~ Language. Some ~ references~\iow_newline:
+        https://docs.python.org/3/reference/lexical_analysis.html~\iow_newline:
+        https://docs.python.org/3/library/keyword.html~\iow_newline:
+        https://github.com/python/cpython/blob/main/Lib/keyword.py
+     }  ,
+    keywd                    =      {1}
+      {
+        and, as, assert, break, class, continue, def, del, elif, 
+        else, except, exec, finally, for, from, global, if, 
+        import, in, is, lambda, not, or, pass, print, raise, 
+        return, try, while, with, yield,
+      }  ,
+  }
+
+\codehl_keyset_def:nn { python.3.0 }
+  {
+    info / note  =
+     {
+       python ~ 3.0 ~ based ~ on ~ python ~ 2.7
+     }  ,
+    based ~ on               =      { python.2.7 }  ,
+    suppress ~ keywd         =      {1}
+      {
+        print, exec,
+      }  ,
+    keywd                    =      {1}
+      {
+        nonlocal, True, False, None,
+      }  ,    
+  }
+
+\codehl_keyset_def:nn { python.3.6 }
+  {
+    info / note  =
+     {
+       python ~ 3.6 ~ based ~ on ~ python ~ 3.0
+     }  ,
+    based ~ on               =      { python.3.0 }  ,
+    keywd                    =      {1}
+      {
+        async, await, 
+      }  ,    
+  }
+
+\codehl_keyset_def:nn { python.3.12 }
+  {
+    info / note  =
+     {
+       python ~ 3.12 ~ based ~ on ~ python ~ 3.6
+     }  ,
+    based ~ on               =      { python.3.6 }  ,
+    keywd                    =      {1}
+      {
+        match, case, _, type,
+      }  ,    
+  }
+
+%%
+%% Aliases
+%%
+%
+\codehl_lang_alias:nn   { python } { python.3.12 }
+\codehl_keyset_alias:nn { python } { python.3.12 }
+
+
+%%%%%%%
+%%%  This restore the 'expl syntax' state saved (hopefully) at the beginning
+%%%%%%%
+\hlExplFileOut
