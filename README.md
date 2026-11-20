@@ -13,16 +13,18 @@ For more details,  see the documentation,
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*).
 
 ## Installation
-The stable version is available at [CTAN](https://ctan.org/pkg/codeverbatim).
+  <strike>The stable version is available at [CTAN](https://ctan.org/pkg/codehighlight).</strike>
+  This ísn't a published package at CTAN
+
+Copy the latex subtree to a place your latex installation can see.
 
 ## Usage
 Just place
 ```latex
   \usepackage{codeverbatim}
-  \usepackage{codehighlight}
 ```
 
-in the preamble and compile away.
+in the preamble, for further details, see the documentation.
 
 ## Contacting Author
 
@@ -61,12 +63,6 @@ The Current Maintainer of this work is Alceu Frigeri
 
 * codeverbatim.sty
     - verbatim capture environment
-
-* codehighlight.sty
-    - code highlighting
-
-* codehl-00.def ... codehl-21.def       *(hexadecimal numbering)*
-    - the many pre-defined language files
 
 -------------
 
