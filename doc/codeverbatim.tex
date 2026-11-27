@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.0} {2026/11/18}
+%% This is version {1.0} {2026/11/27}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codeverbatim
@@ -40,32 +40,87 @@
 \usepackage{codeverbatim}
 \usepackage{codehighlight}
 
-%%\hlLangLoad{00}
+\usepackage{newfloat}
+
+\newcodekey{codehl}
+  {
+    codeprefix={},
+    resultprefix={},
+    letter={_ : -},
+    texcs=[2]{hlKeysetDef,hlSettings,cvNewEnvironment,hlDisplayV,hlLangDef,hlHLsetDef,
+    hlBasefmtDef,hlSettingsDef,cvSVerbNew,cvSVerbSet,cvSVerbOn,cvSVerbOff,cvHideSpc,cvRetokenEnvNewCommand,codeverb_new_environment:nnnnn},
+    texcs=[3]{ExplSyntaxOn,ExplSyntaxOff},
+    emph=[1]{nestable,tagged,based,on,keywd,string,in,on,case,sensitive,
+    alphanumeric,digits,oletter,identifier,area,comment,line,at,discard,
+    active,delimited,replace,suppress,emph,info,note,
+    gobble,inline,add,endmark,base,format,show,spaces,text,width,wrap,indent,
+    background,numbers,sep,rule,width,color,frame,left,right,top,bottom,
+    hl,set,registered,defined,settings,basefmt,hlset,keyset,lang,show,all
+    settings,language,drop,first,other }  
+  } 
 
 \ExplSyntaxOn
-\cs_new:Npn \citepkg #1
-  { \tsobj [pkg] { #1 } \, \cite { #1 } }
-\cs_new:Npn \citepkgtitle #1
-  { \citetitle { #1 } \, \cite { #1 } }
+\NewDocumentCommand \citepkg { sO{}m } 
+  {
+    \seq_set_from_clist:Nn \l__codehl_doctmp_seq { #2 }
+    \seq_pop_left:NNTF \l__codehl_doctmp_seq
+      \l__codehl_doctmpa_tl
+      { 
+        \emph { `` \l__codehl_doctmpa_tl '' }
+        \seq_pop_right:NNTF \l__codehl_doctmp_seq
+          \l__codehl_doctmpb_tl
+          {
+            \seq_map_inline:Nn \l__codehl_doctmp_seq
+              {
+               , ~ \emph { `` ##1 '' }
+              }
+            \use:n { ~ } and ~ \emph { `` \l__codehl_doctmpb_tl '' }
+          }
+          { }
+         \use:n { ~ }  from ~ 
+      }
+      {  }
+  
+    \bool_if:NTF #1
+      { \citetitle { #3 } \, \cite { #3 }  }
+      { \tsobj [pkg]  { #3 } \, \cite { #3 } }
+  }
 \ExplSyntaxOff
 
-\begin{codestore}[demo00]
-% only in the preamble
-\hlLangLoad{C}
+\begin{codestore}[demofloat]
+  %% This must be declared in the preamble
+  \DeclareFloatingEnvironment
+    [fileext={lov},listname={List of C code},name={C code},placement=htb]
+    {floatenv}
+\end{codestore}
 
-% once the file definition was loaded, the following can be anywhere
-\hlDispSettings
+\tsexec{demofloat}
+
+\begin{codestore}[demoLoad]
+% only in the preamble
+\hlLangLoad{ C , php , TeX }
+\end{codestore}
+
+\tsexec{demoLoad}[1]
+
+
+\begin{codestore}[demo00]
+% if the file definition were already loaded, the following can be anywhere
+\hlSettings
   {
-    keywd set = C
+    keywd set = { C }
   }
 
 \cvNewEnvironment[verb tl=\DemoV]{DemoEnv}{}
   {}
-  { \hlDisplayV \DemoV }
+  { 
+  \hlDisplayV \DemoV 
+%  \myShow \DemoV
+  }
 \end{codestore}
 
 \begin{codestore}[demo00]
-\hlDispSettings
+\hlSettings
   {
     language = C ,
     keywd set = C
@@ -73,8 +128,6 @@
 \end{codestore}
 
 \tsexec{demo00}[1]
-
-%\hlLangShow{C}  
 
 
 %% if needed
@@ -157,7 +210,7 @@ When capturing content in verbatim mode, many characters have their usual catego
   This list is named ``other characters list'' in the following (for simplicity).
 \end{tsremark}
 \begin{tsremark}
-  As noted above, \tsfmt[verb]{\^{}\^{}M } will always have its category code changed to other (12). Moreover, following the \tsobj{\tl_retokenize:n} convention, lines will be terminated by \tsfmt[verb]{\^{}\^{}J} (and not \tsfmt[verb]{\^{}\^{}M}), also with category code other. See the chapter ``Reassigning category codes'' (under ``Manipulating tokens in token lists'') from \citepkgtitle{expl3}, for details.
+  As noted above, \tsfmt[verb]{\^{}\^{}M } will always have its category code changed to other (12). Moreover, following the \tsobj{\tl_retokenize:n} convention, lines will be terminated by \tsfmt[verb]{\^{}\^{}J} (and not \tsfmt[verb]{\^{}\^{}M}), also with category code other. See the chapter ``Reassigning category codes'' (under ``Manipulating tokens in token lists'') from \citepkg*{expl3}, for details.
 \end{tsremark}
 
 By default no other character has its category code changed. This can be changed with the keys below, in which there are two cases: 
@@ -207,15 +260,15 @@ These keys are common to all main code verbatim commands and expect a comma sepa
 \tsmacro{\cvNewEnvironment}[keys]{env-name,arg spec,begin-code,end-code}
 \tsmacro{\codeverb_new_environment:nnnnn}{keys,env-name,signature,begin-code,end-code}
 \end{codesyntax}
-This will create a new document environment \tsobj[marg]{env-name}, following the \tsobj{\NewDocumentEnvironment}  structure. \tsobj[marg]{arg spec} is the desired \tsobj[marg]{env-name} parameter specification list (\tsobj{\NewDocumentEnvironment} 1st parameter, see \citepkgtitle{usrguide}). The \tsobj[marg]{begin-code} code will be executed before the verbatim code gets grabbed. The \tsobj[marg]{end-code} will be executed right after, see the keys \tsobj[key]{inline,verb tl} below for details on how to further handle the verbatim content.
+This will create a new document environment \tsobj[marg]{env-name}, following the \tsobj{\NewDocumentEnvironment}  structure. \tsobj[marg]{arg spec} is the desired \tsobj[marg]{env-name} parameter specification list (\tsobj{\NewDocumentEnvironment} 1st parameter, see \citepkg*{usrguide}). The \tsobj[marg]{begin-code} code will be executed before the verbatim code gets grabbed. The \tsobj[marg]{end-code} will be executed right after, see the keys \tsobj[key]{inline,verb tl} below for details on how to further handle the verbatim content.
 \end{codedescribe}
 \begin{tsremark}
-  If short verbatim commands are on (\tsobj[code,or]{\cvSVerbOn,\codeverb_sverb_on:}) those active characters will be made other (see \ref{codeverb:caveats}) after applying the characters category code defined here (with the common keys from \ref{codeverb:commonkeys}) and before applying the characters category code defined with \tsobj[code,or]{\cvEnvCCSet,\codeverb_env_catcode_set:n} (see \ref{codeverb:auxiliary-commands} below).
+  If short verbatim commands are on (\tsobj[code,or]{\cvSVerbOn,\codeverb_sverb_on:}) those active characters will be made other (see \ref{codeverb:caveats}) after applying the characters category code defined here (with the common keys from \ref{codeverb:commonkeys}) and before applying the characters category code defined with \tsobj[code,or]{\cvSetEnvCC,\codeverb_set_env_catcode:n} (see \ref{codeverb:auxiliary-commands} below).
 \end{tsremark}
 \tsobj[marg]{keys} can be any combination of (besides the ones from \ref{codeverb:commonkeys}):
 \begin{describelist*}{keys}
 
-  \describe{drop first}{(default: false) If the character following the environment begin until the line end shall be processed or discarded. The default behaviour is similar to other packages of the kind, like \tsobj[pkg,or]{listings,fancyvrb}}
+  \describe{drop first}{(default: true) If the character following the environment begin until the line end shall be processed or discarded. The default behaviour is similar to other packages of the kind, like \tsobj[pkg,or]{listings,fancyvrb}}
   \describe{drop blanks}{(default: false) If set to true, and the initial lines are blank, those lines will be discarded.}
   \describe{line proc}{(default: -nothing-) The given command shall grab 2 parameters. It will receive a single line (verbatim material) as the 2nd parameter and a temporary token list as the 1st parameter. The simplest command would be \tsobj{\tl_set:Nn} (no pre-processing at all). This can be used to pre-process the verbatim content, one line at a time. }
   \describe{inline}{(default: false) If set, \tsobj[marg]{end-code} will receive the verbatim material as \tsfmt{\#1}. This has precedence over the key \tsobj[key]{verb tl}.}
@@ -224,14 +277,14 @@ This will create a new document environment \tsobj[marg]{env-name}, following th
   Off course, the default is ok to be used in an \citepkg{expl3} code régime, you may want to change that.}
 \end{describelist*}
 
-\subsection{Auxiliary catcode Commands}\label{codeverb:auxiliary-commands}
+\subsubsection{catcode commands}\label{codeverb:auxiliary-commands}
 
-\begin{codedescribe}{\cvEnvCCSet , \codeverb_env_catcode_set:n}
+\begin{codedescribe}{\cvSetEnvCC , \codeverb_set_env_catcode:n}
 \begin{codesyntax}%
-\tsmacro{\cvEnvCCSet}{keys}
-\tsmacro{\codeverb_env_catcode_set:n}{keys}
+\tsmacro{\cvSetEnvCC}{keys}
+\tsmacro{\codeverb_set_env_catcode:n}{keys}
 \end{codesyntax}
-These are meant to be used in the \tsobj[marg]{begin-code} of a custom environment, allowing for further (local) customization of characters category code. \tsobj[marg]{keys} can be any combination of the common keys (see \ref{codeverb:commonkeys}). For example:
+These can only be used in the declaration of a new verbatim environment, and are meant to be used in the \tsobj[marg]{begin-code}, allowing for further (local) customization of characters category code. \tsobj[marg]{keys} can be any combination of the common keys (see \ref{codeverb:commonkeys}). For example:
 \end{codedescribe}
 \begin{codestore}[env-cctab]
   \cvNewEnvironment[drop first]{myEnv}{O{}}
@@ -246,7 +299,7 @@ These are meant to be used in the \tsobj[marg]{begin-code} of a custom environme
 
 \tscode*[codeprefix={}]{env-cctab}
 
-Note that the environment \tsobj[env]{myEnv} was defined with the default verbatim setup (category codes as in \ref{codeverb:commonkeys}) and, in this example, with a single optional parameter to allow changing the characters category code by the end user. 
+Note that the environment \tsobj[env]{myEnv} was defined with the default verbatim setup (category codes as in \ref{codeverb:commonkeys}). The single optional parameter allows the end user to change the category code of characters.
 \begin{tsremark}
   It won't replace the environment defaults, but will be applied after the environment setup.
 \end{tsremark}
@@ -255,7 +308,7 @@ Note that the environment \tsobj[env]{myEnv} was defined with the default verbat
    %Of course, if the end user gives a \tsobj[key]{cctab}, everything changes.
 \end{tsremark}
 
-\subsection{Auxiliary Store Commands}\label{codeverb:auxiliary}
+\subsection{Store commands}\label{codeverb:auxiliary}
 
 Besides just storing the verbatim content in a token list variable (key \tsobj[key]{verb tl} above) one has a few other options:
 \begin{itemize}[nosep]
@@ -276,14 +329,16 @@ These will create a set of commands prefixed with \tsobj[marg]{cs-base}, using a
 \end{describelist*}
 \end{codedescribe}
 
-\begin{codedescribe}{\<cs-base>PutRightnn ,  \<cs-base>Merge , \<cs-base>_gput_right:nn ,  \<cs-base>_merge:Nnn }
+\begin{codedescribe}{\<cs-base>PutRight ,  \<cs-base>PutRightnV , \<cs-base>Merge , \<cs-base>_gput_right:nn ,  \<cs-base>_gput_right:nV , \<cs-base>_merge:Nnn }
 \begin{codesyntax}%
-\tsmacro{\<cs-base>PutRightnn}{st-name,verb-content}
+\tsmacro{\<cs-base>PutRight}{st-name,verb-content}
+\tsmacro{\<cs-base>PutRight}{st-name,tl-var}
 \tsmacro{\<cs-base>Merge}{var,base-list,index-list}
 \tsmacro{\<cs-base>_gput_right:nn}{st-name,verb-content}
+\tsmacro{\<cs-base>_gput_right:nn}{st-name,tl-var}
 \tsmacro{\<cs-base>_merge:Nnn}{var,base-list,index-list}
 \end{codesyntax}
-The \tsobj{\<cs-base>PutRightnn} (or \tsobj{\<cs-base>_gput_right:nn}) will create (as needed) an internal sequence variable associated with \tsobj[marg]{st-name} and store \tsobj[marg]{verb-content} in it. Note, three other commands variants will be defined: \tsobj{\<cs-base>PutRightnV,\<cs-base>PutRightVV,\<cs-base>PutRightVn}, all expecting 2 parameters, the \tsobj{V} denoting if the first, second or all parameters are stored in an auxiliary \tsobj[marg]{tl-var} (\citepkg{expl3} \emph{var}, \LaTeXe{} command).
+The \tsobj{\<cs-base>PutRight} (or \tsobj{\<cs-base>_gput_right:nn}) will create (as needed) an internal sequence variable associated with \tsobj[marg]{st-name} and store \tsobj[marg]{verb-content} in it. The \tsobj{\<cs-base>PutRightnV,\<cs-base>_gput_right:nV} variants will store the content of a token list var, \tsobj[marg]{tl-var}.
 
 The \tsobj{\<cs-base>Merge} (or \tsobj{\<cs-base>_merge:Nnn}) will merge items of one, or more, of those sequences.
 \end{codedescribe}
@@ -316,7 +371,9 @@ For example:
 
 \tsobj{\tempB} will end up with the 1st item from \tsobj[marg]{case-A} followed by all items from the 3rd to the last one from  \tsobj[marg]{case-A}, then the 1st item from \tsobj[marg]{case-B} followed by all items from the 3rd to the last one from  \tsobj[marg]{case-B}.
 
-\begin{codedescribe}{\cvRetokenEnvNewCommand , \codeverb_retoken_env_newcs:nn }
+
+\subsection{Retokenizing}
+\begin{codedescribe}{\cvRetokenEnvNewCommand , \codeverb_retoken_env_newcs:nnn }
 \begin{codesyntax}%
 \tsmacro{\cvRetokenEnvNewCommand}[key]{env-cmd,env-name}
 \tsmacro{\codeverb_retoken_env_newcs:nnn}{key,env-cmd,env-name}
@@ -375,10 +432,10 @@ once defined, \tsobj{\VerbListingV} \tsobj{\g_codeverb_verb_body_tl} (err, the v
 \tsobj{\cvRetokenNewCommand,\codeverb_retoken_newcs:N} will make \tsobj[marg]{cmd} an alias to \tsobj{\tl_retokenize:n} (from \citepkg{expl3}), while \tsobj{\cvRetokenNewCommandV,\codeverb_retoken_newcsV:N}  will make \tsobj[marg]{cmd} an alias to \tsobj{\tl_retokenize:V}. These commands are just for completeness (with the previous set of commands, which retokenize some verbatim content inside a given environment). Moreover, their main aim is to allow  the code, grabbed as verbatim content, to be (re)used as \LaTeX{} commands/text, the same overall idea from the commands \tsobj{\getstored} (package \citepkg{scontents}) or \tsobj{\tsexec} (package \citepkg{codedescribe}).
 \end{codedescribe}
 
-\subsection{Auxiliary Display Commands}\label{codeverb:aux:display}
+\subsection{Display commands}\label{codeverb:aux:display}
 
 \ExplSyntaxOn
-\cvSVerbNew{||}{||}
+\cvSVerbNew{|*}{*|}
   { \tl_trim_left_spaces:n { #1 } }
 \ExplSyntaxOff
 \cvSVerbOn
@@ -388,10 +445,10 @@ once defined, \tsobj{\VerbListingV} \tsobj{\g_codeverb_verb_body_tl} (err, the v
 \tsmacro{\cvHideSpc}{text}
 \tsmacro{\codeverb_hide_spc:n}{text}
 \end{codesyntax}
-These will just replace every occurrence of a space (character code 32) by \tsobj{\space}. They are the default commands used by \tsobj{\cvSVerb,\codeverb_sverb:Nw} and are needed because (by default) spaces also have their category code changed to other (see \ref{codeverb:commonkeys}), resulting that spaces are visible as in ``|| example of visible spaces||''.
+These will just replace every occurrence of a space (character code 32) by \tsobj{\space}. They are the default commands used by \tsobj{\cvSVerb,\codeverb_sverb:Nw} and are needed because (by default) spaces also have their category code changed to other (see \ref{codeverb:commonkeys}), resulting that spaces are visible as in ``|* example of visible spaces*|''.
 \end{codedescribe}
 
-\subsection{Short Verbatim Commands}\label{codeverb:sverb}
+\subsection{Short Verbatim}\label{codeverb:sverb}
 
 The following commands aims at defining ``short cuts'' (active characters, as in other verbatim packages) allowing to grab short verbatim content and use it ``right away'', for instance, inside a paragraph. Unlike other verbatim packages, the following commands allow to customize the used characters category code, per command, as well to customize the action taken with the just grabbed verbatim content.
 
@@ -407,10 +464,19 @@ Both, \tsobj{\cvSVerb,\codeverb_sverb:Nw}, are the immediate commands. They will
   The category code of \tsobj[marg]{char} itself will be made other, regardless of the actual underlying category code in use whilst grabbing the content, the category code change being local.
 \end{tsremark}
 With \tsobj{\csSVerbSet,\codeverb_sverb_setcs:nn} one can customize the commands  \tsobj{\cvSVerb,\codeverb_sverb:Nw}.
- \tsobj[marg]{keys} can be any of the common keys (see \ref{codeverb:commonkeys}) and allow to change the effective category code table in use, whilst \tsobj[marg]{code} will receive the grabbed content as \tsfmt[verb]{\#1}. For instance, with \tsfmt[verb]{\tsobj{\cvSVerbSet}\{\#1\}} the content grabbed with \tsobj{\csSVerb} will be presented ``as is'' and visible spaces. Likewise, \tsfmt[verb]{\tsobj{\cvSVerbSet}\{ \{ \tsobj{\ttfamily} \#1 \} \}} will result that the content grabbed with \tsobj{\csSVerb} will be presented ``as is'' using the \tsobj{\ttfamily} (note the extra set of braces to localize the effect of the \tsobj{\ttfamily} command).
+ \tsobj[marg]{keys} can be any of the common keys (see \ref{codeverb:commonkeys}) and the following:
+ 
+ \begin{describelist*}{key}
+   \describe{no endmark}{This will suppress the ending mark, \tsobj{^ ^ J}, which is introduced by default  (following the \tsobj{\tl_retokenize:n} convention, see \citepkg[Reassigning category code]{expl3}) }
+ \end{describelist*}
+ 
+ \tsobj[marg]{code} will receive the grabbed content as \tsfmt[verb]{\#1}. For instance, with \tsfmt[code]{\tsobj{\cvSVerbSet}[no endmark]\{\#1\}} the content grabbed with \tsobj{\csSVerb} will be presented ``as is'' with visible spaces. Likewise, \tsfmt[verb]{\tsobj{\cvSVerbSet}\{ \{ \tsobj{\ttfamily} \#1 \} \}} will result that the content grabbed with \tsobj{\csSVerb} will be presented with  the \tsobj{\ttfamily} (note the extra set of braces to localize the effect of the \tsobj{\ttfamily} command).
 \end{codedescribe}
 \begin{tsremark}  
-  One can use \tsobj[code,or]{\hlDisplay,\codehl_display:nn} (see the section \emph{Display commands} from \citepkg{codehighlight}) when defining \tsobj[marg]{code}. Pay attention that those display commands expect the content to be terminated with a \tsfmt[verb]{\^{}\^{}J}. That for, use the \tsobj[key]{short verb} key (which will add that \tsfmt[verb]{\^{}\^{}J} to the grabbed content), for instance: \tsfmt[code]{\tsobj{\cvSVerbSet} \{ \tsobj{\hlDisplay}[inline,short verb]\{\#1\} \}}.
+  One can use \tsobj[code,or]{\hlDisplay,\codehl_display:nn} (see the section \emph{Display commands} from \citepkg{codehighlight}) when defining \tsobj[marg]{code}, for instance: \tsfmt[code]{\tsobj{\cvSVerbSet} \{ \tsobj{\hlDisplay}[inline]\{\#1\} \}}.
+\end{tsremark}
+\begin{tsremark}[\color{red}Warning:]
+  Those display commands (from \citepkg{codehighlight}) expect the content to be terminated with a \tsfmt[verb]{\^{}\^{}J}. Do not use the \tsobj[key]{no endmark} with them, otherwise a quark loop will ensue.
 \end{tsremark}
 
 \begin{codedescribe}{\cvSVerbNew,\cvSVerbOn,\cvSVerbOff,\codeverb_sverb_new:nnnn,\codeverb_sverb_on:,\codeverb_sverb_off:}
@@ -428,19 +494,19 @@ With \tsobj{\csSVerbSet,\codeverb_sverb_setcs:nn} one can customize the commands
 \cvSVerbOff
 \begin{codestore}[short-verb]
 \ExplSyntaxOn
-\codeverb_sverb_new:nnnn {} {||} {||}
+\codeverb_sverb_new:nnnn { no ~ endmark } {|*} {*|}
   { \tl_trim_left_spaces:n { #1 } }
 \ExplSyntaxOff
 
 \cvSVerbOn
-Example of use: || \cmd{#1}||
+Example of use: |* \cmd{#1}*|
 \cvSVerbOff
 \end{codestore}
 
 \tsdemo[codeprefix={},resultprefix={}]{short-verb}
 
 \begin{tsremark}
-  One can use \tsobj[code,or]{\hlDisplay,\codehl_display:nn} (see section \emph{Display commands} from package \citepkg{codehighlight}) when defining \tsobj[marg]{code}. Pay attention that those display commands expect the content to be terminated with a \tsfmt[verb]{\^{}\^{}J}. Use, then, the \tsobj[key]{short verb} key (which will add that \tsfmt[verb]{\^{}\^{}J} to the grabbed content), for instance: \tsfmt[code]{\tsobj{\cvSVerbNew} \{||\}\{||\}\{ \tsobj{\hlDisplay}[inline,short verb]\{\#1\} \}}.
+  \tsobj[marg]{keys} are the same from the \tsobj{cvSVerbSet,\codeverb_sverb_setcs:nn}. The same remarks and warning (regarding the \tsobj[key]{no endmark} key) applies.
 \end{tsremark}
 
 \subsubsection{Caveats}\label{codeverb:caveats}
@@ -453,7 +519,7 @@ A few caveats to be considered:
         For instance, one may want 3 definitions for \tsobj[marg]{start-patt}: \tsobj{|,||,|||}, in which case the longest one should be defined last.
       \end{tsremark}
       \begin{tsremark}[\color{red}Attention]
-        When looking ahead, \tsobj{\peek_regex:NTF} is used. One side effect is that the first character following the \tsobj[marg]{start-patt} will be grabbed with the current category code table (and not the verbatim one). In particular if the 1st character following \tsobj[marg]{start-patt} is a special one, like \tsverb[verb]{ \ } or \tsfmt[verb]{\#}, this will, probably, lead to low level errors. The work around is to use a single space after the \tsobj[marg]{start-patt}, since this 1st space will be grabbed with the current category code it can be easily removed with a command like \tsobj{\tl_trim_left_spaces:n} (as in the previous example) since it will (default settings) be the single space with category code 10 (space).
+        When looking ahead, \tsobj{\peek_regex:NTF} is used. One side effect is that the first character following the \tsobj[marg]{start-patt} will be grabbed with the current category code table (and not the verbatim one, see \citepkg[Peeking ahead at the next token]{expl3}). In particular if the 1st character following \tsobj[marg]{start-patt} is a special one, like \tsverb[verb]{ \ } or \tsfmt[verb]{\#}, this will, probably, lead to low level errors. The work around is to use a single space after the \tsobj[marg]{start-patt}, since this 1st space will be grabbed with the current category code it can be easily removed with a command like \tsobj{\tl_trim_left_spaces:n} (as in the previous example) since it will (default settings) be the single space with category code 10 (space).
       \end{tsremark}
   \item The characters made active by the \tsobj{\cvSVerbNew,\codeverb_sverb_new:nnnn}, while effectively actives (\tsobj{\cvSVerbOn}), will be made other when using a verbatim environment (see \ref{codeverb:newenv}) or using any of the short verbatim commands.
 \end{itemize}
@@ -468,172 +534,13 @@ A few caveats to be considered:
 \tsobj{\cvSVerbUndef,\codeverb_sverb_undef:n} will undefine the short cut associated with \tsobj[marg]{start-patt}, while \tsobj{\cvSVerbUndefAll,\codeverb_sverb_undef_all:} will undefine all current defined short cuts.
 \end{codedescribe}
 
-\newpage
+
+
 \section{Examples}
 
-In the following examples, for simplicity, mostly \LaTeXe{} commands are used. Furthermore, they are based on the commands from this package and the ones from \citepkg{codehighlight}, since this package alone has no provision for displaying the grabbed code content.
+In the following examples, for simplicity, mostly \LaTeXe{} commands are used. Furthermore, they are based on the commands from this package and the ones from \citepkg{codehighlight}, since this package alone has no provision for syntax highlight.
 
-\subsection{A minimal construct}
-A minimal construct could entice loading a pre-defined language (C in the example), setting the display settings to only recognize the keywords (therefore, no comment or string will be recognized), and define an environment which would display the collected verbatim code right away:
-\tscode*[codeprefix={}]{demo00}[1]
-
-\begin{codestore}[demo01]
-  \begin{DemoEnv}
-    for ( i=0 , i<10 , i++ ) {
-      g += i;
-    }
-    // a comment
-  \end{DemoEnv}
-\end{codestore}
-
-\tsdemo[codeprefix={},resultprefix={}]{demo01}[1]
-
-Changing the settings to include the language syntax:
-\tscode*[codeprefix={},resultprefix={}]{demo00}[2]
-\tsexec{demo00}[2]
-
-\begin{codestore}[demo01]
-  \begin{DemoEnv}
-    for ( i=0 , i<10 , i++ ) {
-      g += i;
-    }
-    // a comment 
-  \end{DemoEnv}
-\end{codestore}
-
-\tsdemo[codeprefix={},resultprefix={}]{demo01}[2]
-
-\subsection{Customizing the language}\label{examples}
-One can change an existing language definition, for instance, adding a \LaTeX{} escape (the \tsobj[key]{nestable} key is to allow it to be detected even inside another comment):
-
-\begin{codestore}[demo01]
-\hlLangDef{C}
-  {
-    active comment line = {1}{\$\$}{ nestable }
-  }
-\end{codestore}
-\tscode*[codeprefix={},resultprefix={}]{demo01}[3]
-\tsexec{demo01}[3]
-
-\begin{codestore}[demo01]
-  \begin{DemoEnv}
-    for ( i=0 , i<10 , i++ ) {
-      g += i;
-    }
-    // a comment $$ \textbf{this}
-  \end{DemoEnv}
-\end{codestore}
-
-\tsdemo[codeprefix={},resultprefix={}]{demo01}[4]
-
-\newpage
-\subsection{Further customization}
-One can use color to call attention to some parts of the code, in general this is achieved by customizing a \tsobj[marg]{hlset} (see section \emph{Highlight Sets} from \citepkg{codehighlight}). Note that, in the following example, \tsobj[marg]{std-hlset} is a pre-defined \tsobj[marg]{hlset} (the default one, if none is declared).
-\begin{codestore}[demo01]
-\hlLangDef{C}
-  {
-    comment line = {2}{//+}{ }
-  }
-\hlHLsetDef{std-hlset}
-  {
-    comment = {2}{\itshape\color{red}}
-  }
-\end{codestore}
-\tscode*[codeprefix={},resultprefix={}]{demo01}[5]
-\tsexec{demo01}[5]
-
-\begin{codestore}[demo01]
-  \begin{DemoEnv}
-    for ( i=0 , i<10 , i++ ) {
-      g += i;
-    }
-    // a comment $$ \textbf{this}
-    //+ very important comment
-  \end{DemoEnv}
-\end{codestore}
-
-\tsdemo[codeprefix={},resultprefix={}]{demo01}[6]
-
-\subsection{Using sequences}
-
-Note, the following example could be written in \LaTeXe{}, but, it's more natural to write it in \citepkg{expl3} (given the use of sequences).
-First a dedicated store command is created (see \ref{codeverb:auxiliary}) then an environment using it (see \ref{codeverb:newenv}).
-%%% TODO: rewrite it (package codeverbatim)
-\begin{codestore}[demo02]
-\ExplSyntaxOn
-
-  \codeverb_new_store_cmds:nn { } { DemoStore }
-  \cs_generate_variant:Nn \DemoStore_gput_right:nn { V } 
-
-  \codeverb_new_environment:nnnnn 
-    { 
-      drop ~ first, 
-      inline ,       % The environment end code will receive the verbatim code as #1
-      other =  { \^^K } ,
-    } 
-    {DemoStore} {O{default}} 
-    { %% Here, #1 is the environment optional parameter
-      \tl_set:Nn \DemoStore_tmp_tl {#1}
-    }
-    { %% Here, #1 is the collected verbatim code
-      \DemoStore_gput_right:Vn
-          \DemoStore_tmp_tl
-          { #1 }
-    }
-\ExplSyntaxOff  
-\end{codestore}
-
-\tscode*[codeprefix={},resultprefix={}]{demo02}[1]
-
-\tsexec{demo02}
-
-\begin{codestore}[demo02]
-\begin{DemoStore}[sampleA]
-      for ( i=0 , i<10 , i++ ) {
-      g += i;
-    }    // a comment $$ \textbf{this}
-\end{DemoStore}
-
-\begin{DemoStore}[sampleA]
-      for ( j=0 , j<10 , j++ ) {
-      h += i;
-    }    // a comment $$ \textbf{this too}
-\end{DemoStore}
-
-\DemoStoreMerge {\mymerged} {sampleA} {1-2}
-\hlDisplayV \mymerged
-\end{codestore}
- 
- Note that, the above code defines a new environment, \tsobj[env]{DemoStore}, which expects a single optional parameter: the `sequence name' to be used.
-Once a few verbatim snips are collected, they can be merged (command \tsobj{\DemoStoreMerge} below, created by the command \tsobj{\codeverb_new_store_cmds:nn} above) and then displayed as a simple peace.
- \tsdemo[codeprefix={},resultprefix={}]{demo02}[2]
- 
-
-\newpage
-\section{To do, Future plans}
-These are some aspects (and random ideas) that are either planned or that deserve some consideration:
-\begin{itemize}
-  \item grabbing code from an external file (codeverbatim): defining a 'text marker' (begging/end ... label).
-  \item optimize the background color code. It works as is, but, it's slow.
-  \item ``here code'' typical syntax $<<$Label or $<<$'Label'. Possible approach: \_scanT collects the next label and sets \_end\_regex.
-  \item handling of tabs (? fixed spacing or column mod num ?).
-  \item 'simple' identifiers :
-  \begin{itemize}
-    \item (maybe) <start>... followed by an explicit regex (expl3): not really an identifier (name it 'markers' ??) like <start> => \tsfmt{\#} <regex> \tsverb{\d\d\d | \d\d | \d} (that would make for \tsfmt{\#1} or \tsfmt{\#20} or \tsfmt{\#250} (Delphi)). That could also be used to highlight 'other keywords' (if they fit a regular expression).
-  \end{itemize}
-  \item 'delimited' identifiers :
-  \begin{itemize}
-    \item <start> ... <end> (some multi-word compiler directives). code problem: a `keyword' may contain an space then. phrase keywords.
-    \item (maybe) delimited identifier followed by regex (for instance, \citepkg{expl3} signatures). issue: needs a different/unique \tsobj[marg]{start-pattern} (no backtrack). 
-  \end{itemize}
-  
-  \item indexing might be implement in a similar way as it is in \citepkg{codedescribe}.
-  \item allow for further customization of line numbering: e.g. one every 5, or starting number, etc.
-  \item simula/algol comments peculiar syntax.
-  \item listings \tsobj[key]{procnamekeys} might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
-  \item writing code to an external file, albeit fairly simple, isn't planned for the time being.
-  \item improve the examples section.
-\end{itemize}
+\input{codeverbatim-cmm}
 
 \printbibliography
 

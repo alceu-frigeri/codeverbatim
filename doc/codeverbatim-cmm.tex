@@ -1,0 +1,453 @@
+%%%==============================================================================
+% WinEdt pragmas
+% !Mode:: "TeX:EN"
+% Default Compile engines:
+% !TEX program = pdflatex
+% !PDFTeXify ext =  --enable-etex  --restrict-write18
+% !PDFLaTeX ext  =  --enable-etex  --restrict-write18
+% !BIB program = biber
+%%%==============================================================================
+%% Copyright 2026-present by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {1.0} {2026/11/27}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/codeverbatim
+%%
+%%%==============================================================================
+%%% This is the codeverbatim/codehighlight 'common' part (examples and todo)
+%%%==============================================================================
+
+Moreover, for simplicity (and keeping them in sync) this section is duplicated in both packages, resulting in both packages being cited, \tsobj{\cite{}}, instead of using internal links, \tsobj{\ref{}}.
+
+\subsection{Preloading sets}
+ In the preamble (see \citepkg[Pre-defined sets]{codehighlight}):
+\tscode*[codehl]{demoLoad}[1]
+This will trigger the loading of the files associated with \tsobj[value]{C,php,TeX}. Note that, since \tsobj[value]{php} is based on \tsobj[value]{html} the file associated with it will also be loaded.
+\begin{tsremark}[\color{red}Warning:]
+  Keep in mind that loading of files can only happen in the preamble, otherwise an error will ensue.
+\end{tsremark}
+\begin{tsremark}
+  This isn't mandatory if, in the preamble, one uses \tsobj{\hlSettings}, referencing the desired language/set or \tsobj[code,sep=/]{\hlLangDef,\hlKeysetDef}, either extending or based on the desired language/set. Those commands also trigger the loading of the needed auxiliary files.
+\end{tsremark}
+
+\subsection{A minimal construct}
+A minimal construct could entice  setting  only  keywords (but no language, therefore, no comment or string will be recognized), and define an environment which will display the collected verbatim code right away (see \citepkg[Display Settings]{codehighlight} and \citepkg[New Verbatim Environment]{codeverbatim}):
+\tscode*[codehl]{demo00}[1]
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codehl]{demo01}[1]
+
+Changing the settings to include the language syntax:
+\tscode*[codehl]{demo00}[2]
+\tsexec{demo00}[2]
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment 
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codehl]{demo01}[2]
+
+\subsection{Customizing the language}\label{examples}
+One can change an existing language definition, for instance, adding a \LaTeX{} escape (the \tsobj[key]{nestable} key is to allow it to be detected even inside another comment, see \citepkg[Language Syntax]{codehighlight}):
+
+\begin{codestore}[demo01]
+\hlLangDef{C}
+  {
+    active comment line = {1}{\$\$}{ nestable }
+  }
+\end{codestore}
+\tscode*[codehl]{demo01}[3]
+\tsexec{demo01}[3]
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment $$ \textbf{this:} $A_i$
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codehl]{demo01}[4]
+
+
+\subsection{Further customization}
+One can use color to call attention to some parts of the code, in general this is achieved by customizing a \tsobj[marg]{hlset} (see \citepkg[Highlight Sets]{codehighlight}). Note that, in the following example, \tsobj[marg]{std-hlset} is a pre-defined \tsobj[marg]{hlset} (starting one).
+\begin{codestore}[demo01]
+\hlLangDef{C}
+  {
+    comment line = {2}{//+}{ }
+  }
+\hlHLsetDef{std-hlset}
+  {
+    comment = {2}{\itshape\color{red}}
+  }
+\end{codestore}
+\tscode*[codehl]{demo01}[5]
+\tsexec{demo01}[5]
+
+\begin{codestore}[demo01]
+  \begin{DemoEnv}
+    for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }
+    // a comment $$ \textbf{this:} $A_i$
+    //+ really important comment
+  \end{DemoEnv}
+\end{codestore}
+
+\tsdemo[codehl]{demo01}[6]
+
+\subsection{Using sequences}
+
+Note, the following example could be written in \LaTeXe{}, but, it's more natural to write it in \citepkg{expl3} (given the use of sequences).
+First a dedicated store command is created (see \citepkg[Store commands]{codeverbatim}) then an environment using it (see \citepkg[New Verbatim Environment]{codeverbatim}).
+
+\begin{codestore}[demo02]
+\ExplSyntaxOn
+
+  \codeverb_new_store_cmds:nn { } { DemoStore }
+  \cs_generate_variant:Nn \DemoStore_gput_right:nn { V } 
+
+  \codeverb_new_environment:nnnnn 
+    { 
+      drop ~ first, 
+      inline ,       % The environment end code will receive the verbatim code as #1
+      other =  { \^^K } ,
+    } 
+    {DemoStore} {O{default}} 
+    { %% Here, #1 is the environment optional parameter
+      \tl_set:Nn \DemoStore_tmp_tl {#1}
+    }
+    { %% Here, #1 is the collected verbatim code
+      \DemoStore_gput_right:Vn
+          \DemoStore_tmp_tl
+          { #1 }
+    }
+\ExplSyntaxOff  
+\end{codestore}
+
+\tscode*[codehl]{demo02}[1]
+
+\tsexec{demo02}
+
+\begin{codestore}[demo02]
+\begin{DemoStore}[sampleA]
+      for ( i=0 , i<10 , i++ ) {
+      g += i;
+    }    // a comment $$ \textbf{this:} $A_i$
+\end{DemoStore}
+
+\begin{DemoStore}[sampleA]
+      for ( j=0 , j<10 , j++ ) {
+      h += i;
+    }    // a comment $$ \textbf{this too:} $B_j$
+\end{DemoStore}
+
+\DemoStoreMerge {\mymerged} {sampleA} {1-2}
+\hlDisplayV \mymerged
+\end{codestore}
+ 
+ The code above defines a new environment, \tsobj[env]{DemoStore}, which expects a single optional parameter: the `sequence name' to be used.
+Once a few verbatim snips are collected, they can be merged (command \tsobj{\DemoStoreMerge} below, created by the command \tsobj{\codeverb_new_store_cmds:nn} above) and then displayed as a simple piece. 
+
+ \tsdemo[codehl]{demo02}[2]
+ 
+
+
+\begin{codestore}[demoSettings]
+  \hlBasefmtDef { ShortVerb }  %%% all non given keys start with their default values
+    { inline }
+\end{codestore}
+
+\begin{codestore}[demoSettings]
+  \hlSettingsDef { PHP }
+    {
+      based on language    = { php }  ,
+      based on keywd set   = { html , php }  ,
+      based on hl set      = { std-hlset }  ,
+      based on base format = { ShortVerb } 
+    }
+\end{codestore}
+    
+\begin{codestore}[demoSettings]
+  \hlSettingsDef { C++ }
+    {
+      based on language    = { C++ }  ,
+      based on keywd set   = { C , C++ }  ,
+      based on hl set      = { std-hlset }  ,
+      based on base format = { std-basefmt } 
+    }
+\end{codestore} 
+
+\begin{codestore}[demoSettings]
+  \hlSettingsDef { C }
+    {
+      based on language    = { C }  ,
+      based on keywd set   = { C }  ,
+      based on hl set      = { std-hlset }  ,
+      based on base format = { std-basefmt } 
+    }
+\end{codestore} 
+
+\begin{codestore}[demoSettings]
+  \hlSettingsDef { TeX }
+    {
+      based on language    = { TeX }  ,
+      based on keywd set   = { TeX.common }  ,
+      based on hl set      = { std-hlset }  ,
+      based on base format = { ShortVerb } 
+    }
+\end{codestore} 
+
+\tsexec{demoSettings}[1-5]
+
+%\hlSettingsSelect{TeX}
+%\hlShow{ settings show all}
+
+\begin{codestore}[demoSverb]
+\cvSVerbNew [no endmark]{|}{|}
+  {#1}
+  
+\cvSVerbNew {||}{||}
+  {\hlSettingsSelect{TeX}\hlDisplay[inline]{#1}}
+  
+\cvSVerbNew {|<}{>|}
+  {\hlSettingsSelect{PHP}\hlDisplay{#1}}
+  
+\cvSVerbNew {|(}{)|}
+  {\hlSettingsSelect{C++}\hlDisplay[inline]{#1}}  
+\end{codestore}
+
+\tsexec{demoSverb}
+
+ \subsection{Verbatim shortcuts}
+
+
+ The following is to be used with short verbatim commands (see \citepkg[Short Verbatim]{codeverbatim}). 
+
+\tscode*[codehl]{demoSettings}[1]
+
+  \subsubsection{Custom settings}  
+A few dedicated settings, per language:
+
+\tscode*[codehl]{demoSettings}[2]
+
+\tscode*[codehl]{demoSettings}[3]
+
+\tscode*[codehl]{demoSettings}[4]
+
+\tscode*[codehl]{demoSettings}[5]
+
+
+Note that, all sets have their own ``name space'', You can have a settings named ``C++'', a language named ``C++'', a keyword set named ``C++'' and so own. None correlated, or attached, to the other.
+%\hlShow{basefmt show = ShortVerb }
+
+\subsubsection{Custom highlight set}
+Besides being an example of a custom highlight set, this is just to emphasize the use of the shortcuts commands in the following examples.
+
+\begin{codestore}[demoHL]
+\hlHLsetDef { std-hlset }
+  {
+   keywd  = {1}{\bfseries\color{blue}} ,
+   php    = {1}{\bfseries\color{red}}  ,
+   html   = {1}{\bfseries\color{green}}  ,
+   string = {2}{\slshape\color{white!50!red}}  ,
+   string = {1}{\slshape\color{white!50!black}}  ,
+  }
+\end{codestore}
+\tsexec{demoHL}  
+
+\tscode*[codehl]{demoHL}
+
+
+
+\subsubsection{Custom shortcuts}
+
+The following will define 4 shortcuts, one ``raw'' (showing spaces), one for \TeX{} commands, one for C++ and another one for html/php (see \citepkg[Short Verbatim]{codeverbatim}). 
+
+\tscode*[codehl]{demoSverb}
+
+Note that, in the first case, since the collected code will be used ``raw'' (no processing), the \tsobj[key]{no endmark} is used to suppress the insertion of an end mark, \tsobj{^ ^ J}, which would, otherwise, be rendered as an small speck, like \tsfmt{^^J}.
+
+\begin{tsremark}
+  If the key \tsobj[key]{inline} is part of the base format, it is possible to omit it when using \tsobj{\hlDisplay}.
+\end{tsremark}
+
+\begin{codestore}[demoverb]
+%% this will set it, plain verbatim text, hidding spaces.
+\cvSVerbSet[no  endmark]{\cvHideSpc{#1}}
+
+then you can have \cvSVerb!a \short \one ...! in the middle of some text.
+\end{codestore}
+
+Using an explicit short verbatim command
+\tsdemo*[codehl]{demoverb}
+
+Or a more elaborated example of use, turning on the short verbatim shortcuts, \tsobj{\cvSVerbOn}
+\begin{codestore}[demoverb]
+\cvSVerbOn
+  A more elaborated case, 
+  showing spaces,  |quick \and \simple| or 
+  some \LaTeX{} source code like || this is \TeX{} || followed by 
+  simple php |< <?php echo "some text"; ?> some other echo >|, 
+  why not C like |( for ( j=0 , j<10, j++) )| or 
+  some php inside some html |< <a source="<?php echo "some text"; ?>" > and &nbsp;  >|. 
+  All in the same paragraph.
+  
+\cvSVerbOff
+\end{codestore}
+
+\tsdemo*[codehl]{demoverb}
+
+\begin{tsremark}
+  When using these shortcuts, take note that \tsobj{\peek_regex:NTF} is used to recognize the many commands that start with the same (active) character, which has the side effect that the first following character will be captured with the current code régime. See \citepkg[{Short Verbatim},{caveats}]{codeverbatim} for details.
+\end{tsremark}
+
+\subsection{A floating environment}
+
+Using the package \citepkg{newfloat}, one can declare a new floating environment (including a ``list of ...'') as follow:
+
+\tscode*[codehl]{demofloat}
+
+Then, it's a matter of declaring a dedicated verbatim environment that uses the floating environment declared above:
+\begin{codestore}[demofloat]
+\ExplSyntaxOn
+  \codeverb_new_environment:nnnnn 
+    { 
+      drop ~ first, 
+      inline ,       % The environment end code will receive the verbatim code as #1
+    } 
+    {DemoFloat} {m} 
+    { %% Here, #1 is the environment optional parameter
+      \tl_set:Nn \l_caption_tl {#1}
+    }
+    { %% Here, #1 is the collected verbatim code
+      \begin{floatenv}
+        \exp_args:No \caption \l_caption_tl
+        \hlSettingsSelect{C}
+        \hlDisplay{#1}
+      \end{floatenv}
+    }
+\ExplSyntaxOff
+\end{codestore}
+
+\tscode*[codehl]{demofloat}
+\tsexec{demofloat}
+
+Lastly, one can just use it as any other floating environment:
+
+\begin{codestore}[demofloat]
+\begin{DemoFloat}{C sample}
+  for ( i=0 , i<10 , i++ ) {
+    g += i;
+  }    // a detail $$ $B_j$
+\end{DemoFloat}
+\end{codestore}
+
+\tscode*[codehl]{demofloat}
+
+\tsexec{demofloat}
+
+\subsection{Using listings with codeverbatim}
+Another possibility, is using \citepkg{codeverbatim} together with \citepkg{listings}, that for is enough to set a \tsobj[pkg]{listings} environment (see it's manual for details), a ``retokenizing'' command to re-scan the verbatim code with \tsobj[pkg]{listings}, \tsobj{\cvRetokenEnvNewCommand} below, see \citepkg[Retokenizing]{codeverbatim}, and a verbatim environment which uses the ``retokenizing'' command:
+
+\begin{codestore}[demoListings]
+\lstnewenvironment{cvlst}
+  { \lstset{language=Pascal} }
+  {}
+
+\cvRetokenEnvNewCommand
+  {cvlisting} {cvlst}
+
+  \cvNewEnvironment 
+    [
+      drop first = false, 
+      inline ,       % The environment end code will receive the verbatim code as #1
+      other =  { \^^K } ,
+    ] 
+    {DemoListing} {} 
+    { %% Here, #1 is the environment optional parameter
+    }
+    { %% Here, #1 is the collected verbatim code
+      %% note the preceeding ^^J 
+      \cvlisting {^^J #1}
+    }
+\end{codestore}
+
+\tsexec{demoListings}
+
+\tscode*[codehl]{demoListings}
+\begin{tsremark}
+ The \tsobj{^ ^ J} is to ``give'' listings a first empty line, so it won't complain about it.
+\end{tsremark}
+ 
+ 
+Thereafter, this is like any other listing environment, though, one where one could further customize every aspect of it, like preprocessing the code, using sequences to store the code before retokenizing it, etc..
+
+ \begin{codestore}[demoListings]
+\begin{DemoListing}
+ for i:=maxint to 0 do
+ begin
+ { do nothing }
+ end;
+
+ Write('Case insensitive ');
+ WritE('Pascal keywords.');
+\end{DemoListing}
+ \end{codestore}
+
+\tsdemo*[codehl]{demoListings}
+
+
+\section{To do, Future plans}
+These are some aspects (and random ideas) that are either planned or that deserve some consideration:
+\begin{itemize}
+  \item grabbing code from an external file (codeverbatim): defining a 'text marker' (begging/end ... label).
+  \item optimize the background color code. It works as is, but, it's slow.
+  \item ``here code'' typical syntax $<<$Label or $<<$'Label'. Possible approach: \_scanT collects the next label and sets \_end\_regex.
+  \item handling of tabs (? fixed spacing or column mod num ?).
+  \item 'simple' identifiers :
+  \begin{itemize}
+    \item (maybe) <start>... followed by an explicit regex (expl3): not really an identifier (name it 'markers' ??) like <start> => \tsfmt{\#} <regex> \tsverb{\d\d\d | \d\d | \d} (that would make for \tsfmt{\#1} or \tsfmt{\#20} or \tsfmt{\#250} (Delphi)). That could also be used to highlight 'other keywords' (if they fit a regular expression).
+  \end{itemize}
+  \item 'delimited' identifiers :
+  \begin{itemize}
+    \item <start> ... <end> (some multi-word compiler directives). code problem: a `keyword' may contain an space then. phrase keywords.
+    \item (maybe) delimited identifier followed by regex (for instance, \tsobj[pkg]{expl3} signatures). issue: needs a different/unique \tsobj[marg]{start-pattern} (no backtrack). 
+  \end{itemize}
+  \item (maybe) blank lines at the end (codeverbatim?)... possible, but would  need some temp (seq? tl? int?)  holding 'blank lines' (delayed insertion) ... waiting to see if something else comes along...main problem: user supplied 'line processing'... before or after it?
+  \item indexing might be implement in a similar way as it is in \tsobj[pkg]{codedescribe}.
+  \item allow for further customization of line numbering: e.g. one every 5, or starting number, etc.
+  \item (maybe) change the markers from \tsobj{\q_nil} to something more end user safe, like \tsobj[code,or]{\s_stop,\scan_stop:} (``drawback'' no pre-existent cmd like \tsobj{\quark_if_nil:}... but could prevent a quark loop in case of misuse.)
+  \item simula/algol comments peculiar syntax.
+  \item listings \tsobj[key]{procnamekeys} might be implemented. Idea: add another 'list' (like identifiers) whose 'result' would be setting a flag for the following keyword.
+  \item writing code to an external file, albeit fairly simple, isn't planned for the time being.
+  \item improve the examples section.
+\end{itemize}
+

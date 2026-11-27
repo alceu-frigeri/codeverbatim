@@ -13,10 +13,7 @@ For more details,  see the documentation,
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*).
 
 ## Installation
-  <strike>The stable version is available at [CTAN](https://ctan.org/pkg/codehighlight).</strike>
-  This ísn't a published package at CTAN
-
-Copy the latex subtree to a place your latex installation can see.
+  The stable version is available at [CTAN](https://ctan.org/pkg/codeverbatim).
 
 ## Usage
 Just place
@@ -56,6 +53,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 * codeverbatim.bib
 * codeverbatim.tex
+* codeverbatim-cmm.tex
     - package documentation
     
 * codeverbatim.pdf

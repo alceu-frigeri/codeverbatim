@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {1.0} {2026/11/18}
+%% This is version {1.0} {2026/11/27}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/codeverb
@@ -34,7 +34,7 @@
   {
      name        = {codeverbatim} ,
      prefix      = {codeverb} ,
-     date        = {2026/11/18} ,
+     date        = {2026/11/27} ,
      version     = {1.0} ,
      description = {Verbatim Environment for codelisting}
   }
@@ -97,16 +97,14 @@
     \msg_line_context: \iow_newline:
     (#1)~Short~ Verbatim~ commands~ are ~already~active.~command~ignored.
   }
-  {
-  }
+  {  }
 
 \msg_new:nnnn { codeverbatim } { sverb already off }
   {
     \msg_line_context: \iow_newline:
     (#1)~Short~ Verbatim~ commands~ aren't ~active.~command~ignored.
   }
-  {
-  }
+  {  }
 
 \cs_generate_variant:Nn \regex_const:Nn { c }
 \cs_generate_variant:Nn \tl_retokenize:n { e , o }
@@ -114,30 +112,44 @@
 
 %\tl_new:N \l__codeverb_dummy_tl %% This is a dummy, to be 'absorbed' ... see 'weird comment'
 
-\bool_new:N \l__codeverb_first_entry_bool
-\bool_new:N \l__codeverb_drop_first_bool
-\bool_new:N \l__codeverb_drop_blanks_bool
+\bool_new:N        \l__codeverb_first_entry_bool
+\bool_new:N        \l__codeverb_drop_first_bool
+\bool_new:N        \l__codeverb_drop_blanks_bool
 
-\bool_new:N \g__codeverb_tmp_build_tl
-\bool_new:N \l__codeverb_tmpii_build_tl
+\bool_new:N        \g__codeverb_tmp_build_tl
+\bool_new:N        \l__codeverb_tmpii_build_tl
 
-\tl_new:N \g__codeverb_tmpa_tl
-\tl_new:N \l__codeverb_tmpa_tl
-\tl_new:N \l__codeverb_tmpb_tl
-\tl_new:N \l__codeverb_tmpc_tl
-\tl_new:N \l__codeverb_tmpd_tl
+\tl_new:N          \g__codeverb_tmpa_tl
+\tl_new:N          \l__codeverb_tmpa_tl
+\tl_new:N          \l__codeverb_tmpb_tl
+\tl_new:N          \l__codeverb_tmpc_tl
+\tl_new:N          \l__codeverb_tmpd_tl
 
-\tl_new:N \l__codeverb_left_tl
-\tl_new:N \l__codeverb_right_tl
+\tl_new:N          \l__codeverb_tmpab_tl
+\tl_new:N          \l__codeverb_tmpcd_tl
 
-\seq_new:N \l__codeverb_tmpa_seq
-\seq_new:N \l__codeverb_lastline_seq
+\tl_new:N          \l__codeverb_left_tl
+\tl_new:N          \l__codeverb_right_tl
 
-%%% Just in case, but probably not needded
-%\str_const:Ne \c__codeverb_hidden_space_str
-%  { \c_percent_str \c_circumflex_str \c_circumflex_str A scheol \c_percent_str }
+\seq_new:N         \l__codeverb_tmpa_seq
+\seq_new:N         \l__codeverb_lastline_seq
 
-\seq_new:N \l__codeverb_other_seq
+\seq_new:N         \l__codeverb_other_seq
+
+\prop_new_linked:N \l__codeverb_sverb_prop
+\prop_new_linked:N \l__codeverb_sverb_scan_prop
+\seq_new:N         \l__codeverb_sverb_seq
+\seq_new:N         \l__codeverb_sverb_self_activ_seq
+\bool_new:N        \l__codeverb_sverb_build_bool
+\bool_new:N        \l__codeverb_sverb_on_bool
+\int_new:N         \l__codeverb_sverb_cnti_int
+\int_new:N         \l__codeverb_sverb_cntii_int
+\int_new:N         \l__codeverb_sverb_patt_cnt_int
+
+\seq_new:N         \l__codeverb_opt_other_seq
+\seq_new:N         \l__codeverb_opt_letter_seq
+
+
 
 \cs_new:Npn \__codeverb_set_other:N #1
   {
@@ -257,18 +269,8 @@
 
 \cs_generate_variant:Nn \regex_set:Nn { co }
 
-\int_new:N \g__codeverb_sverb_int
-
-%%% TODO:: move this to, perhaps, codecmm (from codedescribe...)
-%%%
 %%%%%%%
-%%% This is defined both in
-%%% codehl   => \__codehl_lang_get_dlimit:nNN
-%%%             \__codehl_regex_sanitize:N
-%%% codeverb => \__codeverb_get_dlimit:nNN
-%%%             \__codeverb_regex_sanitize:N
-%%%
-%%% to avoid cross dependence
+%%% see codehighlight (keep them in sync)
 %%%%%%%
 
 %%%%%%%
@@ -279,12 +281,17 @@
   { \regex_replace_all:NnN \c__codeverb_tr_regex { \\ \1 } }
 
 \regex_const:Nn \c__codeverb_escape_regex { \\(.) }
-\cs_new_protected:Npn \__codeverb_dlimit:nNN #1
+
+%%%
+%%% This 'saves' the pattern pre-sanitizing it
+%%%
+\cs_new_protected:Npn \__codeverb_dlimit:nNNN #1#2
   {
-    \str_set:Nn \l__codeverb_tmpa_str { #1 }
-    \tl_remove_all:Nn \l__codeverb_tmpa_str { ~ }
-    \regex_replace_all:NnN \c__codeverb_escape_regex { \1 } \l__codeverb_tmpa_str
-    \exp_last_unbraced:No \__codeverb_dlimit:wNN \l__codeverb_tmpa_str \q_stop
+    \str_set:Nn #2 { #1 }
+    \tl_remove_all:Nn #2 { ~ }
+    \regex_replace_all:NnN
+      \c__codeverb_escape_regex {\1} #2
+    \exp_last_unbraced:No \__codeverb_dlimit:wNN #2 \q_stop
   }
 
 \cs_new_protected:Npn \__codeverb_dlimit:wNN #1#2 \q_stop #3#4
@@ -292,7 +299,10 @@
     \tl_set:Nn #3 { #1 }
     \tl_if_blank:nTF { #2 }
       { \tl_clear:N #4 }
-      { \tl_set:Nn #4 { #2 } }
+      {
+        \tl_set:Nn #4 { #2 }
+        \__codeverb_regex_sanitize:N #4
+      }
   }
 
 %%%%%%%
@@ -304,21 +314,6 @@
     \tl_set:Nn #3 { #1 }
     \tl_if_blank:nTF { #2 }
   }
-
-\prop_new_linked:N \l__codeverb_sverb_prop
-\prop_new_linked:N \l__codeverb_sverb_scan_prop
-\seq_new:N \l__codeverb_sverb_seq
-\seq_new:N \l__codeverb_sverb_self_activ_seq
-\bool_new:N \l__codeverb_sverb_build_bool
-\bool_new:N \l__codeverb_sverb_on_bool
-\int_new:N \l__codeverb_sverb_cnti_int
-\int_new:N \l__codeverb_sverb_cntii_int
-\int_new:N \l__codeverb_sverb_patt_cnt_int
-
-\seq_new:N \l__codeverb_opt_other_seq
-\seq_new:N \l__codeverb_opt_letter_seq
-
-\clist_new:N \l__codeverb_opt_other_clist
 
 \keys_define:nn { codeverb / common keys }
   {
@@ -347,31 +342,26 @@
           \l__codeverb_opt_letter_seq
           { #1 }
       } ,
-
-%    cctab         .code:n =
-%      {
-%        \cctab_if_exist:cTF { #1 }
-%          {
-%            %%% it's either that
-%            \tl_set:Nn \l__codeverb_opt_cctab_tl { #1 }
-%          }
-%          { %%% \msg_err... it doesn't exist
-%          }
-%      } ,
-%    cctab       .value_required:n = true ,
-
  }
+
+\seq_const_from_clist:Nn \c__codeverb_default_other_seq
+  {
+    \~  , \     , \\    , \{    , \}    ,
+    \#  , \&    , \$    , \^    , \_    ,
+    \%  , \^^A  , \^^I  , \^^J  , \^^K
+  }
+
+\seq_const_from_clist:Nn \c__codeverb_default_letter_seq
+  { }
 
 \cs_new_protected:Npn \__codeverb_opt_catcodes_default:
   {
-    \seq_set_from_clist:Nn \l__codeverb_opt_other_seq
-      {
-        \~  , \     , \\    , \{    , \}    ,
-        \#  , \&    , \$    , \^    , \_    ,
-        \%  , \^^A  , \^^I  , \^^J  , \^^K
-      }
-    \seq_clear:N \l__codeverb_opt_letter_seq
-    \tl_clear:N \l__codeverb_opt_cctab_tl
+    \seq_set_eq:NN
+      \l__codeverb_opt_other_seq
+      \c__codeverb_default_other_seq
+    \seq_set_eq:NN
+      \l__codeverb_opt_letter_seq
+      \c__codeverb_default_letter_seq
   }
 
 \cs_new_protected:Npn \__codeverb_sanitize_list:nNn #1#2#3
@@ -394,14 +384,7 @@
 \cs_new_protected:Npn \__codeverb_ccset_new:n #1
   {
     \tl_clear:N \l__codeverb_tmpa_tl
-%    \tl_if_empty:NTF \l__codeverb_opt_cctab_tl
-%      { \tl_clear:N \l__codeverb_tmpa_tl }
-%      {
-%        \tl_set:Ne  \l__codeverb_tmpa_tl
-%          {
-%            \exp_not:N \cctab_select:N \exp_not:c { \l__codeverb_opt_cctab_tl }
-%          }
-%      }
+
     \seq_if_empty:NF \l__codeverb_opt_other_seq
       {
         \seq_set_eq:cN { __codeverb_ #1 _other_seq }
@@ -439,7 +422,9 @@
 \cs_new_protected:Npn \codeverb_sverb_new:nnnn #1#2#3#4
   {
     \__codeverb_opt_catcodes_default:
-    \keys_set:nn { codeverb / common keys }
+    \__codeverb_opt_sverb_default:
+
+    \keys_set:nn { codeverb / short verb }
       { #1 }
 
     \bool_if:NTF \l__codeverb_sverb_on_bool
@@ -453,33 +438,36 @@
 
         \__codeverb_ccset_new:n { sverb_ \int_use:N \g__codeverb_sverb_cnt_int }
 
-        \__codeverb_dlimit:nNN
+        \__codeverb_dlimit:nNNN
           { #2 }
+          \l__codeverb_tmpab_tl
           \l__codeverb_tmpa_tl \l__codeverb_tmpb_tl
 
-        \tl_set_eq:NN \l__codeverb_tmpe_tl \l__codeverb_tmpb_tl
-
-        \__codeverb_regex_sanitize:N \l__codeverb_tmpe_tl
-
-        \__codeverb_dlimit:nNN
+        \__codeverb_dlimit:nNNN
           { #3 }
+          \l__codeverb_tmpcd_tl
           \l__codeverb_tmpc_tl \l__codeverb_tmpd_tl
 
+        \bool_if:NTF \l__codeverb_opt_sans_J_bool
+          { \tl_set:Nn \l__codeverb_tmpc_tl {     } }
+          { \tl_set:Nn \l__codeverb_tmpc_tl { ^^J } }
+
         \prop_put:Nee \l__codeverb_sverb_prop
-          { \exp_not:o \l__codeverb_tmpa_tl \exp_not:o \l__codeverb_tmpb_tl }
+          { \exp_not:o \l__codeverb_tmpab_tl }
           {
             { \exp_not:o \l__codeverb_tmpa_tl }
             {
               { \exp_not:o \l__codeverb_tmpa_tl }
-              { \exp_not:o \l__codeverb_tmpe_tl }
-              { \exp_not:o \l__codeverb_tmpc_tl \exp_not:o \l__codeverb_tmpd_tl }
+              { \exp_not:o \l__codeverb_tmpb_tl }
+              { \exp_not:o \l__codeverb_tmpcd_tl }
               { \exp_not:n { #4 } }
               { \exp_not:c { __codeverb_sverb_ \int_use:N \g__codeverb_sverb_cnt_int _ccset: } }
+              { \exp_not:o \l__codeverb_tmpc_tl }
             }
           }
 
         \seq_put_right:Ne \l__codeverb_sverb_seq
-          { \exp_not:o \l__codeverb_tmpa_tl \exp_not:o \l__codeverb_tmpb_tl }
+          { \exp_not:o \l__codeverb_tmpab_tl }
 
         \bool_set_false:N \l__codeverb_sverb_build_bool
       }
@@ -493,7 +481,7 @@
           { sverb02 }
       }
       {
-        %%% since removing an item from a sequence is expensive (_map_inline... + tmp _seq)
+        %%% since removing a specific item from a sequence is expensive (_map_inline... + tmp _seq)
         %%% it's only removed from the main prop
         \prop_remove:Nn \l__codeverb_sverb_prop { #1 }
         \bool_set_false:N \l__codeverb_sverb_build_bool
@@ -574,7 +562,7 @@
 
                 \seq_map_inline:Nn ##2
                   {
-                    \__codeverb_sverb_onbuild:Nnnnn ####1
+                    \__codeverb_sverb_onbuild:Nnnnnn ####1
                   }
 
                 \prop_put:Nne \l__codeverb_sverb_scan_prop
@@ -594,7 +582,6 @@
           { \__codeverb_sverb_set_on:NNNNN ##2 }
         \bool_set_true:N \l__codeverb_sverb_on_bool
       }
-
   }
 
 \cs_generate_variant:Nn \regex_show:N { c }
@@ -655,17 +642,27 @@
   }
 \cs_generate_variant:Nn \__codeverb_sverb_save:Nn { No }
 
-%%% #5 (was) _clist (others)
-\cs_new_protected:Npn \__codeverb_sverb_onbuild:Nnnnn #1#2#3#4#5
+%%%%%%%
+%%% #1 1st char
+%%% #2 rest start-pattern, sanitized
+%%% #3 end-pattern
+%%% #4 user command
+%%% #5 \c{...ccset:}
+%%% #6 ^^J or not...
+%%%%%%%
+\cs_new_protected:Npn \__codeverb_sverb_onbuild:Nnnnnn #1#2#3#4#5#6
   {
     \tl_set:Ne \l__codeverb_tmpa_tl
       { \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _cs: } }
     \int_incr:N \l__codeverb_sverb_cntii_int
 
-    \cs_set:cpn { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _scan:w } ##1 #3
+    \cs_set:cpn { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _usercmd:n } ##1
+      { #4 }
+
+    \cs_set:cpe { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _scan:w } ##1 #3
       {
-        \group_end:
-        #4
+        \exp_not:N \group_end:
+        \exp_not:c { __codeverb_sverb_ \int_use:N \l__codeverb_sverb_cnti_int . \int_use:N \l__codeverb_sverb_cntii_int _usercmd:n } { ##1 #6 }
       }
 
     \seq_put_right:Nn \l__codeverb_sverb_self_activ_seq
@@ -719,20 +716,46 @@
   }
 
 \regex_const:Nn \c__codeverb_spc_regex { \ }
-\tl_new:N \l__codeverb_tmpY_tl
+\tl_new:N \l__codeverb_hide_spc_tmp_tl
+
 \cs_new:Npn \codeverb_hide_spc:n #1
   {
-    \tl_set:Nn \l__codeverb_tmpY_tl { #1 }
-    \regex_replace_all:NnN \c__codeverb_spc_regex { \c{ space } } \l__codeverb_tmpY_tl
-    \l__codeverb_tmpY_tl
+    \tl_set:Nn \l__codeverb_hide_spc_tmp_tl { #1 }
+    \regex_replace_all:NnN \c__codeverb_spc_regex { \c{ space } } \l__codeverb_hide_spc_tmp_tl
+    \l__codeverb_hide_spc_tmp_tl
   }
 \cs_set_eq:NN \cvHideSpc \codeverb_hide_spc:n
+
+\keys_define:nn { }
+  { codeverb / short verb .inherit:n = codeverb / common keys }
+
+\keys_define:nn { codeverb / short verb }
+  {
+    no ~ endmark .bool_set:N = \l__codeverb_opt_sans_J_bool
+  }
+\cs_new_protected:Npn \__codeverb_opt_sverb_default:
+  {
+    \bool_set_false:N \l__codeverb_opt_sans_J_bool
+  }
 
 \cs_new_protected:Npn \codeverb_sverb_setcs:nn #1#2
   {
     \__codeverb_opt_catcodes_default:
-    \keys_set:nn { codeverb / common keys }
+    \__codeverb_opt_sverb_default:
+    \keys_set:nn { codeverb / short verb }
       { #1 }
+
+    \bool_if:NTF \l__codeverb_opt_sans_J_bool
+      {
+        \cs_set_eq:NN
+          \__codeverb_sverb_set_eff_scan:n
+          \__codeverb_sverb_sans_J_set_scan:n
+      }
+      {
+        \cs_set_eq:NN
+          \__codeverb_sverb_set_eff_scan:n
+          \__codeverb_sverb_set_scan:n
+      }
 
     \__codeverb_ccset_new:n { sverb }
 
@@ -744,12 +767,12 @@
   { \codeverb_sverb_setcs:nn { #1 } { #2 } }
 
 \codeverb_sverb_setcs:nn
-  { } { \__codeverb_hide_spc:n { #1 } }
+  { no ~ endmark } { \codeverb_hide_spc:n { #1 } }
 
 \cs_new_protected:Npn \codeverb_sverb:Nw #1
   {
     \str_set:Nn \l__codeverb_tmpa_str { #1 }
-    \__codeverb_sverb_set_scan:o \l__codeverb_tmpa_str
+    \__codeverb_sverb_set_eff_scan:o \l__codeverb_tmpa_str
     \group_begin:
       \__codeverb_sverb_ccset:
       \__codeverb_sverb_self_ccset:
@@ -759,7 +782,19 @@
   }
 \cs_set_eq:NN \cvSVerb \codeverb_sverb:Nw
 
+\cs_generate_variant:Nn \__codeverb_sverb_set_eff_scan:n { o }
+
 \cs_new_protected:Npn \__codeverb_sverb_set_scan:n #1
+  {
+    \cs_set:Npn \__codeverb_sverb_scan:nw ##1 #1
+      {
+        \group_end:
+        \__codeverb_sverb_cs:n { ##1 ^^J }
+      }
+  }
+\cs_generate_variant:Nn \__codeverb_sverb_set_scan:n { o }
+
+\cs_new_protected:Npn \__codeverb_sverb_sans_J_set_scan:n #1
   {
     \cs_set:Npn \__codeverb_sverb_scan:nw ##1 #1
       {
@@ -767,21 +802,20 @@
         \__codeverb_sverb_cs:n { ##1 }
       }
   }
-\cs_generate_variant:Nn \__codeverb_sverb_set_scan:n { o }
+\cs_generate_variant:Nn \__codeverb_sverb_sans_J_set_scan:n { o }
 
 %%%%%%%
+%%% Environments
+%%%
 %%%%%%%
-
-\cs_new_protected:Npn \codeverb_env_catcode_set:n #1
+\cs_new_protected:Npn \__codeverb_set_env_catcode:n #1
   {
     \seq_clear:N \l__codeverb_opt_other_seq
     \seq_clear:N \l__codeverb_opt_letter_seq
-    \tl_clear:N \l__codeverb_opt_cctab_tl
 
     \keys_set:nn { codeverb / common keys } { #1 }
 
     \__codeverb_ccset_new:n { env_local }
-
   }
 
 \keys_define:nn { }
@@ -804,7 +838,7 @@
 
 \keys_precompile:nnN  { codeverb / new env }
   {
-    drop~first    = false ,
+    drop~first    = true ,
     drop~blanks   = false ,
     line~proc     = { } ,
     inline        = false ,
@@ -837,6 +871,8 @@
         \NewDocumentEnvironment { #4 }{ #5 }
           {
             #3  %% setting defaults
+            \cs_set_eq:NN \codeverb_set_env_catcode:n \__codeverb_set_env_catcode:n
+            \cs_set_eq:NN \cvSetEnvCC                 \__codeverb_set_env_catcode:n
             #6
             \__codeverb_env_begin:
           }
@@ -849,6 +885,8 @@
         \NewDocumentEnvironment { #4 }{ #5 }
           {
             #3  %% setting defaults
+            \cs_set_eq:NN \codeverb_set_env_catcode:n \__codeverb_set_env_catcode:n
+            \cs_set_eq:NN \cvSetEnvCC                 \__codeverb_set_env_catcode:n
             #6
             \__codeverb_env_begin:
           }
@@ -1007,7 +1045,7 @@
 
 \cs_new_protected:Npn \codeverb_retoken_newcs:N #1
   { \cs_set_eq:NN #1 \tl_retokenize:n }
-\cs_set_eq:NN \cvRetokenNewCommand \__codeverb_retoken_newcs:N
+\cs_set_eq:NN \cvRetokenNewCommand \codeverb_retoken_newcs:N
 
 \cs_new_protected:Npn \codeverb_retoken_newcsV:N #1
   { \cs_set_eq:NN #1 \tl_retokenize:V }
@@ -1271,7 +1309,6 @@
     \tl_set:Nn \l__codeverb_tmp_xerr_tl { #1 }
     \tl_if_blank:nTF { #1 }
   }
-
 
 %%% Reading from a file (catcode other)... making 128+ active
 %%%
